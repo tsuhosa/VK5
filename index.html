@@ -1,711 +1,10 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no,maximum-scale=1">
-<meta name="theme-color" content="#ffb6d5">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="format-detection" content="telephone=no">
-<link rel="manifest" href="manifest.json">
-<link rel="icon" href="icon-192.png">
-<link rel="apple-touch-icon" href="icon-192.png">
-<title>🌸 Quán trà sữa của Vân Khánh</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Comfortaa:wght@500;700&display=swap" rel="stylesheet">
-<style>
-/* ============================================================
-   🌸 QUÁN TRÀ SỮA VÂN KHÁNH — UI PASTEL 2025
-   Tối ưu cực mạnh cho Safari iOS:
-   - Logic 12fps, UI 3fps
-   - Event-driven: chỉ render khi state đổi
-   - Không animation infinite
-   - Zero setInterval / setTimeout cho game loop
-   ============================================================ */
-:root{
-  --ink:#4a3b5c;
-  --ink2:#6b5a80;
-  --mu:#a89ab8;
-  --pink:#ff8fb8;
-  --pink2:#ffc6dd;
-  --pink3:#ffe4ef;
-  --rose:#ff6b9d;
-  --lav:#c9b6f0;
-  --lav2:#e6dcff;
-  --mint:#8ed9c0;
-  --mint2:#d4f4e7;
-  --peach:#ffb89c;
-  --peach2:#ffe0d2;
-  --cream:#fff8f3;
-  --honey:#ffd98a;
-  --line:#4a3b5c;
-  --shadow:0 2px 0 var(--line);
-  --shadow-soft:0 2px 8px rgba(180,140,180,.18);
-  --radius:14px;
-}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
-html,body{
-  margin:0;height:100%;overflow:hidden;
-  color:var(--ink);
-  font:600 13.5px/1.35 "Quicksand",system-ui,sans-serif;
-  -webkit-font-smoothing:antialiased;
-}
-body{
-  background:
-    radial-gradient(circle at 12% 18%,rgba(255,200,220,.55) 0 4px,transparent 5px),
-    radial-gradient(circle at 88% 72%,rgba(200,180,240,.4) 0 3px,transparent 4px),
-    radial-gradient(circle at 50% 50%,#fff5f9 0%,#f5ecff 55%,#e8f4ff 100%);
-  background-attachment:fixed;
-}
-button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-action:manipulation;padding:0}
-.hide{display:none!important}.mu{color:var(--mu)}.sm{font-size:11px}
-
-#app{
-  height:100vh;height:100dvh;max-width:480px;margin:0 auto;
-  display:grid;
-  grid-template-rows:auto minmax(0,1fr) auto auto auto;
-  grid-template-columns:minmax(0,1fr);
-  gap:7px;
-  padding:calc(env(safe-area-inset-top) + 8px) 9px calc(env(safe-area-inset-bottom) + 8px);
-}
-
-/* ================= HUD ================= */
-#hd{
-  position:relative;color:#fff;
-  border-radius:var(--radius);
-  padding:16px 11px 9px;
-  background:
-    radial-gradient(circle at 20% -20%,rgba(255,255,255,.5),transparent 40%),
-    linear-gradient(155deg,#ffb3d1 0%,#ff8fb8 40%,#c9b6f0 100%);
-  box-shadow:var(--shadow-soft),0 3px 0 rgba(180,140,180,.35);
-  overflow:hidden;
-}
-#hd::before{
-  content:"";position:absolute;top:0;left:0;right:0;height:11px;
-  background:
-    radial-gradient(circle,rgba(255,255,255,.7) 0 2px,transparent 3px) 0 0/14px 11px;
-  border-bottom:1px solid rgba(255,255,255,.5);
-  pointer-events:none;
-}
-#pause{
-  position:absolute;right:7px;top:14px;width:26px;height:26px;
-  border-radius:50%;
-  background:rgba(255,255,255,.4);
-  border:2px solid #fff;
-  font-size:12px;line-height:1;z-index:3;color:#fff;
-  box-shadow:0 2px 0 rgba(180,140,180,.4);
-}
-#hd .t{
-  text-align:center;font-size:14.5px;font-weight:700;
-  padding:0 30px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-  text-shadow:0 1px 2px rgba(150,90,130,.35);
-  position:relative;z-index:1;
-  font-family:"Comfortaa","Quicksand",sans-serif;
-}
-#hd .r{display:flex;align-items:center;gap:5px;margin-top:5px;white-space:nowrap;position:relative;z-index:1}
-
-.lvb{
-  flex:none;position:relative;width:34px;height:34px;border-radius:50%;
-  display:grid;place-items:center;padding-top:4px;
-  color:#8a4500;font-size:14px;font-weight:700;
-  background:linear-gradient(180deg,#fff3b8,var(--honey));
-  border:2px solid #fff;
-  box-shadow:0 2px 0 rgba(180,140,180,.4);
-}
-.lvb::before{content:"LV";position:absolute;top:2px;font-size:7.5px;font-weight:700;opacity:.8}
-
-.xpw{flex:1;min-width:0;position:relative}
-.pb{height:8px;border-radius:6px;background:rgba(255,255,255,.55);overflow:hidden;box-shadow:inset 0 1px 2px rgba(180,140,180,.25)}
-.pb i{display:block;height:100%;width:0;background:linear-gradient(90deg,#fff3b8,#ffd98a);transition:width .3s}
-.xpb{height:13px}
-.xpb i{background:
-  radial-gradient(circle,rgba(255,255,255,.6) 0 2px,transparent 2.5px) 0 0/8px 8px,
-  linear-gradient(90deg,#fff3b8,#ffd98a);
-}
-#xpt{
-  position:absolute;inset:0;display:grid;place-items:center;
-  font-size:9px;font-weight:700;text-shadow:0 1px 1px rgba(150,90,130,.5);color:#fff;
-}
-.chap{
-  flex:none;
-  background:rgba(255,255,255,.3);border:1.5px solid rgba(255,255,255,.7);
-  border-radius:10px;padding:3px 8px;font-size:10.5px;font-weight:700;
-}
-.cur{
-  flex:1;min-width:0;display:flex;align-items:center;justify-content:center;gap:2px;
-  background:rgba(255,255,255,.3);border:1.5px solid rgba(255,255,255,.65);
-  border-radius:10px;padding:3px 5px;font-size:11.5px;
-}
-.cur b{font-weight:700}
-.dpb{margin-top:5px;height:5px}.dpb i{background:linear-gradient(90deg,#fff4c8,#fff)}
-
-/* ================= QUÁN ================= */
-.ch1{--w1:#ffe4c9;--w2:#ffc6dd;--dc:#8a4a6a;--bg:#fff5fa}
-.ch2{--w1:#ffd0c4;--w2:#ffb89c;--dc:#8a3a2a;--bg:#fff2ec}
-.ch3{--w1:#e0d0ff;--w2:#c9b6f0;--dc:#5a4a8a;--bg:#f7f2ff}
-
-#shop{
-  position:relative;overflow:hidden;
-  display:flex;flex-direction:column;
-  border-radius:var(--radius);
-  background:
-    linear-gradient(180deg,var(--w1),var(--w2)) top/100% 30px no-repeat,
-    var(--bg);
-  box-shadow:var(--shadow-soft),0 3px 0 rgba(180,140,180,.35);
-}
-#shop::before{
-  content:"";position:absolute;inset:0;
-  background:#3a2a5c;opacity:var(--n,0);pointer-events:none;z-index:5;
-  transition:opacity .8s;
-}
-#shop .wx{position:absolute;inset:0;pointer-events:none;z-index:4;opacity:0;transition:opacity 1s}
-/* Thời tiết: chỉ đổi gradient nhẹ, không animate */
-.rain .wx{opacity:1;background:linear-gradient(180deg,rgba(140,170,220,.22),rgba(140,170,220,.05))}
-.storm .wx{opacity:1;background:linear-gradient(180deg,rgba(90,110,180,.32),rgba(90,110,180,.1))}
-.snow .wx{opacity:1;background:linear-gradient(180deg,rgba(220,235,255,.4),rgba(240,245,255,.15))}
-
-#deco{
-  height:30px;line-height:28px;text-align:center;
-  font-size:12.5px;font-weight:700;white-space:nowrap;overflow:hidden;
-  color:var(--dc);
-  border-bottom:1px solid rgba(255,255,255,.6);
-  background:rgba(255,255,255,.4);
-  position:relative;z-index:2;
-  letter-spacing:.3px;
-}
-#tables{
-  flex:1;min-height:0;
-  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:1fr 1fr;
-  gap:7px;padding:8px 8px 0;
-}
-.tb{
-  position:relative;min-height:0;
-  border-radius:12px;
-  display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
-  padding-bottom:6px;
-  background:
-    radial-gradient(circle at 50% 25%,rgba(255,255,255,.7),transparent 60%),
-    rgba(255,255,255,.4);
-  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.8);
-  transition:background .25s;
-}
-.tb::after{
-  content:"";position:absolute;bottom:8px;left:16%;right:16%;height:22%;
-  border-radius:50%;
-  background:radial-gradient(ellipse at 50% 30%,#e8b98a,#b87840 75%);
-  border:2px solid #fff;
-  box-shadow:0 2px 4px rgba(120,70,40,.25),inset 0 2px 0 rgba(255,255,255,.4);
-  z-index:1;
-}
-.tb.sel{
-  background:
-    radial-gradient(circle at 50% 25%,rgba(255,255,255,.9),transparent 60%),
-    linear-gradient(180deg,#fff0f6,#ffe4ef);
-  box-shadow:inset 0 0 0 2px var(--rose),0 0 0 4px rgba(255,143,184,.25),var(--shadow-soft);
-}
-.tb.lk{
-  justify-content:center;gap:2px;
-  background:rgba(200,180,220,.18);
-  border:2px dashed rgba(180,140,200,.5);
-  color:var(--mu);font-size:17px;font-weight:700;
-}
-.tb.lk span{font-size:9.5px;display:block;text-align:center;padding:0 4px}
-.tb.lk::after{display:none}
-
-.ce{
-  position:relative;font-size:clamp(28px,5vh,50px);line-height:1;
-  margin-bottom:14%;z-index:2;
-  filter:drop-shadow(0 3px 2px rgba(120,80,120,.18));
-  transition:transform .3s ease-out;
-}
-.tb.sel .ce{transform:translateY(-3px)}
-
-.cn{
-  position:absolute;bottom:9px;z-index:3;
-  font-size:10.5px;font-weight:700;color:#fff;
-  background:linear-gradient(180deg,#c9b6f0,#a890e0);
-  padding:1px 8px;border-radius:9px;border:1.5px solid #fff;
-  white-space:nowrap;
-  box-shadow:0 2px 0 rgba(150,110,190,.4);
-  font-family:"Comfortaa",sans-serif;
-}
-.emp{
-  z-index:2;margin-bottom:24%;
-  font-size:10.5px;color:#a87098;font-weight:700;text-align:center;
-  opacity:.75;
-}
-.bub{
-  position:absolute;top:3px;left:5px;z-index:4;
-  background:#fff;border:1.5px solid var(--pink2);border-radius:10px;
-  padding:1px 7px;font-size:clamp(13px,1.9vh,16px);
-  box-shadow:0 2px 4px rgba(180,140,180,.2);
-}
-.bub::after{
-  content:"";position:absolute;left:11px;bottom:-5px;
-  border:5px solid transparent;border-top-color:#fff;border-bottom:0;
-  filter:drop-shadow(0 1.5px 0 var(--pink2));
-}
-.bub .dn{opacity:.25}
-.cd{
-  position:absolute;top:3px;right:5px;z-index:4;
-  width:clamp(28px,4.2vh,38px);aspect-ratio:1;border-radius:50%;
-  display:grid;place-items:center;
-  font-weight:700;font-size:clamp(10px,1.7vh,13px);
-  background:conic-gradient(var(--cc,#8ed9c0) calc(var(--p,1)*360deg),#fff 0);
-  color:var(--ink);
-  border:1.5px solid #fff;
-  box-shadow:0 2px 4px rgba(180,140,180,.3);
-  font-family:"Comfortaa",sans-serif;
-}
-.hurry .cd{background:conic-gradient(#ff6b9d calc(var(--p,1)*360deg),#fff 0)}
-
-#staffs{
-  display:flex;gap:5px;padding:6px 8px 7px;
-  overflow-x:auto;scrollbar-width:none;
-  background:rgba(255,255,255,.25);
-}
-#staffs::-webkit-scrollbar{display:none}
-.sf{
-  flex:none;
-  border-radius:10px;
-  padding:2px 9px;font-size:11px;font-weight:700;
-  white-space:nowrap;background:#fff;
-  border:1.5px solid var(--pink2);
-  box-shadow:0 2px 4px rgba(180,140,180,.18);
-  color:var(--ink);
-}
-.sf.rd{
-  background:linear-gradient(180deg,#ffe4ef,#ffc6dd);
-  border-color:var(--rose);
-  box-shadow:0 2px 4px rgba(180,140,180,.2),0 0 0 2px rgba(255,143,184,.3);
-}
-.sf small{color:var(--mu);margin-left:3px;font-weight:600}
-.sf.rd small{color:var(--rose)}
-
-.pop{
-  position:absolute;z-index:6;transform:translate(-50%,-50%);
-  font-weight:700;font-size:12.5px;
-  background:#fff;border:1.5px solid var(--pink2);border-radius:10px;
-  padding:1px 8px;white-space:nowrap;
-  box-shadow:0 2px 6px rgba(180,140,180,.3);
-  animation:up 1.3s ease-out forwards;
-  pointer-events:none;
-  color:var(--ink);
-}
-.pop.g{color:#4aaa88;border-color:var(--mint)}
-.pop.b{color:var(--rose);border-color:var(--rose)}
-@keyframes up{
-  0%{opacity:0;transform:translate(-50%,-40%) scale(.75)}
-  15%{opacity:1;transform:translate(-50%,-50%) scale(1)}
-  100%{opacity:0;transform:translate(-50%,-140%) scale(1)}
-}
-
-/* ================= ĐƠN ================= */
-#ord{
-  white-space:nowrap;overflow:hidden;
-  border-radius:11px;
-  background:
-    linear-gradient(90deg,var(--pink2) 0 5px,transparent 5px),
-    #fff;
-  box-shadow:var(--shadow-soft);
-  padding:6px 12px 6px 14px;
-  font-size:12px;min-height:36px;
-  display:flex;align-items:center;gap:5px;flex-wrap:wrap;
-}
-.chp{
-  background:linear-gradient(180deg,#fff8e0,#ffefc0);
-  border:1.5px solid #ffd98a;border-radius:8px;
-  padding:0 6px;font-weight:700;font-size:11.5px;
-}
-.chp.ok{background:linear-gradient(180deg,#e0f7ec,#c4eedd);border-color:var(--mint);color:#3a8a70}
-
-/* ================= QUẦY PHA ================= */
-#bar{
-  background:
-    radial-gradient(circle at 20% 0%,rgba(255,220,235,.5),transparent 50%),
-    #fff;
-  border-radius:var(--radius);
-  box-shadow:var(--shadow-soft),0 3px 0 rgba(180,140,180,.3);
-  padding:9px;
-  display:grid;grid-template-columns:30% minmax(0,1fr);gap:8px;
-}
-.cupcol{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  border-radius:12px;
-  background:
-    radial-gradient(circle at 50% 65%,#e8f4ff 0%,#f5eeff 70%);
-  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.9);
-}
-.cupw{position:relative;width:100%;display:flex;justify-content:center;padding-top:20px}
-#cup{
-  position:relative;width:80%;max-width:84px;
-  height:clamp(100px,16vh,150px);
-  border:2.5px solid #b6d4ea;border-top:0;
-  border-radius:0 0 20px 20px;
-  overflow:hidden;
-  background:linear-gradient(90deg,rgba(255,255,255,.95),rgba(225,243,255,.75));
-  box-shadow:inset 0 -6px 10px rgba(140,180,220,.12);
-}
-#cup::after{
-  content:"";position:absolute;left:12%;top:6%;bottom:12%;width:10%;
-  border-radius:5px;background:rgba(255,255,255,.75);z-index:2;
-}
-.liq{
-  position:absolute;left:0;right:0;bottom:0;height:var(--h,0%);
-  background:var(--c,#fff);
-  transition:height .5s,background .6s;
-}
-.liq::before{
-  content:"";position:absolute;left:0;right:0;top:0;height:3px;
-  background:rgba(255,255,255,.45);
-}
-.tps{
-  position:absolute;left:0;right:0;bottom:3px;text-align:center;
-  font-size:clamp(11px,1.9vh,16px);letter-spacing:-4px;line-height:1.1;
-}
-.tps span{display:block}
-.ices{
-  position:absolute;left:0;right:0;top:4px;text-align:center;
-  font-size:12px;letter-spacing:-3px;
-}
-.stream{
-  position:absolute;top:0;left:50%;width:7px;margin-left:-3.5px;height:0;
-  border-radius:4px;background:var(--sc);z-index:2;
-}
-.pour .stream{height:38%;top:36%;opacity:.9;transition:height .3s,opacity .3s}
-.lid,.straw{position:absolute;opacity:0;transition:.35s;z-index:3}
-.lid{
-  top:12px;width:88%;max-width:92px;height:12px;border-radius:7px;
-  background:linear-gradient(180deg,#fff,#e8f4ff);
-  border:2.5px solid #b6d4ea;
-  transform:translateY(-28px);
-}
-.straw{
-  top:0;left:58%;width:7px;height:55%;border-radius:4px;
-  background:repeating-linear-gradient(180deg,var(--rose) 0 6px,#ffc6dd 6px 12px);
-  transform:translateY(-38px) rotate(10deg);
-}
-.pk .lid{opacity:1;transform:none}
-.pk .straw{opacity:1;transform:rotate(10deg)}
-.shake #cup{box-shadow:inset 0 0 0 2.5px var(--rose),0 0 14px rgba(255,143,184,.4)}
-#sugl{font-size:10px;color:var(--mu);font-weight:700;margin-top:2px;text-align:center}
-
-#tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
-.tops{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
-.tn{max-width:94%;overflow:hidden;text-overflow:ellipsis}
-.tops .tn{font-size:9.5px;max-width:100%}
-.tops .tile{height:clamp(36px,4.8vh,48px)}
-.tops .tile b{font-size:clamp(16px,2.4vh,22px)}
-.tile{
-  position:relative;border-radius:11px;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  font-weight:700;font-size:11px;
-  height:clamp(44px,6.2vh,60px);line-height:1;white-space:nowrap;
-  background:
-    radial-gradient(circle at 50% 0%,rgba(255,255,255,.9),transparent 70%),
-    linear-gradient(180deg,#fff,#f5f0ff);
-  box-shadow:var(--shadow-soft),inset 0 0 0 1.5px rgba(255,255,255,.9);
-  color:var(--ink);
-  transition:background .2s,box-shadow .2s;
-}
-.tile b{font-size:clamp(19px,2.9vh,26px);line-height:1.15}
-.tile small{position:absolute;top:3px;right:6px;font-size:9px;color:var(--mu)}
-.tile.big{height:clamp(52px,7.2vh,72px);font-size:13px;background:
-  radial-gradient(circle at 50% 0%,rgba(255,255,255,.9),transparent 70%),
-  linear-gradient(180deg,#fffaf0,#ffe9c9)}
-.tile.need{
-  background:
-    radial-gradient(circle at 50% 0%,rgba(255,255,255,.9),transparent 70%),
-    linear-gradient(180deg,#fff5e0,#ffe0b0);
-  box-shadow:var(--shadow-soft),0 0 0 2.5px var(--honey);
-}
-.tile.in{
-  background:
-    radial-gradient(circle at 50% 0%,rgba(255,255,255,.6),transparent 70%),
-    linear-gradient(180deg,#a8e6d0,#7ecbaf);
-  color:#fff;
-  box-shadow:var(--shadow-soft),inset 0 0 0 1.5px rgba(255,255,255,.7);
-}
-.tile.bad{
-  background:
-    radial-gradient(circle at 50% 0%,rgba(255,255,255,.6),transparent 70%),
-    linear-gradient(180deg,#ffc6dd,#ff9bbf);
-  color:#a3173f;
-  box-shadow:var(--shadow-soft),inset 0 0 0 1.5px rgba(255,255,255,.7);
-}
-.tile.in small,.tile.bad small{color:inherit;opacity:.9}
-.tile.in::after,.tile.bad::after{
-  position:absolute;top:-6px;left:-4px;width:19px;height:19px;
-  border-radius:50%;display:grid;place-items:center;font-size:11px;
-  border:2px solid #fff;background:#fff;
-  box-shadow:0 2px 4px rgba(180,140,180,.3);
-}
-.tile.in::after{content:"✓";color:var(--mint);font-weight:800}
-.tile.bad::after{content:"!";background:var(--rose);color:#fff;font-weight:800}
-.tile.lk{opacity:.55;filter:grayscale(.6)}
-.tile:active{transform:translateY(2px)}
-
-.acts{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:7px}
-.btn{
-  position:relative;border-radius:12px;
-  height:clamp(46px,6vh,56px);font-weight:700;font-size:14.5px;
-  background:
-    radial-gradient(circle at 50% 0%,rgba(255,255,255,.9),transparent 70%),
-    linear-gradient(180deg,#fff,#f0eaff);
-  box-shadow:var(--shadow-soft),inset 0 0 0 1.5px rgba(255,255,255,.9);
-  display:grid;place-items:center;
-  color:var(--ink);
-  font-family:"Comfortaa","Quicksand",sans-serif;
-}
-.btn.p{
-  background:
-    radial-gradient(circle at 50% 0%,rgba(255,255,255,.5),transparent 70%),
-    linear-gradient(180deg,#ffb3d1,#ff8fb8);
-  color:#fff;
-  text-shadow:0 1px 2px rgba(180,80,120,.3);
-  box-shadow:var(--shadow-soft),0 3px 0 rgba(200,100,150,.3);
-}
-.btn.y{
-  background:
-    radial-gradient(circle at 50% 0%,rgba(255,255,255,.6),transparent 70%),
-    linear-gradient(180deg,#ffe4a8,#ffd070);
-  color:#8a5a00;
-}
-.btn.go{
-  box-shadow:var(--shadow-soft),0 0 0 3px rgba(255,143,184,.4);
-}
-.btn:disabled{filter:grayscale(.7);opacity:.5}
-.btn:active{transform:translateY(2px)}
-
-/* ================= NAV ================= */
-#nav{
-  display:grid;grid-template-columns:repeat(5,1fr);
-  border-radius:var(--radius);
-  background:
-    radial-gradient(circle at 50% 0%,rgba(255,220,235,.4),transparent 60%),
-    #fff;
-  box-shadow:var(--shadow-soft),0 3px 0 rgba(180,140,180,.3);
-  overflow:hidden;
-}
-#nav button{
-  position:relative;
-  font-size:9.5px;font-weight:700;
-  padding:7px 0;
-  display:flex;flex-direction:column;align-items:center;
-  color:var(--mu);
-  font-family:"Comfortaa","Quicksand",sans-serif;
-}
-#nav b{font-size:18px;line-height:1.15}
-#nav .on{
-  background:
-    radial-gradient(circle at 50% 0%,rgba(255,255,255,.3),transparent 70%),
-    linear-gradient(180deg,#ffb3d1,#ff8fb8);
-  color:#fff;
-}
-#nav i{
-  position:absolute;top:4px;right:9px;
-  width:9px;height:9px;border-radius:50%;
-  background:var(--rose);border:2px solid #fff;
-  box-shadow:0 1px 2px rgba(180,80,120,.4);
-}
-
-/* ================= SHEET / MODAL ================= */
-#sheet{
-  position:fixed;inset:0;z-index:50;
-  background:rgba(74,59,92,.45);
-  display:flex;align-items:flex-end;justify-content:center;
-  backdrop-filter:blur(2px);
-  -webkit-backdrop-filter:blur(2px);
-}
-.shx{
-  width:100%;max-width:480px;max-height:78vh;overflow:auto;
-  border-radius:20px 20px 0 0;
-  padding:14px 16px calc(env(safe-area-inset-bottom) + 18px);
-  background:
-    radial-gradient(circle at 50% 0%,rgba(255,220,235,.5),transparent 40%),
-    linear-gradient(180deg,#fff,#fdf8ff);
-  box-shadow:0 -6px 20px rgba(180,140,180,.25);
-  animation:sup .28s cubic-bezier(.2,1.3,.5,1);
-}
-@keyframes sup{from{transform:translateY(100%)}}
-.shh{
-  display:flex;align-items:center;font-size:17px;font-weight:700;
-  margin-bottom:8px;padding-bottom:8px;
-  border-bottom:1.5px dashed var(--pink2);
-  font-family:"Comfortaa","Quicksand",sans-serif;
-  color:var(--ink);
-}
-.shh b{flex:1}
-h3{
-  margin:14px 0 4px;font-size:14px;font-weight:700;
-  color:var(--rose);
-  display:flex;align-items:center;gap:6px;
-  font-family:"Comfortaa",sans-serif;
-}
-h3::before{content:"✿";color:var(--pink);font-size:16px}
-.it{
-  display:flex;align-items:center;gap:10px;
-  padding:8px 0;border-bottom:1px dashed #f0e8f5;
-}
-.it:last-child{border:0}
-.it .e{
-  flex:none;width:40px;height:40px;border-radius:12px;
-  background:
-    radial-gradient(circle at 50% 0%,rgba(255,255,255,.9),transparent 70%),
-    linear-gradient(180deg,#fff,#f5eeff);
-  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.9),0 2px 4px rgba(180,140,180,.15);
-  display:grid;place-items:center;font-size:22px;
-}
-.it .m{flex:1;min-width:0}
-.it small{display:block;color:var(--mu);font-weight:600;margin-top:1px}
-.it .pb{background:#f5eef8;margin-top:4px}
-.bs{display:flex;gap:5px;flex-wrap:wrap}
-.b2{
-  border-radius:10px;
-  padding:5px 10px;font-weight:700;font-size:12px;white-space:nowrap;
-  background:
-    radial-gradient(circle at 50% 0%,rgba(255,255,255,.9),transparent 70%),
-    linear-gradient(180deg,#fff,#f0eaff);
-  box-shadow:0 2px 0 rgba(180,140,180,.25),inset 0 0 0 1.5px rgba(255,255,255,.9);
-  color:var(--ink);
-}
-.b2.p{
-  background:linear-gradient(180deg,#ffb3d1,#ff8fb8);
-  color:#fff;
-  text-shadow:0 1px 1px rgba(180,80,120,.3);
-}
-.b2.g{
-  background:linear-gradient(180deg,#a8e6d0,#7ecbaf);
-  color:#fff;
-}
-.b2:active{transform:translateY(2px);box-shadow:0 0 0 rgba(0,0,0,0)}
-.b2:disabled{opacity:.45}
-
-#modal{
-  position:fixed;inset:0;z-index:60;
-  background:rgba(74,59,92,.5);
-  display:grid;place-items:center;padding:16px;
-  backdrop-filter:blur(3px);
-  -webkit-backdrop-filter:blur(3px);
-}
-.bx{
-  width:100%;max-width:400px;max-height:88vh;overflow:auto;
-  border-radius:22px;
-  padding:20px;
-  background:
-    radial-gradient(circle at 50% 0%,rgba(255,220,235,.6),transparent 40%),
-    linear-gradient(180deg,#fff,#fdf8ff);
-  box-shadow:0 8px 24px rgba(180,140,180,.3);
-  animation:pp .3s cubic-bezier(.2,1.3,.5,1);
-}
-@keyframes pp{from{transform:scale(.88);opacity:0}}
-.bx h2{
-  margin:0 0 10px;text-align:center;font-size:19px;
-  color:var(--rose);
-  padding-bottom:8px;
-  border-bottom:1.5px dashed var(--pink2);
-  font-family:"Comfortaa",sans-serif;
-}
-.bx ol{padding-left:20px;margin:6px 0}
-.ev{
-  background:
-    radial-gradient(circle at 50% 0%,rgba(255,255,255,.7),transparent 70%),
-    linear-gradient(180deg,#fff8e0,#ffeec0);
-  border-radius:12px;
-  padding:8px 12px;margin:6px 0;
-  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.8);
-}
-.g2{display:grid;grid-template-columns:1fr auto;gap:4px 10px}
-.mb{display:grid;gap:10px;margin-top:14px}
-
-#toast{
-  position:fixed;left:50%;top:22%;transform:translateX(-50%);z-index:70;
-  display:grid;gap:6px;width:min(92vw,420px);pointer-events:none;
-}
-#toast div{
-  background:
-    radial-gradient(circle at 50% 0%,rgba(255,255,255,.3),transparent 70%),
-    linear-gradient(180deg,#ffb3d1,#ff8fb8);
-  color:#fff;
-  border:2px solid #fff;border-radius:14px;
-  padding:7px 14px;text-align:center;font-weight:700;
-  box-shadow:0 4px 10px rgba(200,120,160,.3);
-  animation:pp .25s ease-out;
-  text-shadow:0 1px 2px rgba(180,80,120,.3);
-}
-.fly{
-  position:fixed;z-index:40;font-size:28px;
-  transform:translate(-50%,-50%);
-  transition:all .45s ease-in;pointer-events:none;
-  filter:drop-shadow(0 3px 3px rgba(180,120,150,.3));
-}
-
-@media (prefers-reduced-motion:reduce){
-  *{animation-duration:.001ms!important;transition-duration:.001ms!important}
-}
-</style>
-</head>
-<body class="ch1">
-<div id="app">
-  <header id="hd">
-    <button id="pause" data-a="pause">⏸</button>
-    <div class="t">🌸 Quán trà sữa của Vân Khánh</div>
-    <div class="r">
-      <span class="lvb"><b id="lv"></b></span>
-      <div class="xpw"><div class="pb xpb"><i id="xp"></i></div><span id="xpt"></span></div>
-      <span class="chap" id="chap"></span>
-    </div>
-    <div class="r">
-      <span class="cur">💰<b id="money"></b></span>
-      <span class="cur">💗<b id="rep"></b></span>
-      <span class="cur">📅<b id="day"></b></span>
-      <span class="cur"><span id="wxi"></span><b id="clock"></b></span>
-    </div>
-    <div class="pb dpb"><i id="dp"></i></div>
-  </header>
-
-  <section id="shop">
-    <div class="wx"></div>
-    <div id="deco"></div>
-    <div id="tables"></div>
-    <div id="staffs"></div>
-  </section>
-
-  <div id="ord"></div>
-
-  <section id="bar">
-    <div class="cupcol">
-      <div class="cupw" id="cupw">
-        <div class="straw"></div><div class="lid"></div><div class="stream"></div>
-        <div id="cup"><div class="liq"></div><div class="tps" id="tps"></div><div class="ices" id="ices"></div></div>
-      </div>
-      <div id="sugl"></div>
-    </div>
-    <div id="tiles"></div>
-    <div class="acts">
-      <button class="btn" data-a="reset">↺</button>
-      <button class="btn p" id="bBrew" data-a="brew">🫗 Pha</button>
-    </div>
-  </section>
-
-  <nav id="nav"></nav>
-</div>
-
-<div id="sheet" class="hide"><div class="shx"><div class="shh"><b id="sht"></b><button class="b2" data-a="nav" data-k="shop">✕</button></div><div id="shb"></div></div></div>
-<div id="modal" class="hide"></div>
-<div id="toast"></div>
-
 <script>
 'use strict';
 /* ============================================================
-   🌸 GAME LOGIC — Quán trà sữa Vân Khánh
-   Tối ưu cực mạnh cho Safari iOS:
-   - 12fps logic, 3fps UI
-   - Event-driven: chỉ render khi state đổi
-   - Zero setTimeout cho game loop
-   - Hòa tự động đóng gói (không cần bấm)
+   🌸 GAME LOGIC — Quán trà sữa Vân Khánh (v5)
+   - 5 nhân viên, 5 nâng cấp
+   - Nâng cấp "Máy đóng gói tự động": pha xong tự gói + gửi
+   - 12fps logic, 3fps UI, zero allocation
    ============================================================ */
 const $=s=>document.querySelector(s);
 const R=(a,b)=>a+Math.random()*(b-a);
@@ -713,7 +12,7 @@ const P=a=>a[Math.random()*a.length|0];
 const cl=(v,a,b)=>Math.max(a,Math.min(b,v));
 const F=n=>Math.round(n).toLocaleString('vi-VN');
 
-const KEY='vk_tea_v4',DAY=240,LAST=230,PAT=30,MAXLV=30;
+const KEY='vk_tea_v5',DAY=240,LAST=230,PAT=30,MAXLV=30;
 const SUG=['0%','30%','50%','70%','100%'];
 const ICE=['Không đá','Ít đá','Đá vừa','Nhiều đá'];
 const WD=['Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy','Chủ Nhật'];
@@ -759,21 +58,28 @@ const CUS=[
   {n:'Ý',e:'🧑‍✈️',k:'take',lv:2},
   {n:'Ông Đại',e:'👴',k:'vip',lv:3}
 ];
+/* ===== 5 NHÂN VIÊN ===== */
 const STF=[
-  {k:'vananh',e:'💰',n:'Vân Anh',r:'Em gái · Thu ngân',lv:1,c:0,up:1,d:l=>`+${5*l}% tiền mỗi đơn, giảm ${10*l}% khách quỵt tiền`},
-  {k:'linh',e:'📣',n:'Linh',r:'Bạn cùng lớp · Kéo khách',lv:2,c:200,up:1,sk:1,cd:40,d:l=>`Kỹ năng: gọi ngay ${1+(l>>1)} khách vào quán (hồi 40s)`},
-  {k:'diep',e:'🍃',n:'Diệp',r:'Bạn cùng phòng · Pha nền',lv:3,c:300,d:()=>'Chọn khách là tự đổ trà + sữa vào ly'},
-  {k:'hoan',e:'🍿',n:'Hoàn',r:'Em trai út · Chăm khách',lv:4,c:350,up:1,sk:1,cd:45,d:l=>`Kỹ năng: mời khách ăn bim bim, +${8+2*l}s kiên nhẫn cho mọi khách (hồi 45s)`},
-  {k:'dau',e:'🍓',n:'Dâu',r:'Anh bạn mê dâu tây · Topping',lv:5,c:450,d:()=>'Tự thêm topping đúng đơn'},
-  {k:'hoa',e:'🥤',n:'Hòa',r:'Cựu nhân viên bưu điện · Đóng gói',lv:7,c:550,d:()=>'Tự động đóng gói khi pha xong món đúng'},
-  {k:'pheu',e:'📦',n:'Phều',r:'Ông chú chợ Đồng Xuân · Quản kho',lv:8,c:600,up:1,d:l=>`Nguyên liệu để được thêm 1 ngày; ${10+5*l}% cơ hội hoàn lại 1 phần mỗi ly`}
+  {k:'vananh',e:'💰',n:'Vân Anh',r:'Em gái · Thu ngân',lv:1,c:0,up:1,
+   d:l=>`+${5*l}% tiền mỗi đơn · giảm ${10*l}% khách quỵt tiền`},
+  {k:'linh',e:'📣',n:'Linh',r:'Bạn cùng lớp · Kéo khách',lv:2,c:200,up:1,sk:1,cd:40,
+   d:l=>`Kỹ năng: gọi ngay ${1+(l>>1)} khách vào quán (hồi 40s)`},
+  {k:'diep',e:'🍃',n:'Diệp',r:'Bạn cùng phòng · Pha nền',lv:3,c:300,
+   d:()=>'Chọn khách là tự đổ trà + sữa vào ly'},
+  {k:'hoan',e:'🍿',n:'Hoàn',r:'Em trai út · Chăm khách',lv:4,c:350,up:1,sk:1,cd:45,
+   d:l=>`Kỹ năng: mời khách ăn bim bim, +${8+2*l}s kiên nhẫn cho mọi khách (hồi 45s)`},
+  {k:'dau',e:'🍓',n:'Dâu',r:'Anh bạn mê dâu tây · Topping',lv:5,c:450,
+   d:()=>'Tự thêm topping đúng đơn'}
 ];
-const BR=[0,2,1.6,1.2,.8],CAP=[0,15,25,40,60];
+/* ===== 5 NÂNG CẤP ===== */
+const BR=[0,2,1.6,1.2,.8],CAP=[0,15,25,40,60],PKC=[0,0,0,2500];
 const UPG=[
   {k:'tb',e:'🪑',n:'Bàn ghế',mx:4,d:l=>l+' bàn',c:l=>l==2?300:700},
   {k:'br',e:'🫗',n:'Máy pha',mx:4,d:l=>'pha '+BR[l]+'s',c:l=>200*l},
   {k:'st',e:'🏪',n:'Kho',mx:4,d:l=>'chứa '+CAP[l]+'/loại',c:l=>150*l},
-  {k:'dc',e:'🌸',n:'Trang trí',mx:3,d:l=>l?`+${2*l}s kiên nhẫn, +${4*l}% tip`:'chưa trang trí',c:l=>250*(l+1)}
+  {k:'dc',e:'🌸',n:'Trang trí',mx:3,d:l=>l?`+${2*l}s kiên nhẫn · +${4*l}% tip`:'chưa trang trí',c:l=>250*(l+1)},
+  {k:'pk',e:'📦',n:'Máy đóng gói tự động',mx:1,
+   d:l=>l?'Pha xong tự đóng gói gửi khách':'Tự đóng gói khi món đã đúng',c:()=>2500}
 ];
 const EVS=[
   ['',''],
@@ -789,26 +95,24 @@ const MS=[
   ['vip','Phục vụ ông Đại {n} lần',[1,1,2],3],
   ['skill','Dùng kỹ năng nhân viên {n} lần',[2,3,4],2]
 ];
+/* ===== LORE VIẾT LẠI ===== */
 const LORE={
-  2:'Linh, bạn cùng lớp đại học, nói không biết mệt. Đứng cửa là khách tự dừng chân.',
-  3:'Diệp, bạn cùng phòng ký túc xá, nhớ công thức như học bài. Ông Đại khó tính bắt đầu ghé quán.',
-  4:'Cậu em út Hoàn đòi ra phụ chị. Cặp sách lúc nào cũng đầy bim bim.',
-  5:'Dâu, anh chàng to cao mê dâu tây đến mức cả trường gọi là "Dâu", rắc topping khéo không ai bằng.',
-  6:'Mùa thi! Vân Khánh vừa ôn bài vừa bán hàng. Công thức pudding trứng của bà ngoại ra đời.',
-  7:'Hòa, cựu nhân viên bưu điện đầu ngõ, đóng gói nhanh như máy.',
-  8:'Phều, ông chú chợ Đồng Xuân, biết chỗ nhập hàng rẻ và giữ đồ tươi lâu.',
-  9:'Vân Khánh tốt nghiệp loại giỏi. Tiền quán đủ lo học phí cho cả hai em.',
-  10:'🎉 Học bổng thạc sĩ ở Bắc Kinh! Sáng mai Vân Khánh lên đường. Ông Đại khó tính chỉ nói: "Trà được."',
-  13:'Mùa đông âm 10 độ. Khách bước vào ai cũng xuýt xoa.',
-  14:'Đậu đỏ: phiên bản Bắc Kinh của món chè đậu đỏ Hà Nội.',
-  16:'Cả đội ở Hà Nội sang thăm và ở lại phụ quán qua kỳ nghỉ.',
-  17:'Thạch táo gai, lấy cảm hứng từ kẹo hồ lô của Bắc Kinh.',
-  18:'Luận văn thạc sĩ của Vân Khánh nghiên cứu chính về mô hình quán trà sữa.',
-  20:'🎉 Bảo vệ thạc sĩ xuất sắc! Học bổng tiến sĩ ở Thượng Hải đang chờ.',
-  23:'Bên kia đường mở một chuỗi trà sữa lớn. Chỉ có 5★ mới giữ được khách!',
-  24:'Thạch hoa quế thơm ngát ra mắt.',
-  27:'Hoàn giờ đã lớn, sang Thượng Hải du học. Túi vẫn đầy bim bim.',
-  30:'🎓 Vân Khánh bảo vệ luận án Tiến sĩ! Quán trở thành huyền thoại của ba thành phố.'
+  2:'<b>Linh</b> — bạn cùng lớp đại học của Vân Khánh. Cô nàng nói không biết mệt, đứng trước cửa quán là khách đi ngang tự dừng chân. Vân Khánh gọi đùa: "Loa phát thanh của phố cổ".',
+  3:'<b>Diệp</b> — bạn cùng phòng ký túc xá. Cô nhớ công thức trà sữa như nhớ bài giảng, rót trà rót sữa một tay không cần nhìn. Nhờ Diệp mà Vân Khánh không bỏ lỡ khách nào.',
+  4:'<b>Hoàn</b> — cậu em trai út 15 tuổi, ngày nào cũng đòi ra phụ chị. Cặp sách lúc nào cũng đầy bim bim. Khách nào đang cau có mà gặp Hoàn cũng phải bật cười.',
+  5:'<b>Dâu</b> — anh chàng to cao mê dâu tây đến mức cả trường gọi là "Dâu". Rắc topping khéo không ai bằng, nhìn thôi đã thấy ngon. Vân Khánh thuê Dâu về làm topping.',
+  7:'<b>Hòa</b> — cựu nhân viên bưu điện đầu ngõ. Ông chú nghỉ hưu, ngày nào cũng ngồi uống trà sữa ở quán. Vân Khánh nhờ Hòa trông quầy pha giúp vào giờ cao điểm.',
+  10:'🎉 <b>Học bổng thạc sĩ ở Bắc Kinh!</b> Sáng mai Vân Khánh lên đường. Ông Đại khó tính — người chưa từng khen ai — chỉ gật gù: "Trà được."',
+  13:'Mùa đông Bắc Kinh âm 10 độ. Khách bước vào quán ai cũng xuýt xoa, hai tay ôm ly trà nóng không dám buông.',
+  14:'Đậu đỏ — phiên bản Bắc Kinh của món chè đậu đỏ Hà Nội. Vân Khánh ăn thử và nghĩ ngay đến mẹ ở quê.',
+  16:'Cả đội Hà Nội — Linh, Diệp, Hoàn, Dâu — sang thăm và ở lại phụ quán suốt kỳ nghỉ đông.',
+  17:'Thạch táo gai, lấy cảm hứng từ kẹo hồ lô của Bắc Kinh. Vân Khánh nói: "Vị này giống tuổi thơ ghê".',
+  18:'Luận văn thạc sĩ của Vân Khánh nghiên cứu chính về mô hình quán trà sữa ở hồ đồng. Cô vừa học, vừa bán, vừa viết.',
+  20:'🎉 <b>Bảo vệ thạc sĩ xuất sắc!</b> Giáo sư hướng dẫn đích thân gọi cho Vân Khánh báo tin học bổng tiến sĩ ở Thượng Hải đang chờ.',
+  23:'Bên kia đường mở một chuỗi trà sữa lớn. Vân Khánh không nao núng, chỉ nói: "Khách của mình là khách quen rồi." Nhưng chỉ có 5★ mới giữ được khách.',
+  24:'Thạch hoa quế thơm ngát ra mắt. Công thức bí truyền của một bà cụ trong ngõ thạch khố môn truyền lại.',
+  27:'Hoàn giờ đã lớn, sang Thượng Hải du học. Cậu vẫn mang túi bim bim đến quán phụ chị như ngày nào.',
+  30:'🎓 <b>Vân Khánh bảo vệ luận án Tiến sĩ!</b> Quán trà sữa nhỏ năm xưa giờ trở thành huyền thoại của ba thành phố. Bố mẹ ở quê lên dự lễ tốt nghiệp, mẹ khóc. Vân Khánh nói: "Mẹ ơi, con làm được rồi."'
 };
 const CHQ=[0,
   ['Hà Nội: vừa học vừa bán','Vừa học đại học vừa bán trà sữa ở phố cổ. Đạt Level 10 để nhận học bổng thạc sĩ Bắc Kinh!'],
@@ -816,9 +120,11 @@ const CHQ=[0,
   ['Thượng Hải: bến Thượng Hải lên đèn','Chặng cuối: bảo vệ luận án Tiến sĩ ở Level 30 và đưa quán thành huyền thoại ba thành phố!']
 ];
 const CHI={
-  2:`<h2>✈️ Chương 2 · Bắc Kinh</h2><div>Vân Khánh 22 tuổi, sang Bắc Kinh học thạc sĩ. Cô mở một quán nhỏ trong con hồ đồng gần trường. Vân Anh cũng đỗ đại học ở đây, hai chị em lại cùng bán hàng.</div>
+  2:`<h2>✈️ Chương 2 · Bắc Kinh</h2>
+  <div>Vân Khánh 22 tuổi, sang Bắc Kinh học thạc sĩ. Cô mở một quán nhỏ trong con hồ đồng gần trường. Vân Anh cũng đỗ đại học ở đây, hai chị em lại cùng bán hàng.</div>
   <div class="ev">🧀 Kem cheese lên menu · Giá bán ×1.3 · Giá nhập ×1.2 · Mùa đông có tuyết ❄️</div>`,
-  3:`<h2>🎓 Chương 3 · Thượng Hải</h2><div>Vân Khánh 24 tuổi, nhận học bổng tiến sĩ ở Thượng Hải. Quán mới nằm trong một ngõ thạch khố môn gần bến Thượng Hải, khách sành trà và hào phóng.</div>
+  3:`<h2>🎓 Chương 3 · Thượng Hải</h2>
+  <div>Vân Khánh 24 tuổi, nhận học bổng tiến sĩ ở Thượng Hải. Quán mới nằm trong một ngõ thạch khố môn gần bến Thượng Hải, khách sành trà và hào phóng.</div>
   <div class="ev">🟣 Khoai môn viên lên menu · Giá bán ×1.6 · Giá nhập ×1.4 · Hay có mưa phùn 🌦️</div>`
 };
 const INTRO=`<h2>🌸 Quán trà sữa của Vân Khánh</h2>
@@ -830,7 +136,7 @@ const HELP=`<h2>🌸 Cách chơi</h2>
 <li>Mỗi ngày dài 4 phút (10:00–22:00). Cuối tuần đông khách, trời mưa thì vắng.</li>
 <li>Chạm vào khách để xem món. Cho 🍃 trà + 🥛 sữa vào ly, bấm 🍬 / 🧊 để tăng dần từ 0, chọn topping.</li>
 <li>Ô <b>vàng</b> là thứ cần thêm, ô <b>xanh ✓</b> là đã có, ô <b>hồng !</b> là đang sai.</li>
-<li>Bấm 🫗 Pha. Khi nhân viên Hòa vào làm, món đúng sẽ <b>tự động đóng gói</b>.</li>
+<li>Bấm 🫗 Pha. Khi <b>mua Máy đóng gói tự động</b> trong ⬆️ Nâng cấp, món đúng sẽ tự gói gửi khách.</li>
 <li>Coi chừng khách trả thiếu hoặc ôm ly bỏ chạy!</li>
 <li>Tối đóng cửa thì nhập hàng cho ngày mai. Sữa và đồ tươi chỉ để được 1–3 ngày. Mua gấp trong ngày đắt hơn ×1.5.</li>
 <li>Lv10 sang Bắc Kinh, Lv20 sang Thượng Hải.</li>
@@ -846,7 +152,7 @@ const D0=()=>({
     Object.fromEntries(Object.keys(TOP).map(k=>[k,[]])),
     {tea:[[15,3]],milk:[[15,1]],cup:[[15,99]],tc:[[15,1]]}
   ),
-  up:{tb:2,br:1,st:1,dc:0},
+  up:{tb:2,br:1,st:1,dc:0,pk:0},
   staff:{vananh:1},
   st:{sold:0,rev:0,rs:0,rc:0},
   ds:fresh(),dm:[],ev:0,ph:'prep',t:0,snd:1,seen:0,
@@ -857,11 +163,16 @@ try{
   const s=JSON.parse(localStorage.getItem(KEY));
   if(s) S=Object.assign(S,s);
 }catch(e){}
+// Migration từ bản cũ
+if(S.up&&S.up.pk===undefined) S.up.pk=0;
+if(S.staff&&S.staff.hoa) delete S.staff.hoa;
+if(S.staff&&S.staff.pheu) delete S.staff.pheu;
+if(S.up&&S.up.pk===undefined) S.up.pk=0;
 
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 
-/* ---------- T (transient) ---------- */
-const T={cu:[],sel:0,id:0,K:null,st:0,tm:0,tmax:1,for:null,cd:{},sp:3,pause:0,modal:0,mq:[],sheet:'',last:'',sv:0,nav:'',fx:'',dirty:1,cdEls:null,skEls:null};
+/* ---------- T ---------- */
+const T={cu:[],sel:0,id:0,K:null,st:0,tm:0,tmax:1,for:null,cd:{},sp:3,pause:0,modal:0,mq:[],sheet:'',last:'',sv:0,nav:'',fx:'',cdEls:null,skEls:null};
 
 function newCup(){
   T.K={tea:0,milk:0,tops:[],sug:0,ice:0};
@@ -882,11 +193,12 @@ const clk=()=>600+Math.min(S.t,DAY)*3;
 const rush=()=>{const m=clk();return (m>=690&&m<780)||(m>=1080&&m<1200)};
 const inv=k=>S.inv[k].reduce((a,b)=>a+b[0],0);
 const invT=k=>S.inv[k].reduce((a,b)=>a+(b[1]>S.day?b[0]:0),0);
-const life=k=>OB(k).l+(S.staff.pheu&&OB(k).l<50?1:0);
+const life=k=>OB(k).l;
 function add(k,n){const e=S.day+life(k)-(S.ph=='restock'?0:1);const b=S.inv[k].find(x=>x[1]==e);b?b[0]+=n:S.inv[k].push([n,e])}
 function use(k){const B=S.inv[k].sort((a,b)=>a[1]-b[1]);if(B[0]&&!--B[0][0])B.shift()}
 const room=k=>cap()-(S.ph=='restock'?invT(k):inv(k));
 const uc=k=>Math.ceil(OB(k).c*COST[S.ch]*(EV().pr||1)*(S.ph=='restock'?1:1.5));
+const autoPack=()=>S.up.pk>=1; // máy đóng gói tự động
 
 /* ---------- ÂM THANH ---------- */
 let AC=null;
@@ -908,8 +220,6 @@ function beep(f=600,d=.1){
 function toast(m){
   const d=document.createElement('div');d.textContent=m;
   $('#toast').append(d);
-  // Xoá bằng CSS animation thay vì setTimeout
-  d.addEventListener('animationend',()=>d.remove(),{once:true});
   setTimeout(()=>d.remove(),2200);
   const q=$('#toast').children;if(q.length>3)q[0].remove();
 }
@@ -996,11 +306,21 @@ function drawBar(){
       return tile('top',k,o.e,o.s||o.n,q(K.tops.includes(k),D&&D.top==k),inv(k));
     }).join('')}</div>`;
   const d=cur(C(T.sel));
-  const bBrew=$('#bBrew');
-  // Chỉ hiện nút Pha. Đóng gói tự động nếu có Hòa.
+  const bBrew=$('#bBrew'),bPack=$('#bPack'),acts=$('#acts');
   bBrew.disabled=T.st!=0||!d;
   bBrew.classList.toggle('go',!T.st&&!!(d&&K.tea&&K.milk));
   bBrew.textContent=T.st==1?'🫗 Đang pha...':T.st>=2?'✨ Xong!':'🫗 Pha';
+  // Nút Đóng gói chỉ hiện khi CHƯA mua máy tự động
+  if(autoPack()){
+    bPack.classList.add('hide');
+    acts.classList.add('two');
+  } else {
+    bPack.classList.remove('hide');
+    acts.classList.remove('two');
+    bPack.disabled=T.st!=2;
+    bPack.classList.toggle('go',T.st==2);
+    bPack.textContent=T.st==3?'📦 Đang gói...':'📦 Đóng gói';
+  }
   const w=$('#cupw'),full=K.tea&&K.milk;
   w.style.setProperty('--h',(full?80:K.tea||K.milk?45:0)+'%');
   w.style.setProperty('--c',full?'#d9a26f':K.tea?'#b5652b':'#f5efe4');
@@ -1117,21 +437,18 @@ function brew(){
   const u=['tea','milk',...K.tops];
   for(const k of u) if(inv(k)<1) return toast(`Hết ${nm(k)}!`);
   u.forEach(use);
-  if(S.staff.pheu&&Math.random()<.1+.05*S.staff.pheu){
-    const k=P(u);add(k,1);toast(`📦 Phều tiết kiệm được 1 ${nm(k)}`);
-  }
   [d.s,d.n]=rate(K,d,c);d.ip=1;T.for={c:c.id,d};
   T.st=1;T.tm=T.tmax=BR[S.up.br];
   $('#cupw').classList.add('shake');
   beep(330,.3);drawBar();drawOrd();
 }
-/* Hòa tự động đóng gói — không cần bấm nút */
+/* Đóng gói — bấm tay nếu chưa có máy */
 function pack(){
   if(T.st!=2) return;
-  if(inv('cup')<1){toast('Hết 🥤 ly + nắp, vào Kho nhập thêm');return}
+  if(inv('cup')<1) return toast('Hết 🥤 ly + nắp, vào Kho nhập thêm');
   use('cup');
-  T.st=3;T.tm=T.tmax=0.8; // gói nhanh
-  $('#cupw').classList.add('pk');beep(440,.15);drawBar();
+  T.st=3;T.tm=T.tmax=0.8;
+  $('#cupw').classList.add('pk');beep(440,.15);drawBar();drawOrd();
 }
 function nextCup(){
   const prev=T.for&&T.for.c;newCup();
@@ -1239,6 +556,7 @@ function prepModal(){
   ${S.ev?`<div class="ev"><b>${e[0]}</b><div class="sm">${e[1]}</div></div>`:''}
   ${S.sp.length?`<div class="sm">🗑️ Hỏng qua đêm: ${S.sp.join(' · ')}</div>`:''}
   <div class="sm">Kho: ${stock().map(k=>OB(k).e+inv(k)).join(' · ')}</div>
+  ${autoPack()?`<div class="sm">📦 Máy đóng gói tự động đang bật — pha xong sẽ tự gửi khách.</div>`:''}
   <div class="mb"><button class="btn p" data-a="open">🔓 Mở cửa lúc 10:00</button></div>`);
 }
 function openDay(){
@@ -1335,8 +653,10 @@ function upgrade(k){
   const c=u.c(l);
   if(S.money<c) return toast(`Cần ${F(c)}💰`);
   S.money-=c;S.up[k]++;gain(15);
-  beep(1200,.3);toast(`${u.e} ${u.n}: ${u.d(S.up[k])}`);
-  save();drawTables();reSheet();
+  beep(1200,.3);
+  if(k=='pk') toast('📦 Máy đóng gói tự động đã lắp! Pha xong sẽ tự gửi khách.');
+  else toast(`${u.e} ${u.n}: ${u.d(S.up[k])}`);
+  save();drawTables();drawBar();reSheet();
 }
 function unlockTop(k){
   const o=TOP[k];
@@ -1375,8 +695,9 @@ const SH={
   }).join('')],
   up:['⬆️ Nâng cấp',()=>UPG.map(u=>{
     const l=S.up[u.k],mx=l>=u.mx,c=mx?0:u.c(l);
-    return `<div class="it"><div class="e">${u.e}</div><div class="m"><b>${u.n}</b><small>${u.d(l)}${mx?'':' → '+u.d(l+1)}</small></div>
-    ${mx?'<span class="sm mu">Tối đa</span>':`<button class="b2 ${S.money>=c?'p':''}" data-a="up" data-k="${u.k}">${F(c)}💰</button>`}</div>`;
+    const hl=u.k=='pk'?' style="background:linear-gradient(180deg,#fff5e0,#ffe0b0);border-radius:10px;padding:8px;margin:4px 0"':'';
+    return `<div class="it"${hl}><div class="e">${u.e}</div><div class="m"><b>${u.n}</b><small>${u.d(l)}${mx?'':' → '+u.d(l+1)}</small></div>
+    ${mx?'<span class="sm mu">✅ Đã có</span>':`<button class="b2 ${S.money>=c?'p':''}" data-a="up" data-k="${u.k}">${F(c)}💰</button>`}</div>`;
   }).join('')
   +'<h3>🧁 Mở khóa topping</h3>'+Object.keys(TOP).filter(k=>TOP[k].u).map(k=>{
     const o=TOP[k],own=S.tops.includes(k),ok=S.lv>=o.lv&&o.ch<=S.ch;
@@ -1426,6 +747,7 @@ function act(a,k){
       if(T.st) return toast('Đang pha, không làm lại được');
       newCup();drawBar();drawOrd();autoFill();break;
     case 'brew':brew();break;
+    case 'pack':pack();break;
     case 'skill':skill(k);break;
     case 'sinfo':{const s=STF.find(x=>x.k==k);toast(`${s.e} ${s.n} (${s.r}): ${s.d(S.staff[k])}`)}break;
     case 'nav':if(T.modal&&k=='kho')mclose();openSheet(k);break;
@@ -1453,7 +775,7 @@ document.addEventListener('click',e=>{
   if(el) act(el.dataset.a,el.dataset.k);
 });
 
-/* ---------- TICK (chỉ logic, 12fps) ---------- */
+/* ---------- TICK (12fps) ---------- */
 function tick(dt){
   S.t+=dt;
   const cdKeys=Object.keys(T.cd);
@@ -1475,13 +797,12 @@ function tick(dt){
     c.p-=dt;
     if(c.p<=0) angry(c);
   }
-  // Pha xong → nếu có Hòa thì tự đóng gói, ngược lại đợi bấm nút
+  // Pha xong → tự đóng gói nếu có máy, ngược lại chờ bấm
   if(T.st==1&&(T.tm-=dt)<=0){
-    T.st=2;$('#cupw').classList.remove('shake');beep(700,.15);drawBar();
-    if(S.staff.hoa){pack()}
+    T.st=2;$('#cupw').classList.remove('shake');beep(700,.15);drawBar();drawOrd();
+    if(autoPack()) pack();
   }
-  // Đóng gói xong → mang ra
-  if(T.st==3&&(T.tm-=dt)<=0){deliver()}
+  if(T.st==3&&(T.tm-=dt)<=0) deliver();
   if(S.t>=DAY) endDay();
 }
 
@@ -1583,5 +904,3 @@ requestAnimationFrame(loop);
 if('serviceWorker'in navigator&&location.protocol.startsWith('http'))
   navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
-</body>
-</html>
