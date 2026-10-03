@@ -285,10 +285,13 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.9);
   padding:4px;
 }
+
+/* Cốc: KHÔNG overflow hidden để nắp/ống hút không bị cắt, logo luôn nổi */
 .cupw{
   position:relative;width:100%;
   display:flex;justify-content:center;align-items:flex-end;
-  padding:16px 0 4px;
+  padding:22px 0 4px;
+  overflow:visible;
 }
 .cup-body{
   position:relative;
@@ -306,22 +309,36 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
     0 6px 14px rgba(140,180,220,.25);
   overflow:hidden;
 }
+/* Vành miệng cốc — chỉ ở trên cùng, không ảnh hưởng logo */
 .cup-body::before{
   content:"";position:absolute;left:0;right:0;top:0;height:7px;
   background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(220,235,250,.5));
   border-bottom:1.5px solid rgba(180,215,240,.7);
   z-index:4;pointer-events:none;
 }
+
+/* Logo dán trên thân cốc — nằm giữa, KHÔNG bị nắp che */
 .cup-logo{
   position:absolute;
-  top:40%;left:50%;
-  transform:translate(-50%,-50%) rotate(-8deg);
-  width:52%;max-width:48px;aspect-ratio:1;
-  border-radius:50%;object-fit:cover;
-  z-index:3;opacity:.92;
-  box-shadow:0 2px 4px rgba(140,100,120,.25),0 0 0 2px rgba(255,255,255,.85);
-  pointer-events:none;background:#ffc6dd;
+  top:42%;
+  left:50%;
+  transform:translate(-50%,-50%) rotate(-10deg);
+  width:56%;
+  max-width:50px;
+  aspect-ratio:1;
+  border-radius:50%;
+  object-fit:cover;
+  z-index:3;
+  opacity:1;
+  border:2.5px solid #fff;
+  box-shadow:
+    0 2px 5px rgba(140,100,120,.35),
+    0 0 0 1px rgba(180,140,180,.25);
+  pointer-events:none;
+  background:#ffc6dd;
+  filter:drop-shadow(0 1px 2px rgba(140,100,120,.25));
 }
+
 .cup-liquid{
   position:absolute;left:0;right:0;bottom:0;height:0%;
   background:#f5efe4;
@@ -368,8 +385,13 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 .cup-ice span:nth-child(1){left:16%;top:12%;transform:rotate(8deg)}
 .cup-ice span:nth-child(2){left:44%;top:26%;transform:rotate(-12deg)}
 .cup-ice span:nth-child(3){left:64%;top:8%;transform:rotate(15deg)}
+
+/* Nắp dome — đặt ở miệng cốc, KHÔNG che logo (logo ở 42%, nắp ở trên cùng) */
 .cup-lid{
-  position:absolute;left:-4%;right:-4%;top:-6%;height:16%;
+  position:absolute;
+  left:-4%;right:-4%;
+  top:-8%;
+  height:14%;
   border-radius:50% 50% 30% 30% / 80% 80% 30% 30%;
   background:linear-gradient(180deg,#fff,#e0f1ff);
   border:2px solid #b6d4ea;
@@ -379,9 +401,11 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   box-shadow:0 2px 4px rgba(140,180,220,.3),inset 0 3px 0 rgba(255,255,255,.9);
 }
 .pk .cup-lid{opacity:1;transform:translateY(0) scale(1)}
+
+/* Ống hút — cắm xuyên qua nắp, không che logo */
 .cup-straw{
   position:absolute;
-  top:-14%;left:56%;width:9%;height:60%;
+  top:-16%;left:56%;width:9%;height:58%;
   border-radius:50px;
   background:repeating-linear-gradient(180deg,#ff6b9d 0 8px,#ffc6dd 8px 16px);
   border:1px solid rgba(180,80,120,.3);
@@ -389,10 +413,11 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   transform:translateY(-30px) rotate(9deg);
   transform-origin:bottom center;
   transition:opacity .35s,transform .35s;
-  z-index:4;
+  z-index:6;
   box-shadow:inset -1px 0 0 rgba(0,0,0,.1);
 }
 .pk .cup-straw{opacity:1;transform:translateY(0) rotate(9deg)}
+
 .shake .cup-body{
   box-shadow:
     inset 0 0 0 2.5px rgba(255,143,184,.95),
@@ -666,9 +691,9 @@ const P=a=>a[Math.random()*a.length|0];
 const cl=(v,a,b)=>Math.max(a,Math.min(b,v));
 const F=n=>Math.round(n).toLocaleString('vi-VN');
 
-const KEY='vk_tea_v8';
-const SAVE_SLOT='vk_tea_slot_v8';
-const SAVE_VERSION=8;
+const KEY='vk_tea_v9';
+const SAVE_SLOT='vk_tea_slot_v9';
+const SAVE_VERSION=9;
 const DAY=300,LAST=290,PAT=30,MAXLV=30;
 
 const SUG=['0%','30%','50%','70%','100%'];
