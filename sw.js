@@ -1,5 +1,5 @@
-// Quán trà sữa Vân Khánh — service worker
-const CACHE = 'vk-tea-v3';
+// 🌸 Quán trà sữa Vân Khánh — service worker
+const CACHE = 'vk-tea-v4';
 const ASSETS = [
   './',
   './index.html',
@@ -26,7 +26,6 @@ self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET' || new URL(req.url).origin !== location.origin) return;
 
-  // Trang chính: ưu tiên mạng, fallback cache
   if (req.mode === 'navigate') {
     e.respondWith(
       fetch(req)
@@ -36,7 +35,6 @@ self.addEventListener('fetch', e => {
     return;
   }
 
-  // Còn lại: cache-first
   e.respondWith(
     caches.match(req).then(r => r || fetch(req).then(res => {
       const cp = res.clone();
