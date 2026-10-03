@@ -50,7 +50,6 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   padding:calc(env(safe-area-inset-top) + 8px) 9px calc(env(safe-area-inset-bottom) + 8px);
 }
 
-/* HUD */
 #hd{
   position:relative;color:#fff;border-radius:var(--radius);
   padding:16px 11px 9px;
@@ -108,7 +107,6 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 .cur b{font-weight:700}
 .dpb{margin-top:5px;height:5px}.dpb i{background:linear-gradient(90deg,#fff4c8,#fff)}
 
-/* QUÁN */
 .ch1{--w1:#ffe4c9;--w2:#ffc6dd;--dc:#8a4a6a;--bg:#fff5fa}
 .ch2{--w1:#ffd0c4;--w2:#ffb89c;--dc:#8a3a2a;--bg:#fff2ec}
 .ch3{--w1:#e0d0ff;--w2:#c9b6f0;--dc:#5a4a8a;--bg:#f7f2ff}
@@ -252,7 +250,6 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 }
 .chp.ok{background:linear-gradient(180deg,#e0f7ec,#c4eedd);border-color:var(--mint);color:#3a8a70}
 
-/* ============ QUẦY PHA ============ */
 #bar{
   background:radial-gradient(circle at 20% 0%,rgba(255,220,235,.5),transparent 50%),#fff;
   border-radius:var(--radius);
@@ -268,8 +265,6 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 }
 .cupw{position:relative;width:100%;display:flex;justify-content:center;padding-top:22px}
 
-/* ============ CỐC TRÀ SỮA MỚI ============ */
-/* Cốc thủy tinh: thành cốc mờ, đáy cong, KHÔNG có vệt dọc giữa */
 #cup{
   position:relative;
   width:72%;max-width:78px;
@@ -288,7 +283,6 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
     0 4px 10px rgba(140,180,220,.2);
   border:none;
 }
-/* Highlight 2 bên thành cốc (không còn vệt giữa) */
 #cup::before{
   content:"";position:absolute;inset:0;pointer-events:none;z-index:2;
   background:
@@ -301,7 +295,6 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
       rgba(255,255,255,.6) 100%);
   border-radius:inherit;
 }
-/* Vành cốc trên */
 #cup::after{
   content:"";position:absolute;left:0;right:0;top:0;height:6px;
   background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(220,235,250,.4));
@@ -333,7 +326,6 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 }
 .pour .stream{height:38%;top:36%;opacity:.9;transition:height .3s,opacity .3s}
 .lid,.straw{position:absolute;opacity:0;transition:.35s;z-index:3}
-/* Nắp cốc — cong theo vành */
 .lid{
   top:6px;left:14%;right:14%;height:14px;
   border-radius:50% 50% 20% 20% / 60% 60% 40% 40%;
@@ -342,7 +334,6 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   transform:translateY(-30px);
   box-shadow:0 2px 4px rgba(140,180,220,.3),inset 0 2px 0 rgba(255,255,255,.9);
 }
-/* Ống hút — nghiêng nhẹ */
 .straw{
   top:-2px;left:56%;width:7px;height:52%;
   border-radius:3px;
@@ -353,7 +344,6 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 }
 .pk .lid{opacity:1;transform:none}
 .pk .straw{opacity:1;transform:rotate(10deg)}
-/* Hiệu ứng rung cốc khi pha — dùng viền, KHÔNG animation infinite */
 .shake #cup{
   box-shadow:
     inset 0 0 0 2px rgba(255,143,184,.9),
@@ -620,8 +610,10 @@ const cl=(v,a,b)=>Math.max(a,Math.min(b,v));
 const F=n=>Math.round(n).toLocaleString('vi-VN');
 
 const KEY='vk_tea_v6';
-/* ⏱️ 1 ngày = 300 giây thực (5 phút). 10:00→22:00 */
+const SAVE_SLOT='vk_tea_slot_v6';
+const SAVE_VERSION=6;
 const DAY=300,LAST=290,PAT=30,MAXLV=30;
+
 const SUG=['0%','30%','50%','70%','100%'];
 const ICE=['Không đá','Ít đá','Đá vừa','Nhiều đá'];
 const WD=['Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy','Chủ Nhật'];
@@ -747,6 +739,7 @@ const HELP=`<h2>🌸 Cách chơi</h2>
 <li>Coi chừng khách trả thiếu hoặc ôm ly bỏ chạy!</li>
 <li><b>Cuối ngày</b>: nhập hàng, nâng cấp, thuê nhân viên. Xong bấm "Sang ngày mới" mới đi tiếp.</li>
 <li>Lv10 sang Bắc Kinh, Lv20 sang Thượng Hải.</li>
+<li>💾 <b>Save game</b>: vào 🎯 Nhiệm vụ. Lưu/tải/xuất/nhập file. Tự động lưu mỗi 30 giây.</li>
 </ol>
 <div class="mb"><button class="btn p" data-a="mx">Bắt đầu! 🌸</button></div>`;
 
@@ -767,7 +760,7 @@ const D0=()=>({
 let S=D0();
 try{
   const s=JSON.parse(localStorage.getItem(KEY));
-  if(s) S=Object.assign(S,s);
+  if(s) S=Object.assign(D0(),s);
 }catch(e){}
 if(S.up&&S.up.pk===undefined) S.up.pk=0;
 if(S.staff&&S.staff.hoa) delete S.staff.hoa;
@@ -775,7 +768,110 @@ if(S.staff&&S.staff.pheu) delete S.staff.pheu;
 
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 
-const T={cu:[],sel:0,id:0,K:null,st:0,tm:0,tmax:1,for:null,cd:{},sp:3,pause:0,modal:0,mq:[],sheet:'',last:'',sv:0,nav:'',fx:'',cdEls:null,skEls:null};
+/* ========== SAVE THỦ CÔNG ========== */
+function packSave(){
+  return JSON.stringify({
+    v:SAVE_VERSION,
+    ts:Date.now(),
+    day:S.day,lv:S.lv,ch:S.ch,money:S.money,
+    data:S
+  });
+}
+function saveSlot(){
+  try{ localStorage.setItem(SAVE_SLOT,packSave()); return true; }
+  catch(e){ return false; }
+}
+function loadSlot(){
+  try{
+    const raw=localStorage.getItem(SAVE_SLOT);
+    if(!raw) return false;
+    const obj=JSON.parse(raw);
+    if(!obj||obj.v!==SAVE_VERSION) return false;
+    S=Object.assign(D0(),obj.data);
+    T.cu=[];T.sel=0;T.id=0;T.cd={};
+    T.cdEls=null;T.skEls=null;T.nav='';
+    newCup();
+    return true;
+  }catch(e){ return false; }
+}
+const hasSlot=()=>!!localStorage.getItem(SAVE_SLOT);
+function slotInfo(){
+  try{
+    const raw=localStorage.getItem(SAVE_SLOT);
+    if(!raw) return null;
+    const o=JSON.parse(raw);
+    const d=new Date(o.ts);
+    return {lv:o.lv,day:o.day,ch:o.ch,money:o.money,
+      time:`${d.getHours()}:${String(d.getMinutes()).padStart(2,'0')} ${d.getDate()}/${d.getMonth()+1}`};
+  }catch(e){ return null; }
+}
+function deleteSlot(){
+  try{ localStorage.removeItem(SAVE_SLOT); return true; }
+  catch(e){ return false; }
+}
+function exportSave(){
+  try{
+    const data=packSave();
+    const blob=new Blob([data],{type:'application/json'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;
+    a.download=`tra-sua-vk-ngay${S.day}-lv${S.lv}.json`;
+    document.body.append(a);
+    a.click();
+    a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+    toast('💾 Đã xuất file save!');
+  }catch(e){ toast('❌ Không xuất được file'); }
+}
+function importSave(){
+  const input=document.createElement('input');
+  input.type='file';
+  input.accept='.json,application/json';
+  input.onchange=()=>{
+    const f=input.files&&input.files[0];
+    if(!f) return;
+    const reader=new FileReader();
+    reader.onload=()=>{
+      try{
+        const obj=JSON.parse(reader.result);
+        if(!obj||!obj.data){ toast('❌ File không hợp lệ'); return; }
+        if(obj.v!==SAVE_VERSION) toast(`⚠️ File v${obj.v}, game v${SAVE_VERSION}`);
+        if(!confirm(`Nhập save Ngày ${obj.day||'?'} · Lv${obj.lv||'?'}?\nTiến trình hiện tại sẽ bị ghi đè.`)) return;
+        S=Object.assign(D0(),obj.data);
+        T.cu=[];T.sel=0;T.id=0;T.cd={};
+        T.cdEls=null;T.skEls=null;T.nav='';
+        newCup();
+        save();drawAll();
+        toast('✅ Đã nhập save thành công!');
+        if(S.ph=='prep') prepModal();
+        else if(S.ph=='end') report();
+        else if(S.ph=='restock') restockModal();
+      }catch(e){ toast('❌ Lỗi đọc file'); }
+    };
+    reader.readAsText(f);
+  };
+  input.click();
+}
+function manualSave(){
+  if(saveSlot()) toast('💾 Đã lưu vào ô nhớ!');
+  else toast('❌ Không lưu được');
+}
+function manualLoad(){
+  if(!hasSlot()){ toast('📭 Chưa có save nào'); return; }
+  const info=slotInfo();
+  if(!confirm(`Tải save?\nNgày ${info.day} · Lv${info.lv} · ${F(info.money)}💰\nLưu lúc ${info.time}\n\nTiến trình hiện tại sẽ mất.`)) return;
+  if(loadSlot()){
+    save();drawAll();
+    toast('📂 Đã tải save!');
+    if(S.ph=='prep') prepModal();
+    else if(S.ph=='end') report();
+    else if(S.ph=='restock') restockModal();
+  } else toast('❌ Save lỗi hoặc phiên bản cũ');
+}
+
+/* ---------- T ---------- */
+const T={cu:[],sel:0,id:0,K:null,st:0,tm:0,tmax:1,for:null,cd:{},sp:3,pause:0,modal:0,mq:[],sheet:'',last:'',sv:0,svAuto:0,nav:'',fx:'',cdEls:null,skEls:null};
 
 function newCup(){
   T.K={tea:0,milk:0,tops:[],sug:0,ice:0};
@@ -792,9 +888,7 @@ const nm=k=>OB(k).e+' '+OB(k).n;
 const stock=()=>['tea','milk','cup',...S.tops];
 const wd=()=>(S.day-1)%7;
 const quiet=()=>S.q.some(([a,b])=>S.t>=a&&S.t<b);
-/* 1 ngày 300s: 10:00 → 22:00, mỗi giây thực = 2.4 phút game */
 const clk=()=>600+Math.min(S.t,DAY)*2.4;
-/* Cao điểm: 11:30–13:00 (690–780) và 18:00–20:00 (1080–1200) */
 const rush=()=>{const m=clk();return (m>=690&&m<780)||(m>=1080&&m<1200)};
 const inv=k=>S.inv[k].reduce((a,b)=>a+b[0],0);
 const invT=k=>S.inv[k].reduce((a,b)=>a+(b[1]>S.day?b[0]:0),0);
@@ -852,25 +946,54 @@ function drawHead(){
   $('#chap').textContent=`Chương ${S.ch} · ${CITY[S.ch].n} ${CITY[S.ch].f}`;
 }
 function drawTables(){
-  const f=WX[S.cw].fx,u=f?`<i style="font-style:normal;font-size:.45em;position:absolute;right:-.35em;top:-.1em">${f=='snow'?'🧣':'☂️'}</i>`:'';
-  $('#tables').innerHTML=[0,1,2,3].map(i=>{
-    if(i>=S.up.tb) return `<div class="tb lk" id="tb${i}">🔒<span>Nâng cấp bàn</span></div>`;
-    const c=T.cu.find(c=>c.tb==i);
-    if(!c) return `<div class="tb" id="tb${i}"><div class="emp">🪑<br>Bàn trống</div></div>`;
-    return `<div class="tb ${c.id==T.sel&&!c.gone?'sel':''} ${c.in?'in':''} ${c.gone?'out':''}" id="tb${i}" data-a="sel" data-k="${c.id}">
-      <div class="bub">${c.d.map(d=>`<span class="${d.done?'dn':''}">🧋${d.top?TOP[d.top].e:''}</span>`).join(' ')}</div>
+  const f=WX[S.cw].fx;
+  const u=f?`<i style="font-style:normal;font-size:.45em;position:absolute;right:-.35em;top:-.1em">${f=='snow'?'🧣':'☂️'}</i>`:'';
+  const byTable={};
+  for(let i=0;i<T.cu.length;i++){ const c=T.cu[i]; if(!c.gone) byTable[c.tb]=c; }
+  let html='';
+  for(let i=0;i<4;i++){
+    if(i>=S.up.tb){ html+=`<div class="tb lk" id="tb${i}">🔒<span>Nâng cấp bàn</span></div>`; continue; }
+    const c=byTable[i];
+    if(!c){ html+=`<div class="tb" id="tb${i}"><div class="emp">🪑<br>Bàn trống</div></div>`; continue; }
+    let bub='';
+    for(let j=0;j<c.d.length;j++){
+      const d=c.d[j];
+      bub+=(j?' ':'')+`<span class="${d.done?'dn':''}">🧋${d.top?TOP[d.top].e:''}</span>`;
+    }
+    const ceFace=c.gone=='ran'?'🏃':c.gone=='angry'?'😠':c.e;
+    html+=`<div class="tb ${c.id==T.sel&&!c.gone?'sel':''} ${c.in?'in':''} ${c.gone?'out':''}" id="tb${i}" data-a="sel" data-k="${c.id}">
+      <div class="bub">${bub}</div>
       <div class="cd" id="cd${c.id}"></div>
-      <div class="ce">${c.gone=='ran'?'🏃':c.gone=='angry'?'😠':c.e}${c.gone?'':u}</div>
+      <div class="ce">${ceFace}${c.gone?'':u}</div>
       <div class="cn">${c.n}${c.k=='vip'?' 👑':''}</div>
     </div>`;
-  }).join('');
-  T.cu.forEach(c=>c.in=0);
-  refreshCdCache();
+  }
+  const shop=$('#tables');
+  shop.innerHTML=html;
+  T.cdEls={};
+  const cdNodes=shop.querySelectorAll('.cd');
+  for(let i=0;i<cdNodes.length;i++){
+    const n=cdNodes[i];
+    T.cdEls[n.id.slice(2)]=n;
+  }
+  for(let i=0;i<T.cu.length;i++) T.cu[i].in=0;
 }
 function drawStaff(){
   $('#staffs').innerHTML=STF.filter(s=>S.staff[s.k])
     .map(s=>`<button class="sf" data-a="${s.sk?'skill':'sinfo'}" data-k="${s.k}">${s.e} ${s.n}${s.sk?`<small id="sk_${s.k}"></small>`:''}</button>`)
     .join('');
+  T.skEls={};
+  const nodes=document.querySelectorAll('#staffs .sf');
+  for(let i=0;i<nodes.length;i++){
+    const b=nodes[i];
+    if(b.dataset.k){
+      const s=STF.find(x=>x.k==b.dataset.k);
+      if(s&&s.sk){
+        const e=document.getElementById('sk_'+s.k);
+        if(e) T.skEls[s.k]=e;
+      }
+    }
+  }
 }
 const dname=d=>d.top?TOP[d.top].n:'Truyền thống';
 
@@ -949,24 +1072,46 @@ function mkDrink(b){
     done:0,ip:0
   };
 }
-/* Giờ cao điểm: TĂNG MẠNH spawn */
 function nextSpawn(){
   const rushMul=rush()?2.2:1;
   const mul=WDM[wd()]*WX[S.cw].m*(EV().sp||1)*rushMul*(.9+S.rep*.004);
-  /* Giờ cao điểm còn giảm khoảng chờ giữa các khách */
   T.sp=R(8,12)/mul;
 }
 function spawn(){
   if(S.ph!='open'||S.t>=LAST) return 0;
-  const free=[...Array(S.up.tb).keys()].filter(i=>!T.cu.some(c=>c.tb==i));
-  const pool=CUS.filter(c=>c.lv<=S.lv&&!T.cu.some(x=>x.n==c.n));
-  if(!free.length||!pool.length) return 0;
-  const pr=pool.find(c=>c.k=='pair');
-  const b=pr&&wd()>=5&&Math.random()<.35?pr:P(pool);
+  const cu=T.cu;
+  const free=[];
+  for(let i=0;i<S.up.tb;i++){
+    let taken=false;
+    for(let j=0;j<cu.length;j++){ if(cu[j].tb==i){taken=true;break} }
+    if(!taken) free.push(i);
+  }
+  if(!free.length) return 0;
+  const pool=[];
+  for(let i=0;i<CUS.length;i++){
+    const c=CUS[i];
+    if(c.lv>S.lv) continue;
+    let dup=false;
+    for(let j=0;j<cu.length;j++){ if(cu[j].n==c.n){dup=true;break} }
+    if(!dup) pool.push(c);
+  }
+  if(!pool.length) return 0;
+  let pair=null;
+  for(let i=0;i<pool.length;i++) if(pool[i].k=='pair'){pair=pool[i];break}
+  const b=(pair&&wd()>=5&&Math.random()<.35)?pair:P(pool);
   const n=b.k=='pair'?2:b.k=='take'?2+(Math.random()<.4):1;
-  const pm=PAT+2*S.up.dc+({calm:10,vip:-5,pair:10,take:18}[b.k]||0);
-  const c={...b,id:++T.id,tb:P(free),pm,p:pm,d:Array.from({length:n},()=>mkDrink(b)),in:1};
-  T.cu.push(c);beep(880,.15);
+  let pm=PAT+2*S.up.dc;
+  if(b.k=='calm') pm+=10;
+  else if(b.k=='vip') pm-=5;
+  else if(b.k=='pair') pm+=10;
+  else if(b.k=='take') pm+=18;
+  const c={
+    n:b.n,e:b.e,k:b.k,lv:b.lv,
+    id:++T.id,tb:P(free),pm:pm,p:pm,in:1,
+    d:new Array(n)
+  };
+  for(let i=0;i<n;i++) c.d[i]=mkDrink(b);
+  cu.push(c);beep(880,.15);
   if(!C(T.sel)&&!T.st){T.sel=c.id;drawOrd();drawBar();autoFill()}
   drawTables();return 1;
 }
@@ -1206,7 +1351,7 @@ function restockModal(){
     <button class="btn" data-a="nav" data-k="kho">📦 Nhập lẻ trong kho</button>
     <button class="btn" data-a="nav" data-k="up">⬆️ Nâng cấp</button>
     <button class="btn" data-a="nav" data-k="staff">👥 Thuê nhân viên</button>
-    <button class="btn p" data-a="end2night">😴 Xong, sang ngày mới</button>
+    <button class="btn p" data-a="next">😴 Xong, sang ngày mới</button>
   </div>`);
 }
 function buySug(){
@@ -1216,15 +1361,13 @@ function buySug(){
   S.money-=tot;S.nc=(S.nc||0)+tot;beep(990);save();
   drawBar();mclose();restockModal();
 }
-/* Người chơi chủ động bấm "Sang ngày mới" */
 function endToNight(){
   mclose();S.ph='restock';save();
   drawOrd();drawBar();
   restockModal();
 }
 function nextDay(){
-  openSheet('');
-  mclose();
+  openSheet('');mclose();
   S.day++;S.t=0;S.ph='prep';S.ds=fresh();
   S.ds.cost=S.nc||0;S.nc=0;S.sp=[];
   for(const k in S.inv){
@@ -1320,6 +1463,7 @@ const SH={
   }).join('')],
   quest:['🎯 Nhiệm vụ',()=>{
     const g=S.ch*10,q=CHQ[S.ch];
+    const si=hasSlot()?slotInfo():null;
     return `<div class="ev"><b>📖 Chương ${S.ch} · ${q[0]}</b><div class="sm">${q[1]}</div>
     <div class="it" style="padding:0;border:0"><div class="m"><div class="pb"><i style="width:${Math.min(S.lv,g)/g*100}%;background:var(--rose)"></i></div></div><b>Lv ${S.lv}/${g}</b></div></div>
     <h3>Hôm nay</h3>`+S.dm.map((m,i)=>{
@@ -1328,10 +1472,19 @@ const SH={
       ${m.c?'✅':`<button class="b2 ${ok?'p':''}" data-a="claim" data-k="${i}" ${ok?'':'disabled'}>${ok?'Nhận':F(v)+'/'+F(m.n)}</button>`}</div>`;
     }).join('')
     +`<h3>📊 Tổng kết</h3><div class="sm">Đã bán ${F(S.st.sold)} ly · Doanh thu ${F(S.st.rev)}💰 · Đánh giá TB ${S.st.rc?(S.st.rs/S.st.rc).toFixed(2):'–'}★</div>
+    <h3>💾 Lưu game</h3>
+    <div class="bs" style="margin-bottom:8px">
+      <button class="b2 p" data-a="save">💾 Lưu ngay</button>
+      <button class="b2 ${si?'g':''}" data-a="load" ${si?'':'disabled'}>📂 Tải save</button>
+      <button class="b2" data-a="export">⬇️ Xuất file</button>
+      <button class="b2" data-a="import">⬆️ Nhập file</button>
+    </div>
+    ${si?`<div class="sm mu">Save hiện có: Ngày ${si.day} · Lv${si.lv} · ${F(si.money)}💰 · ${si.time}</div>`:'<div class="sm mu">Chưa có save thủ công</div>'}
     <div class="bs" style="margin-top:8px">
       <button class="b2" data-a="snd">🔊 Âm thanh: ${S.snd?'Bật':'Tắt'}</button>
       <button class="b2" data-a="help">❓ Cách chơi</button>
-      <button class="b2" data-a="wipe">🗑️ Chơi lại</button>
+      <button class="b2" data-a="wipeslot">🗑️ Xoá save</button>
+      <button class="b2" data-a="wipe">💥 Chơi lại từ đầu</button>
     </div>`;
   }]
 };
@@ -1380,6 +1533,16 @@ function act(a,k){
     case 'help':openSheet('');modal(HELP);break;
     case 'pause':T.pause^=1;$('#pause').textContent=T.pause?'▶':'⏸';break;
     case 'snd':S.snd^=1;save();reSheet();break;
+    case 'save':manualSave();reSheet();break;
+    case 'load':manualLoad();break;
+    case 'export':exportSave();break;
+    case 'import':importSave();break;
+    case 'wipeslot':
+      if(!hasSlot()){toast('📭 Chưa có save thủ công');break}
+      if(confirm('Xoá save thủ công? (Tiến trình đang chơi không bị ảnh hưởng)')){
+        deleteSlot();toast('🗑️ Đã xoá save thủ công');reSheet();
+      }
+      break;
     case 'wipe':if(confirm('Xóa toàn bộ tiến trình và chơi lại từ đầu?')){localStorage.removeItem(KEY);location.reload()}break;
   }
 }
@@ -1391,8 +1554,8 @@ document.addEventListener('click',e=>{
 
 function tick(dt){
   S.t+=dt;
-  const cdKeys=Object.keys(T.cd);
-  for(let i=0;i<cdKeys.length;i++){const k=cdKeys[i];T.cd[k]=Math.max(0,T.cd[k]-dt)}
+  for(const k in T.cd){ if(T.cd[k]>0){T.cd[k]=Math.max(0,T.cd[k]-dt)} }
+
   const w=S.wc;
   if(w&&!w.d&&S.t>=w.t){
     w.d=1;S.cw=w.to;
@@ -1400,21 +1563,29 @@ function tick(dt){
     toast(x.fx?`${x.e} ${x.n}! Khách sẽ ít đi`:'⛅ Trời tạnh rồi, khách lại đông dần');
     drawTables();
   }
+
   if((T.sp-=dt)<=0){
-    if(!quiet())spawn();
-    /* Giờ cao điểm: spawn liên tục, không chờ */
-    if(rush()&&!quiet()){spawn();spawn();}
+    const q=quiet();
+    if(!q){
+      spawn();
+      if(rush()){ spawn(); spawn(); }
+    }
     nextSpawn();
   }
+
   for(let i=0,n=T.cu.length;i<n;i++){
     const c=T.cu[i];
     if(c.gone) continue;
-    let allDone=true;
-    for(let j=0;j<c.d.length;j++){if(!c.d[j].done&&!c.d[j].ip){allDone=false;break}}
-    if(allDone) continue;
+    let pending=false;
+    for(let j=0;j<c.d.length;j++){
+      const d=c.d[j];
+      if(!d.done&&!d.ip){ pending=true; break; }
+    }
+    if(!pending) continue;
     c.p-=dt;
     if(c.p<=0) angry(c);
   }
+
   if(T.st==1&&(T.tm-=dt)<=0){
     T.st=2;$('#cupw').classList.remove('shake');beep(700,.15);drawBar();drawOrd();
     if(autoPack()) pack();
@@ -1428,12 +1599,9 @@ const el=id=>EL[id]||(EL[id]=document.getElementById(id));
 const setTxt=(id,v)=>{const e=el(id);if(e&&e.textContent!==v)e.textContent=v};
 const setW=(id,v)=>{const e=el(id);const w=v+'%';if(e&&e.style.width!==w)e.style.width=w};
 
-function refreshCdCache(){
-  T.cdEls={};
-  for(let i=0;i<T.cu.length;i++){const c=T.cu[i];const e=document.getElementById('cd'+c.id);if(e)T.cdEls[c.id]=e}
-  T.skEls={};
-  for(let i=0;i<STF.length;i++){const s=STF[i];if(s.sk){const e=document.getElementById('sk_'+s.k);if(e)T.skEls[s.k]=e}}
-}
+const CC_COLORS=['#ff6b9d','#ffd98a','#8ed9c0'];
+let _lastN=-1;
+
 function ui(){
   const m=clk();
   setTxt('money',F(S.money));
@@ -1443,41 +1611,57 @@ function ui(){
   setTxt('xpt',`${S.exp}/${need(S.lv)}`);
   setTxt('wxi',WX[S.cw].e);
   setTxt('clock',String(m/60|0).padStart(2,'0')+':'+String(m%60|0).padStart(2,'0'));
-  const deco=S.ph!='open'?CITY[S.ch].d
-    :quiet()?'😴 Phố vắng khách... nghỉ tay chút nào 🌸'
-    :rush()?'🔥 Giờ cao điểm! Khách nườm nượp':CITY[S.ch].d;
+
+  let deco;
+  if(S.ph!='open') deco=CITY[S.ch].d;
+  else if(quiet()) deco='😴 Phố vắng khách... nghỉ tay chút nào 🌸';
+  else if(rush()) deco='🔥 Giờ cao điểm! Khách nườm nượp';
+  else deco=CITY[S.ch].d;
   setTxt('deco',deco);
+
   const fx=WX[S.cw].fx||'';
-  if(fx!=T.fx){T.fx=fx;$('#shop').className=fx}
+  if(fx!=T.fx){T.fx=fx;el('shop').className=fx}
+
   setW('xp',S.exp/need(S.lv)*100);
   setW('dp',S.t/DAY*100);
-  if(!T.cdEls||T.cdEls._n!==T.cu.length){refreshCdCache();T.cdEls._n=T.cu.length}
-  for(let i=0;i<T.cu.length;i++){
-    const c=T.cu[i];
-    const e=T.cdEls[c.id];
-    if(!e||c.gone) continue;
-    const f=cl(c.p/c.pm,0,1);
-    let allDone=true;
-    for(let j=0;j<c.d.length;j++){if(!c.d[j].done&&!c.d[j].ip){allDone=false;break}}
-    const txt=allDone?'✓':Math.ceil(c.p);
-    if(e.textContent!==txt) e.textContent=txt;
-    e.style.setProperty('--p',f);
-    e.style.setProperty('--cc',f>.5?'#8ed9c0':f>.25?'#ffd98a':'#ff6b9d');
-    const hurry=f<.25&&!allDone;
-    if(e.parentNode._hz!==hurry){e.parentNode._hz=hurry;e.parentNode.classList.toggle('hurry',hurry)}
+
+  const cdEls=T.cdEls;
+  if(cdEls){
+    for(let i=0;i<T.cu.length;i++){
+      const c=T.cu[i];
+      const e=cdEls[c.id];
+      if(!e||c.gone) continue;
+      const f=cl(c.p/c.pm,0,1);
+      let allDone=true;
+      for(let j=0;j<c.d.length;j++){const d=c.d[j];if(!d.done&&!d.ip){allDone=false;break}}
+      const txt=allDone?'✓':Math.ceil(c.p);
+      if(e.textContent!==txt) e.textContent=txt;
+      if(e._p!==f){ e._p=f; e.style.setProperty('--p',f); }
+      const ccIdx=f>.5?2:f>.25?1:0;
+      if(e._cc!==ccIdx){ e._cc=ccIdx; e.style.setProperty('--cc',CC_COLORS[ccIdx]); }
+      const hurry=f<.25&&!allDone;
+      const par=e.parentNode;
+      if(par._hz!==hurry){ par._hz=hurry; par.classList.toggle('hurry',hurry); }
+    }
   }
-  if(!T.skEls) refreshCdCache();
-  for(let i=0;i<STF.length;i++){
-    const s=STF[i];
-    const e=T.skEls[s.k];
-    if(!e) continue;
-    const cd=T.cd[s.k]||0;
-    const txt=cd>0?Math.ceil(cd)+'s':'✨';
-    if(e.textContent!==txt) e.textContent=txt;
-    const rd=cd<=0&&S.ph=='open';
-    if(e.parentNode._rd!==rd){e.parentNode._rd=rd;e.parentNode.classList.toggle('rd',rd)}
+
+  const skEls=T.skEls;
+  if(skEls){
+    for(let i=0;i<STF.length;i++){
+      const s=STF[i];
+      const e=skEls[s.k];
+      if(!e) continue;
+      const cd=T.cd[s.k]||0;
+      const txt=cd>0?Math.ceil(cd)+'s':'✨';
+      if(e.textContent!==txt) e.textContent=txt;
+      const rd=cd<=0&&S.ph=='open';
+      const par=e.parentNode;
+      if(par._rd!==rd){ par._rd=rd; par.classList.toggle('rd',rd); }
+    }
   }
-  $('#shop').style.setProperty('--n',Math.max(0,Math.min(.28,(m/60-18)*.1)));
+
+  const n=Math.max(0,Math.min(.28,(m/60-18)*.1));
+  if(Math.abs(n-_lastN)>.005){ _lastN=n; el('shop').style.setProperty('--n',n); }
 }
 
 let last=performance.now(),acc=0,uiAcc=0,rafId=0;
@@ -1495,6 +1679,7 @@ function loop(now){
   uiAcc+=dt;
   if(uiAcc>=UI_STEP){uiAcc=0;ui()}
   if((T.sv+=dt)>3){T.sv=0;save();drawNav()}
+  if((T.svAuto+=dt)>30){T.svAuto=0;if(S.ph=='open'||S.ph=='restock') saveSlot();}
 }
 document.addEventListener('visibilitychange',()=>{
   if(document.hidden){
