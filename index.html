@@ -50,9 +50,10 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   padding:calc(env(safe-area-inset-top) + 8px) 9px calc(env(safe-area-inset-bottom) + 8px);
 }
 
+/* ========= HUD ========= */
 #hd{
   position:relative;color:#fff;border-radius:var(--radius);
-  padding:16px 11px 9px;
+  padding:14px 11px 9px;
   background:
     radial-gradient(circle at 20% -20%,rgba(255,255,255,.5),transparent 40%),
     linear-gradient(155deg,#ffb3d1 0%,#ff8fb8 40%,#c9b6f0 100%);
@@ -70,11 +71,27 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   font-size:12px;line-height:1;z-index:3;color:#fff;
   box-shadow:0 2px 0 rgba(180,140,180,.4);
 }
-#hd .t{
-  text-align:center;font-size:14.5px;font-weight:700;
-  padding:0 30px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-  text-shadow:0 1px 2px rgba(150,90,130,.35);
+.logo-wrap{
+  display:flex;align-items:center;gap:8px;
   position:relative;z-index:1;
+  padding:0 30px 0 2px;
+  min-width:0;
+}
+#logo{
+  flex:none;width:36px;height:36px;
+  filter:drop-shadow(0 2px 3px rgba(150,90,130,.3));
+  animation:logoFloat 3s ease-in-out infinite;
+}
+@keyframes logoFloat{
+  0%,100%{transform:translateY(0) rotate(-2deg)}
+  50%{transform:translateY(-2px) rotate(2deg)}
+}
+.logo-wrap .t{
+  flex:1;min-width:0;
+  text-align:left;
+  font-size:13.5px;font-weight:700;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  text-shadow:0 1px 2px rgba(150,90,130,.35);
   font-family:"Comfortaa","Quicksand",sans-serif;
 }
 #hd .r{display:flex;align-items:center;gap:5px;margin-top:5px;white-space:nowrap;position:relative;z-index:1}
@@ -107,6 +124,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 .cur b{font-weight:700}
 .dpb{margin-top:5px;height:5px}.dpb i{background:linear-gradient(90deg,#fff4c8,#fff)}
 
+/* ========= QUÁN ========= */
 .ch1{--w1:#ffe4c9;--w2:#ffc6dd;--dc:#8a4a6a;--bg:#fff5fa}
 .ch2{--w1:#ffd0c4;--w2:#ffb89c;--dc:#8a3a2a;--bg:#fff2ec}
 .ch3{--w1:#e0d0ff;--w2:#c9b6f0;--dc:#5a4a8a;--bg:#f7f2ff}
@@ -250,106 +268,44 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 }
 .chp.ok{background:linear-gradient(180deg,#e0f7ec,#c4eedd);border-color:var(--mint);color:#3a8a70}
 
+/* ========= QUẦY PHA ========= */
 #bar{
   background:radial-gradient(circle at 20% 0%,rgba(255,220,235,.5),transparent 50%),#fff;
   border-radius:var(--radius);
   box-shadow:var(--shadow-soft),0 3px 0 rgba(180,140,180,.3);
   padding:9px;
-  display:grid;grid-template-columns:30% minmax(0,1fr);gap:8px;
+  display:grid;grid-template-columns:32% minmax(0,1fr);gap:8px;
 }
 .cupcol{
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   border-radius:12px;
   background:radial-gradient(circle at 50% 70%,#e8f4ff 0%,#f5eeff 70%);
   box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.9);
+  padding:4px;
 }
-.cupw{position:relative;width:100%;display:flex;justify-content:center;padding-top:22px}
-
-#cup{
-  position:relative;
-  width:72%;max-width:78px;
-  height:clamp(96px,15vh,144px);
-  border-radius:6px 6px 42% 42% / 6px 6px 12% 12%;
-  overflow:hidden;
-  background:
-    linear-gradient(180deg,
-      rgba(255,255,255,.55) 0%,
-      rgba(235,245,255,.35) 30%,
-      rgba(220,240,255,.45) 100%);
-  box-shadow:
-    inset 0 0 0 2px rgba(180,215,240,.85),
-    inset 0 -10px 20px rgba(140,180,220,.15),
-    inset 0 6px 10px rgba(255,255,255,.7),
-    0 4px 10px rgba(140,180,220,.2);
-  border:none;
+.cupw{
+  position:relative;width:100%;
+  display:flex;justify-content:center;align-items:flex-end;
+  padding:10px 0 2px;
 }
-#cup::before{
-  content:"";position:absolute;inset:0;pointer-events:none;z-index:2;
-  background:
-    linear-gradient(90deg,
-      rgba(255,255,255,.85) 0%,
-      rgba(255,255,255,.4) 6%,
-      transparent 12%,
-      transparent 88%,
-      rgba(255,255,255,.35) 94%,
-      rgba(255,255,255,.6) 100%);
-  border-radius:inherit;
+#cupSvg{
+  width:82%;max-width:100px;
+  height:clamp(120px,18vh,180px);
+  overflow:visible;
+  filter:drop-shadow(0 4px 6px rgba(140,180,220,.25));
 }
-#cup::after{
-  content:"";position:absolute;left:0;right:0;top:0;height:6px;
-  background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(220,235,250,.4));
-  border-bottom:1px solid rgba(180,215,240,.6);
-  z-index:3;
+#liquid{transition:y .5s cubic-bezier(.4,0,.2,1),height .5s cubic-bezier(.4,0,.2,1),fill .5s}
+#pearls{opacity:0;transition:opacity .3s}
+.cupw.has-pearls #pearls{opacity:1}
+#iceCubes{opacity:0;transition:opacity .3s}
+.cupw.has-ice #iceCubes{opacity:1}
+#lidG,#strawG{opacity:0;transition:opacity .35s}
+.pk #lidG,.pk #strawG{opacity:1}
+.shake #cupSvg{
+  filter:drop-shadow(0 4px 6px rgba(140,180,220,.25)) drop-shadow(0 0 10px rgba(255,143,184,.7));
 }
-.liq{
-  position:absolute;left:0;right:0;bottom:0;height:var(--h,0%);
-  background:var(--c,#fff);transition:height .5s,background .6s;
-  box-shadow:inset 0 3px 6px rgba(0,0,0,.08);
-}
-.liq::before{
-  content:"";position:absolute;left:0;right:0;top:0;height:3px;
-  background:linear-gradient(180deg,rgba(255,255,255,.6),transparent);
-}
-.tps{
-  position:absolute;left:0;right:0;bottom:3px;text-align:center;
-  font-size:clamp(11px,1.9vh,16px);letter-spacing:-4px;line-height:1.1;
-  z-index:2;
-}
-.tps span{display:block}
-.ices{
-  position:absolute;left:0;right:0;top:8px;text-align:center;
-  font-size:11px;letter-spacing:-2px;opacity:.9;z-index:2;
-}
-.stream{
-  position:absolute;top:0;left:50%;width:6px;margin-left:-3px;height:0;
-  border-radius:3px;background:var(--sc);z-index:2;
-}
-.pour .stream{height:38%;top:36%;opacity:.9;transition:height .3s,opacity .3s}
-.lid,.straw{position:absolute;opacity:0;transition:.35s;z-index:3}
-.lid{
-  top:6px;left:14%;right:14%;height:14px;
-  border-radius:50% 50% 20% 20% / 60% 60% 40% 40%;
-  background:linear-gradient(180deg,#fff,#e0f1ff);
-  border:2px solid #b6d4ea;
-  transform:translateY(-30px);
-  box-shadow:0 2px 4px rgba(140,180,220,.3),inset 0 2px 0 rgba(255,255,255,.9);
-}
-.straw{
-  top:-2px;left:56%;width:7px;height:52%;
-  border-radius:3px;
-  background:
-    repeating-linear-gradient(180deg,var(--rose) 0 6px,#ffc6dd 6px 12px);
-  box-shadow:inset -1px 0 0 rgba(0,0,0,.1);
-  transform:translateY(-42px) rotate(10deg);
-}
-.pk .lid{opacity:1;transform:none}
-.pk .straw{opacity:1;transform:rotate(10deg)}
-.shake #cup{
-  box-shadow:
-    inset 0 0 0 2px rgba(255,143,184,.9),
-    inset 0 -10px 20px rgba(140,180,220,.15),
-    0 0 14px rgba(255,143,184,.5);
-}
+#streamR{opacity:0;transition:opacity .2s}
+.pour #streamR{opacity:.9}
 #sugl{font-size:10px;color:var(--mu);font-weight:700;margin-top:2px;text-align:center}
 
 #tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
@@ -550,7 +506,34 @@ h3::before{content:"✿";color:var(--pink);font-size:16px}
 <div id="app">
   <header id="hd">
     <button id="pause" data-a="pause">⏸</button>
-    <div class="t">🌸 Quán trà sữa của Vân Khánh</div>
+    <div class="logo-wrap">
+      <svg id="logo" viewBox="0 0 60 60" aria-label="Logo Vân Khánh">
+        <circle cx="30" cy="30" r="28" fill="url(#lgBg)" stroke="#fff" stroke-width="2"/>
+        <path d="M19 20 L22 44 Q22.5 48 30 48 Q37.5 48 38 44 L41 20 Z"
+              fill="url(#lgMilk)" stroke="#8a5a3a" stroke-width="1.6" stroke-linejoin="round"/>
+        <path d="M21.5 32 L25 44 Q25.5 46.5 30 46.5 Q34.5 46.5 35 44 L38.5 32 Z" fill="#d9a26f"/>
+        <circle cx="26" cy="42" r="1.6" fill="#2a1a1a"/>
+        <circle cx="30" cy="43.5" r="1.6" fill="#2a1a1a"/>
+        <circle cx="34" cy="42" r="1.6" fill="#2a1a1a"/>
+        <circle cx="28" cy="38" r="1.3" fill="#2a1a1a"/>
+        <circle cx="32" cy="39.5" r="1.3" fill="#2a1a1a"/>
+        <path d="M17 20 Q17 14 30 14 Q43 14 43 20 Z" fill="#f0f8ff" stroke="#8a5a3a" stroke-width="1.6"/>
+        <path d="M35 8 L32 26" stroke="#ff6b9d" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M35 8 L32 26" stroke="#ffc6dd" stroke-width="1" stroke-linecap="round" stroke-dasharray="2 2"/>
+        <path d="M46 14 Q46 11 48.5 11 Q51 11 51 13.5 Q51 16 46 19 Q41 16 41 13.5 Q41 11 43.5 11 Q46 11 46 14 Z" fill="#ff4d6d"/>
+        <text x="30" y="57" text-anchor="middle"
+              font-family="Comfortaa,sans-serif" font-size="7" font-weight="700" fill="#fff">VK</text>
+        <defs>
+          <linearGradient id="lgBg" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#ffb3d1"/><stop offset="1" stop-color="#ff8fb8"/>
+          </linearGradient>
+          <linearGradient id="lgMilk" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#f5efe4"/><stop offset="1" stop-color="#e8dcc8"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <div class="t">Quán trà sữa của Vân Khánh</div>
+    </div>
     <div class="r">
       <span class="lvb"><b id="lv"></b></span>
       <div class="xpw"><div class="pb xpb"><i id="xp"></i></div><span id="xpt"></span></div>
@@ -577,12 +560,46 @@ h3::before{content:"✿";color:var(--pink);font-size:16px}
   <section id="bar">
     <div class="cupcol">
       <div class="cupw" id="cupw">
-        <div class="straw"></div><div class="lid"></div><div class="stream"></div>
-        <div id="cup">
-          <div class="liq"></div>
-          <div class="tps" id="tps"></div>
-          <div class="ices" id="ices"></div>
-        </div>
+        <svg id="cupSvg" viewBox="0 0 120 200" preserveAspectRatio="xMidYMax meet">
+          <g id="lidG" opacity="0">
+            <ellipse cx="60" cy="32" rx="44" ry="9" fill="#e8f4ff" stroke="#8fbfdc" stroke-width="2.5"/>
+            <path d="M16 32 Q16 12 60 12 Q104 12 104 32" fill="#f0f8ff" stroke="#8fbfdc" stroke-width="2.5"/>
+            <ellipse cx="60" cy="32" rx="44" ry="9" fill="none" stroke="#8fbfdc" stroke-width="2.5"/>
+          </g>
+          <g id="strawG" opacity="0">
+            <path d="M75 -10 L68 45" stroke="#ff6b9d" stroke-width="7" stroke-linecap="round" fill="none"/>
+            <path d="M75 -10 L68 45" stroke="#ffc6dd" stroke-width="3" stroke-linecap="round" fill="none" stroke-dasharray="5 5"/>
+          </g>
+          <defs>
+            <clipPath id="cupClip">
+              <path d="M20 32 L28 174 Q29 184 60 184 Q91 184 92 174 L100 32 Z"/>
+            </clipPath>
+          </defs>
+          <path id="cupBody" d="M18 30 L26 175 Q27 186 60 186 Q93 186 94 175 L102 30 Z"
+                fill="rgba(240,248,255,.7)" stroke="#8fbfdc" stroke-width="2.5" stroke-linejoin="round"/>
+          <g clip-path="url(#cupClip)">
+            <rect id="liquid" x="0" y="186" width="120" height="0" fill="transparent"/>
+            <g id="pearls">
+              <circle cx="40" cy="172" r="4" fill="#2a1a1a"/>
+              <circle cx="52" cy="176" r="4" fill="#2a1a1a"/>
+              <circle cx="64" cy="172" r="4" fill="#2a1a1a"/>
+              <circle cx="76" cy="176" r="4" fill="#2a1a1a"/>
+              <circle cx="46" cy="166" r="3.5" fill="#2a1a1a"/>
+              <circle cx="58" cy="170" r="3.5" fill="#2a1a1a"/>
+              <circle cx="70" cy="166" r="3.5" fill="#2a1a1a"/>
+              <circle cx="82" cy="170" r="3.5" fill="#2a1a1a"/>
+            </g>
+            <g id="iceCubes">
+              <rect x="36" y="140" width="12" height="12" rx="2" fill="rgba(255,255,255,.85)" stroke="rgba(180,215,240,.9)" stroke-width="1"/>
+              <rect x="56" y="146" width="11" height="11" rx="2" fill="rgba(255,255,255,.85)" stroke="rgba(180,215,240,.9)" stroke-width="1"/>
+              <rect x="72" y="142" width="12" height="12" rx="2" fill="rgba(255,255,255,.85)" stroke="rgba(180,215,240,.9)" stroke-width="1"/>
+            </g>
+          </g>
+          <path d="M30 45 Q26 90 32 165" stroke="rgba(255,255,255,.85)" stroke-width="4" fill="none" stroke-linecap="round"/>
+          <path d="M90 45 Q94 90 88 165" stroke="rgba(255,255,255,.55)" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <ellipse cx="60" cy="30" rx="42" ry="6" fill="none" stroke="#8fbfdc" stroke-width="2.5"/>
+          <rect id="streamR" x="56" y="-20" width="8" height="0" rx="4" fill="#b5652b" opacity="0"/>
+        </svg>
       </div>
       <div id="sugl"></div>
     </div>
@@ -609,9 +626,9 @@ const P=a=>a[Math.random()*a.length|0];
 const cl=(v,a,b)=>Math.max(a,Math.min(b,v));
 const F=n=>Math.round(n).toLocaleString('vi-VN');
 
-const KEY='vk_tea_v6';
-const SAVE_SLOT='vk_tea_slot_v6';
-const SAVE_VERSION=6;
+const KEY='vk_tea_v7';
+const SAVE_SLOT='vk_tea_slot_v7';
+const SAVE_VERSION=7;
 const DAY=300,LAST=290,PAT=30,MAXLV=30;
 
 const SUG=['0%','30%','50%','70%','100%'];
@@ -726,7 +743,20 @@ const CHI={
   <div>Vân Khánh 24 tuổi, nhận học bổng tiến sĩ ở Thượng Hải. Quán mới nằm trong một ngõ thạch khố môn gần bến Thượng Hải, khách sành trà và hào phóng.</div>
   <div class="ev">🟣 Khoai môn viên lên menu · Giá bán ×1.6 · Giá nhập ×1.4 · Hay có mưa phùn 🌦️</div>`
 };
-const INTRO=`<h2>🌸 Quán trà sữa của Vân Khánh</h2>
+const INTRO=`<div style="text-align:center;margin-bottom:10px">
+<svg viewBox="0 0 60 60" style="width:84px;height:84px;filter:drop-shadow(0 4px 8px rgba(180,120,150,.3))">
+  <circle cx="30" cy="30" r="28" fill="#ffb3d1" stroke="#fff" stroke-width="2"/>
+  <path d="M19 20 L22 44 Q22.5 48 30 48 Q37.5 48 38 44 L41 20 Z" fill="#f5efe4" stroke="#8a5a3a" stroke-width="1.6" stroke-linejoin="round"/>
+  <path d="M21.5 32 L25 44 Q25.5 46.5 30 46.5 Q34.5 46.5 35 44 L38.5 32 Z" fill="#d9a26f"/>
+  <circle cx="26" cy="42" r="1.6" fill="#2a1a1a"/>
+  <circle cx="30" cy="43.5" r="1.6" fill="#2a1a1a"/>
+  <circle cx="34" cy="42" r="1.6" fill="#2a1a1a"/>
+  <path d="M17 20 Q17 14 30 14 Q43 14 43 20 Z" fill="#f0f8ff" stroke="#8a5a3a" stroke-width="1.6"/>
+  <path d="M35 8 L32 26" stroke="#ff6b9d" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M46 14 Q46 11 48.5 11 Q51 11 51 13.5 Q51 16 46 19 Q41 16 41 13.5 Q41 11 43.5 11 Q46 11 46 14 Z" fill="#ff4d6d"/>
+</svg>
+</div>
+<h2>Quán trà sữa của Vân Khánh</h2>
 <div>Vân Khánh 18 tuổi, vừa đỗ đại học ở Hà Nội. Bố mẹ ở quê vất vả lo cho ba chị em, nên cô quyết tự kiếm tiền học phí.</div>
 <div style="margin-top:6px">Cô thuê một gian nhà ống nhỏ cạnh gốc bàng phố cổ: sáng đi học, chiều tối bán trà sữa. Ngày khai trương chỉ có 2 cái bàn, một nồi trân châu đen, và cô em gái Vân Anh xung phong giữ két.</div>
 <div class="mb"><button class="btn p" data-a="mx">Tiếp tục 💕</button></div>`;
@@ -768,14 +798,8 @@ if(S.staff&&S.staff.pheu) delete S.staff.pheu;
 
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 
-/* ========== SAVE THỦ CÔNG ========== */
 function packSave(){
-  return JSON.stringify({
-    v:SAVE_VERSION,
-    ts:Date.now(),
-    day:S.day,lv:S.lv,ch:S.ch,money:S.money,
-    data:S
-  });
+  return JSON.stringify({v:SAVE_VERSION,ts:Date.now(),day:S.day,lv:S.lv,ch:S.ch,money:S.money,data:S});
 }
 function saveSlot(){
   try{ localStorage.setItem(SAVE_SLOT,packSave()); return true; }
@@ -788,8 +812,7 @@ function loadSlot(){
     const obj=JSON.parse(raw);
     if(!obj||obj.v!==SAVE_VERSION) return false;
     S=Object.assign(D0(),obj.data);
-    T.cu=[];T.sel=0;T.id=0;T.cd={};
-    T.cdEls=null;T.skEls=null;T.nav='';
+    T.cu=[];T.sel=0;T.id=0;T.cd={};T.cdEls=null;T.skEls=null;T.nav='';
     newCup();
     return true;
   }catch(e){ return false; }
@@ -805,10 +828,7 @@ function slotInfo(){
       time:`${d.getHours()}:${String(d.getMinutes()).padStart(2,'0')} ${d.getDate()}/${d.getMonth()+1}`};
   }catch(e){ return null; }
 }
-function deleteSlot(){
-  try{ localStorage.removeItem(SAVE_SLOT); return true; }
-  catch(e){ return false; }
-}
+function deleteSlot(){ try{ localStorage.removeItem(SAVE_SLOT); return true; }catch(e){ return false; } }
 function exportSave(){
   try{
     const data=packSave();
@@ -817,17 +837,14 @@ function exportSave(){
     const a=document.createElement('a');
     a.href=url;
     a.download=`tra-sua-vk-ngay${S.day}-lv${S.lv}.json`;
-    document.body.append(a);
-    a.click();
-    a.remove();
+    document.body.append(a);a.click();a.remove();
     setTimeout(()=>URL.revokeObjectURL(url),1000);
     toast('💾 Đã xuất file save!');
   }catch(e){ toast('❌ Không xuất được file'); }
 }
 function importSave(){
   const input=document.createElement('input');
-  input.type='file';
-  input.accept='.json,application/json';
+  input.type='file';input.accept='.json,application/json';
   input.onchange=()=>{
     const f=input.files&&input.files[0];
     if(!f) return;
@@ -839,8 +856,7 @@ function importSave(){
         if(obj.v!==SAVE_VERSION) toast(`⚠️ File v${obj.v}, game v${SAVE_VERSION}`);
         if(!confirm(`Nhập save Ngày ${obj.day||'?'} · Lv${obj.lv||'?'}?\nTiến trình hiện tại sẽ bị ghi đè.`)) return;
         S=Object.assign(D0(),obj.data);
-        T.cu=[];T.sel=0;T.id=0;T.cd={};
-        T.cdEls=null;T.skEls=null;T.nav='';
+        T.cu=[];T.sel=0;T.id=0;T.cd={};T.cdEls=null;T.skEls=null;T.nav='';
         newCup();
         save();drawAll();
         toast('✅ Đã nhập save thành công!');
@@ -853,10 +869,7 @@ function importSave(){
   };
   input.click();
 }
-function manualSave(){
-  if(saveSlot()) toast('💾 Đã lưu vào ô nhớ!');
-  else toast('❌ Không lưu được');
-}
+function manualSave(){ if(saveSlot()) toast('💾 Đã lưu vào ô nhớ!'); else toast('❌ Không lưu được'); }
 function manualLoad(){
   if(!hasSlot()){ toast('📭 Chưa có save nào'); return; }
   const info=slotInfo();
@@ -870,13 +883,15 @@ function manualLoad(){
   } else toast('❌ Save lỗi hoặc phiên bản cũ');
 }
 
-/* ---------- T ---------- */
 const T={cu:[],sel:0,id:0,K:null,st:0,tm:0,tmax:1,for:null,cd:{},sp:3,pause:0,modal:0,mq:[],sheet:'',last:'',sv:0,svAuto:0,nav:'',fx:'',cdEls:null,skEls:null};
 
 function newCup(){
   T.K={tea:0,milk:0,tops:[],sug:0,ice:0};
   T.st=0;T.for=null;
-  $('#cupw').classList.remove('pk','shake');
+  const w=$('#cupw');
+  w.classList.remove('pk','shake','has-pearls','has-ice','pour');
+  const liquid=$('#liquid');
+  if(liquid){liquid.setAttribute('y','186');liquid.setAttribute('height','0');liquid.setAttribute('fill','transparent');}
 }
 const C=id=>T.cu.find(c=>c.id==id&&!c.gone);
 const cur=c=>c&&!c.gone&&c.d.find(d=>!d.done&&!d.ip);
@@ -1045,11 +1060,29 @@ function drawBar(){
     bPack.classList.toggle('go',T.st==2);
     bPack.textContent=T.st==3?'📦 Đang gói...':'📦 Đóng gói';
   }
-  const w=$('#cupw'),full=K.tea&&K.milk;
-  w.style.setProperty('--h',(full?78:K.tea||K.milk?42:0)+'%');
-  w.style.setProperty('--c',full?'#d9a26f':K.tea?'#b5652b':'#f5efe4');
-  $('#tps').innerHTML=K.tops.map(k=>`<span>${TOP[k].e.repeat(4)}</span>`).join('');
-  $('#ices').textContent=K.ice>0?'🧊'.repeat(Math.min(K.ice,3)):'';
+  // Cập nhật cốc SVG
+  const w=$('#cupw');
+  const full=K.tea&&K.milk;
+  const liquid=$('#liquid'),stream=$('#streamR');
+  if(liquid){
+    const fillH=full?124:(K.tea||K.milk)?66:0;
+    const y=186-fillH;
+    liquid.setAttribute('y',y);
+    liquid.setAttribute('height',fillH);
+    liquid.setAttribute('fill',full?'#d9a26f':K.tea?'#b5652b':'transparent');
+  }
+  if(stream){
+    if(w.classList.contains('pour')){
+      stream.setAttribute('height','80');
+      stream.setAttribute('y','-50');
+      stream.setAttribute('opacity','0.9');
+    } else {
+      stream.setAttribute('height','0');
+      stream.setAttribute('opacity','0');
+    }
+  }
+  w.classList.toggle('has-pearls',K.tops.length>0);
+  w.classList.toggle('has-ice',K.ice>=1);
   $('#sugl').textContent=`🍬${SUG[K.sug]} · ${ICE[K.ice]}`;
 }
 function drawNav(){
@@ -1105,11 +1138,7 @@ function spawn(){
   else if(b.k=='vip') pm-=5;
   else if(b.k=='pair') pm+=10;
   else if(b.k=='take') pm+=18;
-  const c={
-    n:b.n,e:b.e,k:b.k,lv:b.lv,
-    id:++T.id,tb:P(free),pm:pm,p:pm,in:1,
-    d:new Array(n)
-  };
+  const c={n:b.n,e:b.e,k:b.k,lv:b.lv,id:++T.id,tb:P(free),pm:pm,p:pm,in:1,d:new Array(n)};
   for(let i=0;i<n;i++) c.d[i]=mkDrink(b);
   cu.push(c);beep(880,.15);
   if(!C(T.sel)&&!T.st){T.sel=c.id;drawOrd();drawBar();autoFill()}
@@ -1160,8 +1189,10 @@ function addIng(k,auto){
     if(K[k]) return auto||toast(`Ly đã có ${nm(k)} rồi`);
     if(inv(k)<1) return toast(`Hết ${nm(k)}, vào Kho nhập thêm`);
     K[k]=1;
-    w.style.setProperty('--sc',k=='tea'?'#b5652b':'#f3ead8');
     w.classList.remove('pour');void w.offsetWidth;w.classList.add('pour');
+    const stream=$('#streamR');
+    if(stream) stream.setAttribute('fill',k=='tea'?'#b5652b':'#f3ead8');
+    setTimeout(()=>w.classList.remove('pour'),600);
   }
   beep(k=='tea'?520:k=='milk'?620:760,.08);
   drawBar();drawOrd();
@@ -1205,10 +1236,10 @@ function deliver(){
   const f=T.for,c=C(f.c);
   if(!c){toast('Khách đã đi mất, ly trà bị bỏ phí 😢');return nextCup()}
   T.st=4;
-  const a=$('#cup').getBoundingClientRect(),b=$('#tb'+c.tb).getBoundingClientRect();
+  const a=$('#cupSvg').getBoundingClientRect(),b=$('#tb'+c.tb).getBoundingClientRect();
   const fl=document.createElement('div');
   fl.className='fly';fl.textContent='🧋';
-  fl.style.left=a.left+a.width/2+'px';fl.style.top=a.top+'px';
+  fl.style.left=a.left+a.width/2+'px';fl.style.top=a.top+a.height/2+'px';
   document.body.append(fl);fl.getBoundingClientRect();
   fl.style.left=b.left+b.width/2+'px';fl.style.top=b.top+b.height/2+'px';
   fl.style.fontSize='18px';
