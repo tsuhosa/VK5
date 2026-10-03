@@ -16,14 +16,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Comfortaa:wght@500;700&display=swap" rel="stylesheet">
 <style>
-/* ============================================================
-   🌸 QUÁN TRÀ SỮA VÂN KHÁNH — UI PASTEL 2025
-   Tối ưu cực mạnh cho Safari iOS:
-   - Logic 12fps, UI 3fps
-   - Event-driven: chỉ render khi state đổi
-   - Không animation infinite
-   - Zero setInterval / setTimeout cho game loop
-   ============================================================ */
 :root{
   --ink:#4a3b5c;
   --ink2:#6b5a80;
@@ -41,7 +33,6 @@
   --cream:#fff8f3;
   --honey:#ffd98a;
   --line:#4a3b5c;
-  --shadow:0 2px 0 var(--line);
   --shadow-soft:0 2px 8px rgba(180,140,180,.18);
   --radius:14px;
 }
@@ -71,7 +62,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   padding:calc(env(safe-area-inset-top) + 8px) 9px calc(env(safe-area-inset-bottom) + 8px);
 }
 
-/* ================= HUD ================= */
+/* HUD */
 #hd{
   position:relative;color:#fff;
   border-radius:var(--radius);
@@ -141,7 +132,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 .cur b{font-weight:700}
 .dpb{margin-top:5px;height:5px}.dpb i{background:linear-gradient(90deg,#fff4c8,#fff)}
 
-/* ================= QUÁN ================= */
+/* QUÁN */
 .ch1{--w1:#ffe4c9;--w2:#ffc6dd;--dc:#8a4a6a;--bg:#fff5fa}
 .ch2{--w1:#ffd0c4;--w2:#ffb89c;--dc:#8a3a2a;--bg:#fff2ec}
 .ch3{--w1:#e0d0ff;--w2:#c9b6f0;--dc:#5a4a8a;--bg:#f7f2ff}
@@ -161,7 +152,6 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   transition:opacity .8s;
 }
 #shop .wx{position:absolute;inset:0;pointer-events:none;z-index:4;opacity:0;transition:opacity 1s}
-/* Thời tiết: chỉ đổi gradient nhẹ, không animate */
 .rain .wx{opacity:1;background:linear-gradient(180deg,rgba(140,170,220,.22),rgba(140,170,220,.05))}
 .storm .wx{opacity:1;background:linear-gradient(180deg,rgba(90,110,180,.32),rgba(90,110,180,.1))}
 .snow .wx{opacity:1;background:linear-gradient(180deg,rgba(220,235,255,.4),rgba(240,245,255,.15))}
@@ -302,7 +292,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   100%{opacity:0;transform:translate(-50%,-140%) scale(1)}
 }
 
-/* ================= ĐƠN ================= */
+/* ĐƠN */
 #ord{
   white-space:nowrap;overflow:hidden;
   border-radius:11px;
@@ -321,7 +311,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 }
 .chp.ok{background:linear-gradient(180deg,#e0f7ec,#c4eedd);border-color:var(--mint);color:#3a8a70}
 
-/* ================= QUẦY PHA ================= */
+/* QUẦY PHA */
 #bar{
   background:
     radial-gradient(circle at 20% 0%,rgba(255,220,235,.5),transparent 50%),
@@ -447,7 +437,8 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 .tile.lk{opacity:.55;filter:grayscale(.6)}
 .tile:active{transform:translateY(2px)}
 
-.acts{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:7px}
+.acts{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.acts.two{grid-template-columns:minmax(0,1fr) minmax(0,2fr)}
 .btn{
   position:relative;border-radius:12px;
   height:clamp(46px,6vh,56px);font-weight:700;font-size:14.5px;
@@ -479,7 +470,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 .btn:disabled{filter:grayscale(.7);opacity:.5}
 .btn:active{transform:translateY(2px)}
 
-/* ================= NAV ================= */
+/* NAV */
 #nav{
   display:grid;grid-template-columns:repeat(5,1fr);
   border-radius:var(--radius);
@@ -511,7 +502,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   box-shadow:0 1px 2px rgba(180,80,120,.4);
 }
 
-/* ================= SHEET / MODAL ================= */
+/* SHEET / MODAL */
 #sheet{
   position:fixed;inset:0;z-index:50;
   background:rgba(74,59,92,.45);
@@ -666,7 +657,7 @@ h3::before{content:"✿";color:var(--pink);font-size:16px}
     <div class="pb dpb"><i id="dp"></i></div>
   </header>
 
-  <section id="bar">
+  <section id="shop">
     <div class="wx"></div>
     <div id="deco"></div>
     <div id="tables"></div>
@@ -684,9 +675,10 @@ h3::before{content:"✿";color:var(--pink);font-size:16px}
       <div id="sugl"></div>
     </div>
     <div id="tiles"></div>
-    <div class="acts">
+    <div class="acts two" id="acts">
       <button class="btn" data-a="reset">↺</button>
       <button class="btn p" id="bBrew" data-a="brew">🫗 Pha</button>
+      <button class="btn y hide" id="bPack" data-a="pack">📦 Đóng gói</button>
     </div>
   </section>
 
@@ -696,14 +688,9 @@ h3::before{content:"✿";color:var(--pink);font-size:16px}
 <div id="sheet" class="hide"><div class="shx"><div class="shh"><b id="sht"></b><button class="b2" data-a="nav" data-k="shop">✕</button></div><div id="shb"></div></div></div>
 <div id="modal" class="hide"></div>
 <div id="toast"></div>
+
 <script>
 'use strict';
-/* ============================================================
-   🌸 GAME LOGIC — Quán trà sữa Vân Khánh (v5)
-   - 5 nhân viên, 5 nâng cấp
-   - Nâng cấp "Máy đóng gói tự động": pha xong tự gói + gửi
-   - 12fps logic, 3fps UI, zero allocation
-   ============================================================ */
 const $=s=>document.querySelector(s);
 const R=(a,b)=>a+Math.random()*(b-a);
 const P=a=>a[Math.random()*a.length|0];
@@ -756,7 +743,6 @@ const CUS=[
   {n:'Ý',e:'🧑‍✈️',k:'take',lv:2},
   {n:'Ông Đại',e:'👴',k:'vip',lv:3}
 ];
-/* ===== 5 NHÂN VIÊN ===== */
 const STF=[
   {k:'vananh',e:'💰',n:'Vân Anh',r:'Em gái · Thu ngân',lv:1,c:0,up:1,
    d:l=>`+${5*l}% tiền mỗi đơn · giảm ${10*l}% khách quỵt tiền`},
@@ -769,8 +755,7 @@ const STF=[
   {k:'dau',e:'🍓',n:'Dâu',r:'Anh bạn mê dâu tây · Topping',lv:5,c:450,
    d:()=>'Tự thêm topping đúng đơn'}
 ];
-/* ===== 5 NÂNG CẤP ===== */
-const BR=[0,2,1.6,1.2,.8],CAP=[0,15,25,40,60],PKC=[0,0,0,2500];
+const BR=[0,2,1.6,1.2,.8],CAP=[0,15,25,40,60];
 const UPG=[
   {k:'tb',e:'🪑',n:'Bàn ghế',mx:4,d:l=>l+' bàn',c:l=>l==2?300:700},
   {k:'br',e:'🫗',n:'Máy pha',mx:4,d:l=>'pha '+BR[l]+'s',c:l=>200*l},
@@ -793,13 +778,13 @@ const MS=[
   ['vip','Phục vụ ông Đại {n} lần',[1,1,2],3],
   ['skill','Dùng kỹ năng nhân viên {n} lần',[2,3,4],2]
 ];
-/* ===== LORE VIẾT LẠI ===== */
 const LORE={
   2:'<b>Linh</b> — bạn cùng lớp đại học của Vân Khánh. Cô nàng nói không biết mệt, đứng trước cửa quán là khách đi ngang tự dừng chân. Vân Khánh gọi đùa: "Loa phát thanh của phố cổ".',
   3:'<b>Diệp</b> — bạn cùng phòng ký túc xá. Cô nhớ công thức trà sữa như nhớ bài giảng, rót trà rót sữa một tay không cần nhìn. Nhờ Diệp mà Vân Khánh không bỏ lỡ khách nào.',
   4:'<b>Hoàn</b> — cậu em trai út 15 tuổi, ngày nào cũng đòi ra phụ chị. Cặp sách lúc nào cũng đầy bim bim. Khách nào đang cau có mà gặp Hoàn cũng phải bật cười.',
   5:'<b>Dâu</b> — anh chàng to cao mê dâu tây đến mức cả trường gọi là "Dâu". Rắc topping khéo không ai bằng, nhìn thôi đã thấy ngon. Vân Khánh thuê Dâu về làm topping.',
-  7:'<b>Hòa</b> — cựu nhân viên bưu điện đầu ngõ. Ông chú nghỉ hưu, ngày nào cũng ngồi uống trà sữa ở quán. Vân Khánh nhờ Hòa trông quầy pha giúp vào giờ cao điểm.',
+  6:'Mùa thi! Vân Khánh vừa ôn bài vừa bán hàng. Công thức pudding trứng của bà ngoại ra đời.',
+  7:'Vân Khánh để dành tiền mua một chiếc máy đóng gói tự động đầu tiên. Không còn phải gói từng ly bằng tay.',
   10:'🎉 <b>Học bổng thạc sĩ ở Bắc Kinh!</b> Sáng mai Vân Khánh lên đường. Ông Đại khó tính — người chưa từng khen ai — chỉ gật gù: "Trà được."',
   13:'Mùa đông Bắc Kinh âm 10 độ. Khách bước vào quán ai cũng xuýt xoa, hai tay ôm ly trà nóng không dám buông.',
   14:'Đậu đỏ — phiên bản Bắc Kinh của món chè đậu đỏ Hà Nội. Vân Khánh ăn thử và nghĩ ngay đến mẹ ở quê.',
@@ -834,14 +819,13 @@ const HELP=`<h2>🌸 Cách chơi</h2>
 <li>Mỗi ngày dài 4 phút (10:00–22:00). Cuối tuần đông khách, trời mưa thì vắng.</li>
 <li>Chạm vào khách để xem món. Cho 🍃 trà + 🥛 sữa vào ly, bấm 🍬 / 🧊 để tăng dần từ 0, chọn topping.</li>
 <li>Ô <b>vàng</b> là thứ cần thêm, ô <b>xanh ✓</b> là đã có, ô <b>hồng !</b> là đang sai.</li>
-<li>Bấm 🫗 Pha. Khi <b>mua Máy đóng gói tự động</b> trong ⬆️ Nâng cấp, món đúng sẽ tự gói gửi khách.</li>
+<li>Bấm 🫗 Pha. Khi mua <b>Máy đóng gói tự động</b> trong ⬆️ Nâng cấp, món đúng sẽ tự gói gửi khách.</li>
 <li>Coi chừng khách trả thiếu hoặc ôm ly bỏ chạy!</li>
 <li>Tối đóng cửa thì nhập hàng cho ngày mai. Sữa và đồ tươi chỉ để được 1–3 ngày. Mua gấp trong ngày đắt hơn ×1.5.</li>
 <li>Lv10 sang Bắc Kinh, Lv20 sang Thượng Hải.</li>
 </ol>
 <div class="mb"><button class="btn p" data-a="mx">Bắt đầu! 🌸</button></div>`;
 
-/* ---------- TRẠNG THÁI ---------- */
 const fresh=()=>({sold:0,rev:0,cost:0,five:0,rs:0,rc:0,left:0,ran:0,short:0,tips:0,vip:0,skill:0});
 const D0=()=>({
   day:1,ch:1,lv:1,exp:0,money:400,rep:50,
@@ -861,7 +845,6 @@ try{
   const s=JSON.parse(localStorage.getItem(KEY));
   if(s) S=Object.assign(S,s);
 }catch(e){}
-// Migration từ bản cũ
 if(S.up&&S.up.pk===undefined) S.up.pk=0;
 if(S.staff&&S.staff.hoa) delete S.staff.hoa;
 if(S.staff&&S.staff.pheu) delete S.staff.pheu;
@@ -869,7 +852,6 @@ if(S.up&&S.up.pk===undefined) S.up.pk=0;
 
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 
-/* ---------- T ---------- */
 const T={cu:[],sel:0,id:0,K:null,st:0,tm:0,tmax:1,for:null,cd:{},sp:3,pause:0,modal:0,mq:[],sheet:'',last:'',sv:0,nav:'',fx:'',cdEls:null,skEls:null};
 
 function newCup(){
@@ -896,9 +878,8 @@ function add(k,n){const e=S.day+life(k)-(S.ph=='restock'?0:1);const b=S.inv[k].f
 function use(k){const B=S.inv[k].sort((a,b)=>a[1]-b[1]);if(B[0]&&!--B[0][0])B.shift()}
 const room=k=>cap()-(S.ph=='restock'?invT(k):inv(k));
 const uc=k=>Math.ceil(OB(k).c*COST[S.ch]*(EV().pr||1)*(S.ph=='restock'?1:1.5));
-const autoPack=()=>S.up.pk>=1; // máy đóng gói tự động
+const autoPack=()=>S.up.pk>=1;
 
-/* ---------- ÂM THANH ---------- */
 let AC=null;
 function beep(f=600,d=.1){
   if(!S.snd) return;
@@ -914,7 +895,6 @@ function beep(f=600,d=.1){
   }catch(e){}
 }
 
-/* ---------- UI HELPERS ---------- */
 function toast(m){
   const d=document.createElement('div');d.textContent=m;
   $('#toast').append(d);
@@ -942,7 +922,6 @@ function mclose(){
   if(T.mq.length) modal(T.mq.shift());
 }
 
-/* ---------- VẼ ---------- */
 function drawHead(){
   document.body.className='ch'+S.ch;
   $('#chap').textContent=`Chương ${S.ch} · ${CITY[S.ch].n} ${CITY[S.ch].f}`;
@@ -1008,7 +987,6 @@ function drawBar(){
   bBrew.disabled=T.st!=0||!d;
   bBrew.classList.toggle('go',!T.st&&!!(d&&K.tea&&K.milk));
   bBrew.textContent=T.st==1?'🫗 Đang pha...':T.st>=2?'✨ Xong!':'🫗 Pha';
-  // Nút Đóng gói chỉ hiện khi CHƯA mua máy tự động
   if(autoPack()){
     bPack.classList.add('hide');
     acts.classList.add('two');
@@ -1038,7 +1016,6 @@ function drawNav(){
 }
 const drawAll=()=>{drawHead();drawTables();drawStaff();drawOrd();drawBar();T.nav='';drawNav()};
 
-/* ---------- KHÁCH ---------- */
 function mkDrink(b){
   const e=EV(),w=WX[S.cw];
   return {
@@ -1088,7 +1065,6 @@ function angry(c){
   pop(c,'😠 Bỏ về!','b');beep(200,.25);leave(c,'angry');
 }
 
-/* ---------- PHA CHẾ ---------- */
 function autoFill(){
   const d=cur(C(T.sel)),K=T.K;
   if(!d||T.st||K.tea||K.milk||K.tops.length) return;
@@ -1140,10 +1116,9 @@ function brew(){
   $('#cupw').classList.add('shake');
   beep(330,.3);drawBar();drawOrd();
 }
-/* Đóng gói — bấm tay nếu chưa có máy */
 function pack(){
   if(T.st!=2) return;
-  if(inv('cup')<1) return toast('Hết 🥤 ly + nắp, vào Kho nhập thêm');
+  if(inv('cup')<1){toast('Hết 🥤 ly + nắp, vào Kho nhập thêm');return}
   use('cup');
   T.st=3;T.tm=T.tmax=0.8;
   $('#cupw').classList.add('pk');beep(440,.15);drawBar();drawOrd();
@@ -1216,7 +1191,6 @@ function skill(k){
   T.cd[k]=s.cd;S.ds.skill++;beep(990,.2);
 }
 
-/* ---------- LEVEL / CHƯƠNG / NGÀY ---------- */
 function gain(x){
   S.exp+=x;
   while(S.lv<MAXLV&&S.exp>=need(S.lv)){S.exp-=need(S.lv);S.lv++;lvUp()}
@@ -1326,7 +1300,6 @@ function nextDay(){
   setupDay();save();drawAll();prepModal();
 }
 
-/* ---------- KHO / NHÂN VIÊN / NÂNG CẤP / NHIỆM VỤ ---------- */
 function buy(k,n){
   n=n=='max'?room(k):Math.min(+n,room(k));
   if(n<=0) return toast('Kho đã đầy loại này');
@@ -1431,7 +1404,6 @@ function openSheet(k){
 }
 const reSheet=()=>T.sheet&&openSheet(T.sheet);
 
-/* ---------- NHẬP LIỆU ---------- */
 function act(a,k){
   switch(a){
     case 'sel':select(+k);break;
@@ -1473,7 +1445,6 @@ document.addEventListener('click',e=>{
   if(el) act(el.dataset.a,el.dataset.k);
 });
 
-/* ---------- TICK (12fps) ---------- */
 function tick(dt){
   S.t+=dt;
   const cdKeys=Object.keys(T.cd);
@@ -1495,7 +1466,6 @@ function tick(dt){
     c.p-=dt;
     if(c.p<=0) angry(c);
   }
-  // Pha xong → tự đóng gói nếu có máy, ngược lại chờ bấm
   if(T.st==1&&(T.tm-=dt)<=0){
     T.st=2;$('#cupw').classList.remove('shake');beep(700,.15);drawBar();drawOrd();
     if(autoPack()) pack();
@@ -1504,7 +1474,6 @@ function tick(dt){
   if(S.t>=DAY) endDay();
 }
 
-/* ---------- UI (3fps) ---------- */
 const EL={};
 const el=id=>EL[id]||(EL[id]=document.getElementById(id));
 const setTxt=(id,v)=>{const e=el(id);if(e&&e.textContent!==v)e.textContent=v};
@@ -1562,7 +1531,6 @@ function ui(){
   $('#shop').style.setProperty('--n',Math.max(0,Math.min(.28,(m/60-18)*.1)));
 }
 
-/* ---------- VÒNG LẶP ---------- */
 let last=performance.now(),acc=0,uiAcc=0,rafId=0;
 const LOGIC_HZ=12,UI_HZ=3;
 const LOGIC_STEP=1/LOGIC_HZ,UI_STEP=1/UI_HZ;
@@ -1590,7 +1558,6 @@ document.addEventListener('visibilitychange',()=>{
   }
 });
 
-/* ---------- KHỞI ĐỘNG ---------- */
 newCup();
 if(!S.dm.length){S.wx=P(['sun','cloud']);setupDay()}
 drawAll();
