@@ -41,6 +41,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   position:relative;
 }
 
+/* HEADER */
 #hd{
   position:relative;border-radius:var(--radius);
   border:2px solid var(--ink);box-shadow:var(--shadow);overflow:hidden;
@@ -66,30 +67,49 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   font-weight:700;margin-top:1px;color:#fff;
   text-shadow:1px 1px 0 rgba(26,20,40,.5);
 }
-.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;padding:8px 10px 4px}
-.stat{
-  display:flex;align-items:center;justify-content:center;gap:3px;
-  background:rgba(255,255,255,.92);
-  border:2px solid var(--ink);border-radius:8px;
-  padding:5px 3px;font-weight:800;font-size:12.5px;
-  box-shadow:1.5px 1.5px 0 var(--ink);min-width:0;
-}
-.stat b{font-weight:400;font-size:13px;line-height:1}
-.bars{padding:2px 10px 10px;display:grid;gap:5px}
-.bar-w{
-  position:relative;height:20px;
-  border:2px solid var(--ink);border-radius:8px;
-  background:#fff;overflow:hidden;box-shadow:1.5px 1.5px 0 var(--ink);
-}
-.bar-w i{position:absolute;left:0;top:0;bottom:0;width:0;transition:width .35s}
-.bar-w.hp i{background:linear-gradient(90deg,#ffb3c1,#ff6b9d)}
-.bar-w.lu i{background:linear-gradient(90deg,#c9b6f0,#a890e0)}
-.bar-w .lbl{
-  position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;
-  padding:0 8px;font-size:10.5px;font-weight:800;
-  color:var(--ink);text-shadow:0 0 3px rgba(255,255,255,.9);
-}
 
+/* 4 stats vuông */
+.stats-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:5px;padding:8px 10px 10px;
+}
+.stat-cell{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.95);
+  border:2px solid var(--ink);border-radius:9px;
+  padding:5px 3px 4px;
+  box-shadow:1.5px 1.5px 0 var(--ink);
+  min-width:0;
+}
+.stat-cell .lbl{
+  font-size:9px;font-weight:800;letter-spacing:.3px;
+  text-transform:uppercase;line-height:1;
+  display:flex;align-items:center;gap:2px;
+}
+.stat-cell .val{
+  font-family:"Comfortaa",sans-serif;
+  font-size:15px;font-weight:800;line-height:1.1;
+  margin:3px 0 3px;
+}
+.stat-cell .bar-mini{
+  width:100%;height:5px;border-radius:3px;
+  background:rgba(26,20,40,.12);
+  border:1.5px solid var(--ink);
+  overflow:hidden;position:relative;
+}
+.stat-cell .bar-mini i{
+  display:block;height:100%;width:0;transition:width .35s;
+}
+.stat-cell.hp .bar-mini i{background:linear-gradient(90deg,#ffb3c1,#ff6b9d)}
+.stat-cell.sp .bar-mini i{background:linear-gradient(90deg,#ffe4a8,#ffb84d)}
+.stat-cell.lu .bar-mini i{background:linear-gradient(90deg,#c9b6f0,#a890e0)}
+.stat-cell.money .sub{
+  font-size:9px;font-weight:700;color:var(--mu);
+  line-height:1;
+}
+.stat-cell.money .val{font-size:13px;margin-bottom:0}
+
+/* SCENE */
 #scene{
   position:relative;overflow:hidden;display:flex;flex-direction:column;
   border:2px solid var(--ink);border-radius:var(--radius);
@@ -154,20 +174,14 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   position:relative;
   border:2px solid var(--ink);border-radius:10px;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  font-weight:800;font-size:11px;line-height:1.15;
+  font-weight:800;font-size:12px;line-height:1.15;
   height:clamp(58px,7.4vh,72px);
   background:linear-gradient(180deg,#fff,#f5f0ff);
   color:var(--ink);padding:3px;
   box-shadow:2px 2px 0 var(--ink);transition:transform .1s;
 }
-.act b{font-size:22px;line-height:1.1;margin-bottom:2px;font-weight:400}
+.act b{font-size:24px;line-height:1.1;margin-bottom:3px;font-weight:400}
 .act span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.act small{
-  position:absolute;top:2px;right:5px;
-  font-size:8.5px;font-weight:800;padding:1px 5px;
-  border:1.5px solid var(--ink);border-radius:6px;
-  background:rgba(255,255,255,.9);color:var(--ink);
-}
 .act:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink)}
 .act.dis{opacity:.42;filter:grayscale(.7)}
 .act.hoc{background:linear-gradient(180deg,#c9f2df,#a8e6d0)}
@@ -365,15 +379,27 @@ h3::before{content:"✿";color:#ff6b9d;font-size:16px}
         <div class="t">Vân Khánh Diary<small id="chapLbl">✿ THẠC SĨ · CNU BẮC KINH ✿</small></div>
       </div>
     </div>
-    <div class="stats-row">
-      <span class="stat">💰<b id="moneyV">500</b></span>
-      <span class="stat">📚<b id="ktV">5</b></span>
-      <span class="stat">📅<b id="weekV2">T1/36</b></span>
-      <span class="stat">📝<b id="countV">0</b></span>
-    </div>
-    <div class="bars">
-      <div class="bar-w hp"><i id="hpB"></i><span class="lbl"><span>HP</span><span id="hpLbl">80 / 100</span></span></div>
-      <div class="bar-w lu"><i id="lvB"></i><span class="lbl"><span>Luận văn</span><span id="lvLbl">0.0%</span></span></div>
+    <div class="stats-grid">
+      <div class="stat-cell hp">
+        <div class="lbl">⚡ HP</div>
+        <div class="val" id="hpV">80</div>
+        <div class="bar-mini"><i id="hpB"></i></div>
+      </div>
+      <div class="stat-cell sp">
+        <div class="lbl">💗 SP</div>
+        <div class="val" id="spV">70</div>
+        <div class="bar-mini"><i id="spB"></i></div>
+      </div>
+      <div class="stat-cell lu">
+        <div class="lbl">📝 Luận</div>
+        <div class="val" id="lvV">0%</div>
+        <div class="bar-mini"><i id="lvB"></i></div>
+      </div>
+      <div class="stat-cell money">
+        <div class="lbl">💰 Tiền</div>
+        <div class="val" id="moneyV">500</div>
+        <div class="sub" id="weekV2">Tuần 1/36</div>
+      </div>
     </div>
   </header>
 
@@ -392,7 +418,7 @@ h3::before{content:"✿";color:#ff6b9d;font-size:16px}
   </section>
 
   <div id="acts-wrap">
-    <div id="period-lbl">BUỔI SÁNG · Chọn 1 hành động</div>
+    <div id="period-lbl">NGÀY 1 · CÒN 2 HÀNH ĐỘNG</div>
     <div id="acts"></div>
     <button id="nextBtn" data-a="next" disabled>➡️ SANG BUỔI CHIỀU</button>
     <nav id="nav">
@@ -417,40 +443,49 @@ const $=s=>document.querySelector(s);
 const cl=(v,a,b)=>Math.max(a,Math.min(b,v));
 const F=n=>Math.round(n).toLocaleString('vi-VN');
 
-const KEY='vkdiary_v10';
-const SLOT='vkdiary_slot_v10';
-const REC_KEY='vkdiary_rec_v10';
-const SAVE_VER=10;
+const KEY='vkdiary_v12';
+const SLOT='vkdiary_slot_v12';
+const REC_KEY='vkdiary_rec_v12';
+const SAVE_VER=12;
 const SCHOLAR=[0,750,875];
 const START_MONEY=500;
 const MAX_WEEKS=[0,36,72];
-const WRITE_RATE=[0,5,4];
+const WRITE_RATE=[0,1.5,1.2];      // viết luận: MS 1.5, TS 1.2
+const FIX_RATE=[0,0.8,0.6];        // sửa lỗi
+const MEET_RATE=[0,0.5,0.4];       // gặp GV
+const LIB_RATE=[0,0.5,0.4];        // thư viện / lab
+const NIGHT_RATE=[0,1.0,0.8];      // thức đêm
+const ACTIONS_PER_DAY=2;
 const STIPEND_WEEKS=[0,24,60];
 
 const WD=['Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy','Chủ Nhật'];
 const PERIODS=['🌅 Buổi sáng','☀️ Buổi chiều','🌙 Buổi tối'];
 
+/* 6 action mỗi buổi — không hiển thị +/- ở nút */
 const ACTS=[
-  {k:'s_tv', n:'Thư viện',   e:'📚', p:0, hp:-6, sp:-12, kt:18, grp:'hoc'},
-  {k:'s_lab',n:'Lab thầy',   e:'🧪', p:0, hp:-5, sp:3,  kt:8,  grp:'hoc'},
-  {k:'s_ts', n:'Pha trà sữa',e:'🧋', p:0, hp:-8, sp:-10, m:45,  grp:'lam'},
-  {k:'s_sh', n:'Đi shopping',e:'🛍️',p:0, hp:-3, sp:15,  m:-40, grp:'choi'},
-  {k:'s_an', n:'Ăn sáng',    e:'🍚', p:0, hp:8,  sp:3,   m:-5,  grp:'an'},
-  {k:'s_ngu',n:'Ngủ nướng',  e:'😴', p:0, hp:10, sp:15,         grp:'ngu'},
+  /* 🌅 SÁNG */
+  {k:'s_tv', n:'Thư viện',   e:'📚', p:0, hp:-6, sp:-12, lu:'lib', grp:'hoc'},
+  {k:'s_lab',n:'Lab thầy',   e:'🧪', p:0, hp:-5, sp:+2,  lu:'lib', grp:'hoc'},
+  {k:'s_ts', n:'Pha trà sữa',e:'🧋', p:0, hp:-8, sp:-10, m:+45,   grp:'lam'},
+  {k:'s_sh', n:'Đi shopping',e:'🛍️',p:0, hp:-3, sp:+15,  m:-40,   grp:'choi'},
+  {k:'s_an', n:'Ăn sáng',    e:'🍚', p:0, hp:+8, sp:+3,  m:-5,    grp:'an'},
+  {k:'s_ngu',n:'Ngủ nướng',  e:'😴', p:0, hp:+10,sp:+15,          grp:'ngu'},
 
-  {k:'c_wr', n:'SB viết luận',e:'✍️',p:1, hp:-10, sp:-15, m:-30, lu:1, grp:'viet'},
-  {k:'c_gv', n:'Gặp GV',     e:'🧑‍🏫',p:1, hp:-3, sp:-5,  kt:3, lu:2, grp:'viet'},
-  {k:'c_ta', n:'Trợ giảng',  e:'🎓', p:1, hp:-10, sp:-10, m:75,  grp:'lam'},
-  {k:'c_cf', n:'Đi cafe',    e:'☕', p:1, hp:-2, sp:18,  m:-25, grp:'choi'},
-  {k:'c_an', n:'Ăn trưa',    e:'🍜', p:1, hp:12, sp:4,   m:-8,  grp:'an'},
-  {k:'c_ngu',n:'Ngủ nướng',  e:'😴', p:1, hp:10, sp:15,         grp:'ngu'},
+  /* ☀️ CHIỀU */
+  {k:'c_wr', n:'Viết luận',  e:'✍️', p:1, hp:-10,sp:-15, m:-30,   lu:'write', grp:'viet'},
+  {k:'c_gv', n:'Gặp GV',     e:'🧑‍🏫',p:1, hp:-3, sp:-5,           lu:'meet',  grp:'viet'},
+  {k:'c_ta', n:'Trợ giảng',  e:'🎓', p:1, hp:-10,sp:-10, m:+75,   grp:'lam'},
+  {k:'c_cf', n:'Đi cafe',    e:'☕', p:1, hp:-2, sp:+18, m:-25,   grp:'choi'},
+  {k:'c_an', n:'Ăn trưa',    e:'🍜', p:1, hp:+12,sp:+4,  m:-8,    grp:'an'},
+  {k:'c_ngu',n:'Ngủ nướng',  e:'😴', p:1, hp:+10,sp:+15,          grp:'ngu'},
 
-  {k:'t_dh', n:'Dạy online', e:'💻', p:2, hp:-10, sp:-12, m:70,  grp:'lam'},
-  {k:'t_goi',n:'Gọi nhà',    e:'📞', p:2, hp:0,  sp:25,  m:-5,  grp:'choi'},
-  {k:'t_sh', n:'Lướt shop',  e:'🛍️',p:2, hp:-3, sp:22,  m:-60, grp:'choi'},
-  {k:'t_fx', n:'Sửa lỗi',    e:'🔍', p:2, hp:-4, sp:-8,  lu:3,  grp:'viet'},
-  {k:'t_an', n:'Ăn tối',     e:'🍲', p:2, hp:12, sp:4,   m:-8,  grp:'an'},
-  {k:'t_ngu',n:'Ngủ nướng',  e:'😴', p:2, hp:10, sp:15,         grp:'ngu'}
+  /* 🌙 TỐI */
+  {k:'t_dh', n:'Dạy online', e:'💻', p:2, hp:-10,sp:-12, m:+70,   grp:'lam'},
+  {k:'t_goi',n:'Gọi nhà',    e:'📞', p:2, hp:0,  sp:+25, m:-5,    grp:'choi'},
+  {k:'t_sh', n:'Lướt shop',  e:'🛍️',p:2, hp:-3, sp:+22, m:-60,   grp:'choi'},
+  {k:'t_fx', n:'Sửa lỗi',    e:'🔍', p:2, hp:-4, sp:-8,           lu:'fix', grp:'viet'},
+  {k:'t_an', n:'Ăn tối',     e:'🍲', p:2, hp:+12,sp:+4,  m:-8,    grp:'an'},
+  {k:'t_ngu',n:'Ngủ nướng',  e:'😴', p:2, hp:+10,sp:+15,          grp:'ngu'}
 ];
 
 const BAD=[
@@ -470,7 +505,7 @@ const BAD=[
 ];
 
 const GOOD=[
-  {e:'🎁 Được tặng sách',  t:'Hưng cho cuốn sách quý.',      kt:10},
+  {e:'🎁 Được tặng sách',  t:'Hưng cho cuốn sách quý.',      lu:1},
   {e:'📞 Mẹ gọi',          t:'Mẹ gọi hỏi thăm.',             sp:20},
   {e:'🍜 Bà chủ tặng cơm', t:'Bà chủ dúi cơm miễn phí.',     hp:10, sp:5},
   {e:'💡 Ý tưởng mới',     t:'Ý tưởng hay chợt đến.',        lu:3},
@@ -482,31 +517,51 @@ const GOOD=[
   {e:'🧧 Lì xì muộn',      t:'Họ hàng gửi lì xì.',           m:100},
   {e:'🍵 Trà gừng',        t:'Uống trà gừng ấm.',            hp:10},
   {e:'📜 Bài báo duyệt',   t:'Bài báo được chấp nhận.',      lu:5, sp:20},
-  {e:'📖 Tài liệu quý',    t:'Tìm được tài liệu hiếm.',      kt:15},
+  {e:'📖 Tài liệu quý',    t:'Tìm được tài liệu hiếm.',      lu:1},
   {e:'🤝 Được khen',       t:'Được giáo sư khen trước lớp.', sp:20}
 ];
 
 const OFFERS=[
-  {k:'trip',  e:'✈️ Đi du lịch với bạn', t:'Hòa rủ đi Cố Cung.',           m:-400, sp:40, kt:10, onceMonth:1},
+  {k:'trip',  e:'✈️ Đi du lịch với bạn', t:'Hòa rủ đi Cố Cung.',           m:-400, sp:40, lu:2, onceMonth:1},
   {k:'picnic',e:'🏞️ Dã ngoại cuối tuần',t:'Cả lab đi dã ngoại.',           m:-150, sp:25, hp:5},
   {k:'ktv',   e:'🎤 Đi KTV cùng lớp',   t:'Lớp tổ chức hát karaoke.',      m:-200, sp:30},
   {k:'party', e:'🍲 Liên hoan cuối kỳ', t:'Liên hoan nhóm nghiên cứu.',    m:-100, sp:20},
   {k:'coat',  e:'🧥 Mùa đông mua áo',   t:'Trời trở lạnh.',                m:-250, hp:5},
-  {k:'books', e:'📚 Hiệu sách giảm giá',t:'Sale 50% sách chuyên ngành.',   m:-180, kt:20},
+  {k:'books', e:'📚 Hiệu sách giảm giá',t:'Sale 50% sách chuyên ngành.',   m:-180, lu:2},
   {k:'bed',   e:'🛏️ Chăn ga mới',       t:'Chăn ga mùa đông.',             m:-120, hp:5, sp:10},
   {k:'cook',  e:'🥢 Nồi cơm mini',      t:'Nấu ăn tiết kiệm.',             m:-100, hp:5},
   {k:'bday',  e:'🎂 Sinh nhật bạn',     t:'Sinh nhật Hòa.',                m:-80,  sp:20}
 ];
 
+/* Event cốt truyện lớn — MẤT NGUYÊN NGÀY */
+const BIG_EVENTS=[
+  {k:'family1', week:20, ch:1,
+    e:'👨‍👩‍👧‍👦 Bố mẹ qua thăm',
+    t:'Bố mẹ và em trai từ Việt Nam sang Bắc Kinh. Cả nhà quây quần suốt một ngày.',
+    cost:300, hp:20, sp:40},
+  {k:'family2', week:40, ch:2,
+    e:'👨‍👩‍👧‍👦 Cả nhà qua thăm',
+    t:'Bố, mẹ, em gái, em trai sang Thượng Hải thăm Vân Khánh.',
+    cost:500, hp:20, sp:50},
+  {k:'conf1', week:3, ch:2,
+    e:'🌏 Hội thảo Singapore',
+    t:'Bay sang Singapore dự hội thảo quốc tế. Một ngày trọn vẹn.',
+    cost:2000, lu:4, sp:15},
+  {k:'conf2', week:7, ch:2,
+    e:'🌏 Hội thảo Tokyo',
+    t:'Bay sang Tokyo trình bày nghiên cứu.',
+    cost:2500, lu:5, sp:20}
+];
+
 const D0=()=>({
-  day:1,week:1,ch:1,period:0,hp:80,sp:70,kt:5,lu:0,
+  day:1,week:1,ch:1,period:0,hp:80,sp:70,lu:0,
   money:START_MONEY,
-  actedInPeriod:false,
+  actionsLeft:ACTIONS_PER_DAY,
   rolledToday:false,
   logDay:[],logWeek:[],logAll:[],
   pendingOffer:null,
+  pendingBigEvent:null,
   notes:[],
-  loan:null,
   travelMonth:0,
   seenEvents:{},
   seen:0,snd:1,endReason:''
@@ -516,6 +571,8 @@ try{
   const raw=localStorage.getItem(KEY);
   if(raw){const o=JSON.parse(raw);if(o&&o.ch&&o.day) S=Object.assign(D0(),o);}
 }catch(e){}
+if(typeof S.actionsLeft!=='number') S.actionsLeft=ACTIONS_PER_DAY;
+if(!S.seenEvents) S.seenEvents={};
 
 const T={modal:0,mq:[],sheet:''};
 
@@ -562,9 +619,7 @@ function exportNotes(){
   if(!S.notes||!S.notes.length) return toast('📭 Chưa có note');
   let txt='NHẬT KÝ VÂN KHÁNH\n================\n\n';
   const sorted=S.notes.slice().sort((a,b)=>(a.c-b.c)||(a.w-b.w)||(a.d-b.d));
-  sorted.forEach(n=>{
-    txt+=`[Chương ${n.c} · Tuần ${n.w} · Ngày ${n.d}]\n${n.t}\n\n`;
-  });
+  sorted.forEach(n=>{ txt+=`[Chương ${n.c} · Tuần ${n.w} · Ngày ${n.d}]\n${n.t}\n\n`; });
   txt+='\n================\nVân Khánh Diary';
   try{
     const blob=new Blob([txt],{type:'text/plain;charset=utf-8'});
@@ -616,17 +671,13 @@ function saveNote(){
   if(i>=0) S.notes[i]=entry;
   else S.notes.push(entry);
   if(S.notes.length>300) S.notes=S.notes.slice(-300);
-  save();
-  toast('📝 Đã lưu note!');
-  openLog();
+  save();toast('📝 Đã lưu note!');openLog();
 }
 function delNote(k){
   if(!S.notes) return;
   if(!confirm('Xoá note này?')) return;
   S.notes=S.notes.filter(n=>n.k!==k);
-  save();
-  toast('🗑️ Đã xoá');
-  openLog();
+  save();toast('🗑️ Đã xoá');openLog();
 }
 
 function getRec(){
@@ -696,14 +747,14 @@ function moodText(){
 function drawHead(){
   document.body.className='ch'+S.ch;
   setTxt('chapLbl',S.ch==1?'✿ THẠC SĨ · CNU BẮC KINH ✿':'✿ TIẾN SĨ · SISU THƯỢNG HẢI ✿');
+  setTxt('hpV',Math.round(S.hp));
+  setTxt('spV',Math.round(S.sp));
+  setTxt('lvV',S.lu.toFixed(1)+'%');
   setTxt('moneyV',F(S.money));
-  setTxt('ktV',Math.round(S.kt));
-  setTxt('weekV2','T'+S.week+'/'+MAX_WEEKS[S.ch]);
-  setTxt('countV',(S.notes||[]).length);
+  setTxt('weekV2','Tuần '+S.week+'/'+MAX_WEEKS[S.ch]);
   setW('hpB',S.hp);
+  setW('spB',S.sp);
   setW('lvB',S.lu);
-  setTxt('hpLbl',Math.round(S.hp)+' / 100');
-  setTxt('lvLbl',S.lu.toFixed(1)+'%');
 }
 function drawScene(){
   const weeksLeft=MAX_WEEKS[S.ch]-S.week+1;
@@ -719,7 +770,16 @@ function drawScene(){
   if(logEl._h!==html){logEl._h=html;logEl.innerHTML=html}
 
   const nEl=$('#notice');
-  if(S.pendingOffer){
+  if(S.pendingBigEvent){
+    const be=S.pendingBigEvent;
+    nEl.classList.add('on');
+    nEl.innerHTML=`<b>${be.e}</b><br>${be.t}<br>
+      <span style="color:#c92e72">Chi phí: ${be.cost} tệ</span>
+      <div class="btns" style="display:flex;gap:6px;margin-top:6px">
+        <button class="b2 p" data-a="accBig" style="flex:1">Tham gia (mất cả ngày)</button>
+        <button class="b2" data-a="decBig" style="flex:1">Bỏ qua</button>
+      </div>`;
+  } else if(S.pendingOffer){
     nEl.classList.add('on');
     nEl.innerHTML=`<b>${S.pendingOffer.e}</b><br>${S.pendingOffer.t}<br>
       <span style="color:#c92e72">${S.pendingOffer.m} tệ</span>
@@ -735,12 +795,9 @@ function drawScene(){
 function drawActs(){
   const period=S.period;
   const list=ACTS.filter(a=>a.p==period);
-  const done=S.actedInPeriod;
-  if(S.rolledToday){
-    setTxt('period-lbl',`BUỔI ${['SÁNG','CHIỀU','TỐI'][period]} · Đã có biến hôm nay`);
-  } else {
-    setTxt('period-lbl',`BUỔI ${['SÁNG','CHIỀU','TỐI'][period]} · Chọn 1 hành động`);
-  }
+  const noLeft=S.actionsLeft<=0;
+  const done=noLeft;
+  setTxt('period-lbl',`${WD[(S.day-1)%7].toUpperCase()} · NGÀY ${S.day} · CÒN ${S.actionsLeft}/${ACTIONS_PER_DAY} HÀNH ĐỘNG`);
   const html=[];
   for(let i=0;i<list.length;i++){
     const a=list[i];
@@ -748,17 +805,11 @@ function drawActs(){
     let cls=clsMap[a.grp]||'';
     let dis=false;
     if(done) dis=true;
-    if(a.k=='c_wr' && (S.hp<30||S.sp<30)) dis=true;
     if(a.m<0 && S.money<-a.m) dis=true;
     if(a.k=='c_wr' && S.lu>=100) dis=true;
     if(dis) cls+=' dis';
-    let eff='';
-    if(a.m) eff=(a.m>0?'+':'')+a.m;
-    else if(a.kt) eff='+'+a.kt+'KT';
-    else if(a.lu) eff='+'+a.lu+'%';
-    else if(a.hp&&a.sp) eff=`${a.hp}HP ${a.sp}SP`;
     html.push(`<button class="act ${cls}" data-a="do" data-k="${a.k}" ${dis?'disabled':''}>
-      <b>${a.e}</b><span>${a.n}</span>${eff?`<small>${eff}</small>`:''}
+      <b>${a.e}</b><span>${a.n}</span>
     </button>`);
   }
   const actsEl=$('#acts');
@@ -766,9 +817,14 @@ function drawActs(){
   if(actsEl._h!==h){actsEl._h=h;actsEl.innerHTML=h}
 
   const nb=$('#nextBtn');
-  if(period==2) nb.textContent='🌙 KẾT THÚC NGÀY';
-  else nb.textContent='➡️ SANG BUỔI '+['CHIỀU','TỐI'][period];
-  nb.disabled=!done;
+  if(S.actionsLeft<=0){
+    nb.textContent='🌙 KẾT THÚC NGÀY';
+  } else {
+    if(S.period==0) nb.textContent='➡️ SANG BUỔI CHIỀU';
+    else if(S.period==1) nb.textContent='➡️ SANG BUỔI TỐI';
+    else nb.textContent='🌙 KẾT THÚC NGÀY';
+  }
+  nb.disabled=!done && S.actionsLeft>0 ? false : (S.actionsLeft<=0);
 
   const wf=$('#writeFab');
   if(S.week>=STIPEND_WEEKS[S.ch] && S.lu<100) wf.classList.add('on');
@@ -796,13 +852,10 @@ function maybeRandomEvent(){
 }
 function applyEvent(ev){
   if(!S.seenEvents) S.seenEvents={};
-  if(ev.idx!==undefined){
-    S.seenEvents[(ev.kind==='good'?'g':'b')+ev.idx]=1;
-  }
+  if(ev.idx!==undefined) S.seenEvents[(ev.kind==='good'?'g':'b')+ev.idx]=1;
   if(ev.hp) S.hp=cl(S.hp+ev.hp,0,100);
   if(ev.sp) S.sp=cl(S.sp+ev.sp,0,100);
   if(ev.m)  S.money+=ev.m;
-  if(ev.kt) S.kt+=ev.kt;
   if(ev.lu) S.lu=cl(S.lu+ev.lu,0,100);
   addLog(`${ev.e}: ${ev.t}`);
 }
@@ -814,14 +867,13 @@ function showEventModal(ev){
       ${ev.hp?`HP ${ev.hp>0?'+':''}${ev.hp} `:''}
       ${ev.sp?`SP ${ev.sp>0?'+':''}${ev.sp} `:''}
       ${ev.m?`${ev.m>0?'+':''}${ev.m} tệ `:''}
-      ${ev.kt?`KT +${ev.kt} `:''}
       ${ev.lu?`Luận ${ev.lu>0?'+':''}${ev.lu}%`:''}
     </div>
     <div class="mb"><button class="btn p" data-a="mx">OK</button></div>`);
 }
 
 function maybeOffer(){
-  if(S.pendingOffer) return;
+  if(S.pendingOffer||S.pendingBigEvent) return;
   if(Math.random()>0.15) return;
   const list=OFFERS.filter(o=>{
     if(o.onceMonth && S.travelMonth===Math.floor(S.week/4)) return false;
@@ -839,8 +891,10 @@ function acceptOffer(){
   if(o.m) S.money+=o.m;
   if(o.sp) S.sp=cl(S.sp+o.sp,0,100);
   if(o.hp) S.hp=cl(S.hp+o.hp,0,100);
-  if(o.kt) S.kt+=o.kt;
+  if(o.lu) S.lu=cl(S.lu+o.lu,0,100);
   if(o.onceMonth) S.travelMonth=Math.floor(S.week/4);
+  if(!S.seenEvents) S.seenEvents={};
+  S.seenEvents['o'+OFFERS.findIndex(x=>x.k===o.k)]=1;
   addLog(`${o.e}: ${o.t}`);
   S.pendingOffer=null;
   save();drawAll();
@@ -853,12 +907,53 @@ function declineOffer(){
   save();drawAll();
 }
 
+/* Event lớn — mất cả ngày */
+function maybeBigEvent(){
+  if(S.pendingBigEvent) return;
+  const be=BIG_EVENTS.find(ev=>ev.ch===S.ch && ev.week===S.week && !S.seenEvents['be_'+ev.k]);
+  if(!be) return;
+  S.pendingBigEvent=Object.assign({},be);
+  save();
+}
+function acceptBig(){
+  if(!S.pendingBigEvent) return;
+  const be=S.pendingBigEvent;
+  if(S.money<be.cost) return toast('❌ Không đủ tiền');
+  S.money-=be.cost;
+  if(be.hp) S.hp=cl(S.hp+be.hp,0,100);
+  if(be.sp) S.sp=cl(S.sp+be.sp,0,100);
+  if(be.lu) S.lu=cl(S.lu+be.lu,0,100);
+  if(!S.seenEvents) S.seenEvents={};
+  S.seenEvents['be_'+be.k]=1;
+  addLog(`${be.e}: ${be.t}`);
+  S.pendingBigEvent=null;
+  // Mất cả ngày → endDay
+  save();
+  modal(`<div class="sp"><img src="icon-192.png" alt=""></div>
+    <h2>${be.e}</h2>
+    <div class="body">${be.t}</div>
+    <div class="ev" style="text-align:center;font-weight:800">
+      −${be.cost} tệ ${be.hp?' · +'+be.hp+' HP':''} ${be.sp?' · +'+be.sp+' SP':''} ${be.lu?' · +'+be.lu+'% luận':''}
+    </div>
+    <div class="mb"><button class="btn p" data-a="bigEnd">Qua ngày mới</button></div>`);
+}
+function declineBig(){
+  if(!S.pendingBigEvent) return;
+  addLog(`😔 Bỏ qua: ${S.pendingBigEvent.e}`);
+  S.pendingBigEvent=null;
+  save();drawAll();
+}
+function bigEnd(){
+  mclose();
+  S.actionsLeft=0;
+  endDay();
+}
+
 function doAct(k){
   if(T.modal) return;
-  if(S.actedInPeriod) return toast('Buổi này đã làm rồi');
+  if(S.actionsLeft<=0) return toast('Hết hành động hôm nay');
   const a=ACTS.find(x=>x.k==k);
   if(!a) return;
-  if(a.k=='c_wr' && (S.hp<30||S.sp<30)) return toast('Cần HP, SP ≥ 30');
   if(a.m<0 && S.money<-a.m) return toast('Không đủ tiền');
   if(a.k=='c_wr' && S.lu>=100) return;
 
@@ -866,14 +961,13 @@ function doAct(k){
   if(a.hp) S.hp=cl(S.hp+Math.round(a.hp*eff),0,100);
   if(a.sp) S.sp=cl(S.sp+Math.round(a.sp*eff),0,100);
   if(a.m) S.money+=a.m;
-  if(a.kt){
-    const g=Math.round(a.kt*eff);
-    S.kt+=g;
-    addLog(`${a.e} ${a.n}: +${g} KT`);
-  } else if(a.lu){
-    let g=a.lu;
-    if(a.lu==1){const rate=WRITE_RATE[S.ch];g=rate*(1+S.kt/100)*eff;}
-    g=Math.round(g*10)/10;
+  if(a.lu){
+    let rate=0;
+    if(a.lu==='write') rate=WRITE_RATE[S.ch];
+    else if(a.lu==='fix') rate=FIX_RATE[S.ch];
+    else if(a.lu==='meet') rate=MEET_RATE[S.ch];
+    else if(a.lu==='lib') rate=LIB_RATE[S.ch];
+    const g=Math.round(rate*eff*10)/10;
     S.lu=cl(S.lu+g,0,100);
     addLog(`${a.e} ${a.n}: +${g}% luận văn`);
   } else if(a.grp=='lam'){
@@ -881,7 +975,7 @@ function doAct(k){
   } else {
     addLog(`${a.e} ${a.n}`);
   }
-  S.actedInPeriod=true;
+  S.actionsLeft--;
   beep(a.grp=='viet'?880:a.grp=='choi'?660:520,.08);
 
   if(S.hp<20 && S.hp>0){
@@ -891,7 +985,7 @@ function doAct(k){
       <div class="body">HP xuống dưới 20. Cô phải nghỉ ngơi một ngày.</div>
       <div class="mb"><button class="btn p" data-a="mx">Cố lên.</button></div>`);
       S.hp=50;S.sp=Math.max(30,S.sp);
-      S.day++;S.period=0;S.actedInPeriod=false;S.rolledToday=false;S.logDay=[];
+      S.day++;S.period=0;S.actionsLeft=ACTIONS_PER_DAY;S.rolledToday=false;S.logDay=[];
       checkWeekLimit();
       save();drawAll();
     },400);
@@ -911,10 +1005,10 @@ function doAct(k){
 
 function sleepNow(){
   if(T.modal) return;
-  const clean=S.period==0 && !S.actedInPeriod;
-  if(!clean){
-    if(!confirm('Kết thúc ngày sớm?\nSẽ bỏ qua các buổi còn lại.')) return;
+  if(S.actionsLeft===ACTIONS_PER_DAY){
+    if(!confirm('Kết thúc ngày sớm?\nSẽ bỏ qua các hành động còn lại.')) return;
   }
+  const bonusActions=S.actionsLeft;
   S.hp=cl(S.hp+18,0,100);
   S.sp=cl(S.sp+35,0,100);
   addLog('🌙 Ngủ đêm');
@@ -926,11 +1020,10 @@ function lateWrite(){
   if(S.week<STIPEND_WEEKS[S.ch]) return toast('Chưa mở khóa');
   if(S.lu>=100) return toast('Luận văn đã xong');
   if(S.hp<15) return toast('Quá mệt, không thức được');
-  if(!confirm('Thức đêm viết luận?\n−15 HP, −20 SP, nhưng +3%×(1+KT/100) luận văn.')) return;
+  if(!confirm('Thức đêm viết luận?\n−15 HP, −20 SP, +'+NIGHT_RATE[S.ch]+'% luận văn.')) return;
   S.hp=cl(S.hp-15,0,100);
   S.sp=cl(S.sp-20,0,100);
-  const rate=WRITE_RATE[S.ch]*0.6;
-  const g=Math.round(rate*(1+S.kt/100)*10)/10;
+  const g=NIGHT_RATE[S.ch];
   S.lu=cl(S.lu+g,0,100);
   addLog(`🌌 Thức đêm viết: +${g}% luận văn`);
   beep(440,.15);
@@ -939,17 +1032,16 @@ function lateWrite(){
     setTimeout(()=>{
       modal(`<h2>🤒 Kiệt sức</h2><div class="body">Thức đêm quá nhiều, Vân Khánh ngất đi.</div><div class="mb"><button class="btn p" data-a="mx">Ôi...</button></div>`);
       S.hp=50;
-      S.day++;S.period=0;S.actedInPeriod=false;S.rolledToday=false;S.logDay=[];
+      S.day++;S.period=0;S.actionsLeft=ACTIONS_PER_DAY;S.rolledToday=false;S.logDay=[];
       save();drawAll();
     },400);
   }
 }
 
 function nextPeriod(){
-  if(!S.actedInPeriod) return;
+  if(S.actionsLeft<=0){endDay();return}
   if(S.period>=2){endDay();return}
   S.period++;
-  S.actedInPeriod=false;
   save();drawAll();
 }
 
@@ -957,7 +1049,7 @@ function endDay(){
   if(S.day%7==0){endWeek();return}
   S.day++;
   S.period=0;
-  S.actedInPeriod=false;
+  S.actionsLeft=ACTIONS_PER_DAY;
   S.rolledToday=false;
   S.logDay=[];
   S.hp=cl(S.hp+2,0,100);
@@ -987,19 +1079,13 @@ function endWeek(){
   const before=S.money;
   S.money+=scholar;
   const wLog={week:S.week,ch:S.ch,moneyBefore:before,moneyAfter:S.money,
-    scholar,lu:S.lu,kt:S.kt,hp:S.hp,sp:S.sp};
+    scholar,lu:S.lu,hp:S.hp,sp:S.sp};
   S.logWeek.push(wLog);
   if(S.logWeek.length>50) S.logWeek.shift();
-  if(S.loan && S.week>=S.loan.dueWeek){
-    S.money+=S.loan.amount;
-    S.sp=cl(S.sp+10,0,100);
-    addLog(`💰 ${S.loan.who} trả lại ${S.loan.amount} tệ`);
-    S.loan=null;
-  }
   S.week++;
   S.day++;
   S.period=0;
-  S.actedInPeriod=false;
+  S.actionsLeft=ACTIONS_PER_DAY;
   S.rolledToday=false;
   S.logDay=[];
   save();
@@ -1012,7 +1098,6 @@ function endWeek(){
     <span>💰 Chênh lệch</span><b style="color:${delta>=0?'#3a8a70':'#c92e72'}">${delta>=0?'+':''}${delta} tệ</b>
     <span>💵 Còn lại</span><b>${F(S.money)} tệ</b>
     <span>📝 Luận văn</span><b>${S.lu.toFixed(1)}%</b>
-    <span>📚 KT</span><b>${Math.round(S.kt)}</b>
     <span>⚡ HP / 💗 SP</span><b>${Math.round(S.hp)} / ${Math.round(S.sp)}</b>
     <span>⏳ Còn lại</span><b>${weeksLeft} tuần</b>
   </div>
@@ -1027,7 +1112,8 @@ function endWeek(){
     <button class="btn" data-a="note">📝 Viết note</button>
     <button class="btn p" data-a="mx">Sang tuần ${S.week} 💕</button>
   </div>`);
-  setTimeout(()=>maybeOffer(),500);
+  setTimeout(()=>maybeBigEvent(),400);
+  setTimeout(()=>maybeOffer(),800);
   checkWeekLimit();
   if(S.endReason) return;
   checkStory();
@@ -1039,7 +1125,7 @@ function checkStory(){
   if(S.lu>=100 && S.ch==1){
     const ch1Days=S.day,ch1Weeks=S.week;
     S.ch=2;S.lu=0;S.day=1;S.week=1;S.period=0;
-    S.actedInPeriod=false;S.rolledToday=false;S.logDay=[];
+    S.actionsLeft=ACTIONS_PER_DAY;S.rolledToday=false;S.logDay=[];
     S.hp=Math.max(S.hp,70);S.sp=Math.max(S.sp,70);
     S.money=Math.max(S.money,2000);
     window.__ch1Days=ch1Days;window.__ch1Weeks=ch1Weeks;
@@ -1147,17 +1233,26 @@ function openBook(){
   let html='';
 
   html+=`<h3>❓ Hướng dẫn nhanh</h3>
-    <div style="font-size:12px;line-height:1.6;padding:0 2px">
-      • 1 ngày = <b>3 buổi</b>: Sáng · Chiều · Tối<br>
-      • Mỗi buổi chọn <b>1 hành động</b> trong 6 nút<br>
+    <div style="font-size:12px;line-height:1.7;padding:0 2px">
+      • 1 ngày = <b>2 hành động</b> (có thể làm bất kỳ buổi nào)<br>
+      • Hết 2 hành động → bấm <b>🌙 Kết thúc ngày</b> để qua ngày mới<br>
       • Bấm <b>🌙 Ngủ đêm</b> để kết thúc ngày bất cứ lúc nào<br>
-      • Bấm <b>🌌 Thức đêm</b> để viết luận thêm (mở sau 24/60 tuần)<br>
+      • <b>HP</b> = Sức khỏe · <b>SP</b> = Tinh thần<br>
       • <b>HP &lt; 20</b> → nghỉ ốm 1 ngày<br>
       • <b>SP &lt; 20</b> → hành động yếu 50%<br>
       • <b>Luận văn 100%</b> → tốt nghiệp<br>
       • <b>Hạn:</b> Thạc sĩ 36 tuần · Tiến sĩ 72 tuần<br>
       • Trợ cấp CSC: <b>+750/tuần</b> (MS) · <b>+875/tuần</b> (TS)<br>
-      • Mỗi ngày chỉ có tối đa <b>1 event ngẫu nhiên</b>
+      • Mỗi ngày tối đa <b>1 event ngẫu nhiên</b><br>
+      • Bấm <b>🌌 Thức đêm</b> để viết luận thêm (mở sau 24/60 tuần)
+    </div>`;
+
+  html+=`<h3>💡 Giải thích chỉ số</h3>
+    <div style="font-size:12px;line-height:1.6;padding:0 2px">
+      <b>⚡ HP (Sức khỏe):</b> năng lượng thể chất. Mất khi làm việc mệt, tăng khi ăn/ngủ.<br>
+      <b>💗 SP (Tinh thần):</b> cảm xúc, động lực. Mất khi viết luận/làm việc, tăng khi đi chơi, gọi nhà.<br>
+      <b>📝 Luận văn:</b> tiến độ nghiên cứu. Đạt 100% là tốt nghiệp.<br>
+      <b>💰 Tiền:</b> chi cho ăn, đi chơi, sách vở. Trợ cấp CSC tự cộng mỗi tuần.
     </div>`;
 
   const periodNames=['🌅 SÁNG','☀️ CHIỀU','🌙 TỐI'];
@@ -1165,29 +1260,41 @@ function openBook(){
     html+=`<h3>${periodNames[p]}</h3>`;
     html+='<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11px;border:2px solid var(--ink);border-radius:8px;overflow:hidden">';
     html+='<thead style="background:linear-gradient(180deg,#ffd1dc,#ffb3c6)">';
-    html+='<tr><th style="padding:5px 4px;border:1px solid var(--ink);text-align:left">HĐ</th>';
+    html+='<tr><th style="padding:5px 4px;border:1px solid var(--ink);text-align:left">Hành động</th>';
     html+='<th style="padding:5px 4px;border:1px solid var(--ink)">HP</th>';
     html+='<th style="padding:5px 4px;border:1px solid var(--ink)">SP</th>';
-    html+='<th style="padding:5px 4px;border:1px solid var(--ink)">KT</th>';
-    html+='<th style="padding:5px 4px;border:1px solid var(--ink)">💰</th>';
-    html+='<th style="padding:5px 4px;border:1px solid var(--ink)">📝</th></tr></thead><tbody>';
+    html+='<th style="padding:5px 4px;border:1px solid var(--ink)">Tiền</th>';
+    html+='<th style="padding:5px 4px;border:1px solid var(--ink)">Luận</th></tr></thead><tbody>';
     ACTS.filter(a=>a.p===p).forEach(a=>{
       const hp=a.hp?(a.hp>0?'+':'')+a.hp:'—';
       const sp=a.sp?(a.sp>0?'+':'')+a.sp:'—';
-      const kt=a.kt?'+'+a.kt:'—';
       const m=a.m?(a.m>0?'+':'')+a.m:'—';
-      const lu=a.lu?(a.lu===1?'5%×KT':'+'+a.lu+'%'):'—';
+      let lu='—';
+      if(a.lu==='write') lu=`+${WRITE_RATE[S.ch]}%`;
+      else if(a.lu==='fix') lu=`+${FIX_RATE[S.ch]}%`;
+      else if(a.lu==='meet') lu=`+${MEET_RATE[S.ch]}%`;
+      else if(a.lu==='lib') lu=`+${LIB_RATE[S.ch]}%`;
       html+=`<tr>
         <td style="padding:5px 4px;border:1px solid var(--ink);font-weight:700">${a.e} ${a.n}</td>
         <td style="padding:5px 4px;border:1px solid var(--ink);text-align:center;color:${a.hp>0?'#3a8a70':a.hp<0?'#c92e72':'var(--mu)'}">${hp}</td>
         <td style="padding:5px 4px;border:1px solid var(--ink);text-align:center;color:${a.sp>0?'#3a8a70':a.sp<0?'#c92e72':'var(--mu)'}">${sp}</td>
-        <td style="padding:5px 4px;border:1px solid var(--ink);text-align:center;color:${a.kt?'#3a8a70':'var(--mu)'}">${kt}</td>
         <td style="padding:5px 4px;border:1px solid var(--ink);text-align:center;color:${a.m>0?'#3a8a70':a.m<0?'#c92e72':'var(--mu)'}">${m}</td>
-        <td style="padding:5px 4px;border:1px solid var(--ink);text-align:center;color:${a.lu?'#3a8a70':'var(--mu)'};font-size:10px">${lu}</td>
+        <td style="padding:5px 4px;border:1px solid var(--ink);text-align:center;color:${lu!=='—'?'#3a8a70':'var(--mu)'};font-size:10px">${lu}</td>
       </tr>`;
     });
     html+='</tbody></table></div>';
   }
+
+  html+=`<h3>🌙 Nút đặc biệt</h3>
+    <table style="width:100%;border-collapse:collapse;font-size:11px;border:2px solid var(--ink)">
+    <tr><td style="padding:5px;border:1px solid var(--ink);font-weight:700">🌙 Ngủ đêm</td>
+    <td style="padding:5px;border:1px solid var(--ink);text-align:center;color:#3a8a70">+18 HP</td>
+    <td style="padding:5px;border:1px solid var(--ink);text-align:center;color:#3a8a70">+35 SP</td></tr>
+    <tr><td style="padding:5px;border:1px solid var(--ink);font-weight:700">🌌 Thức đêm viết</td>
+    <td style="padding:5px;border:1px solid var(--ink);text-align:center;color:#c92e72">−15 HP</td>
+    <td style="padding:5px;border:1px solid var(--ink);text-align:center;color:#c92e72">−20 SP</td></tr>
+    </table>
+    <div style="font-size:11px;color:var(--mu);margin-top:4px">Thức đêm: +${NIGHT_RATE[S.ch]}% luận văn</div>`;
 
   const seen=S.seenEvents||{};
   html+='<h3>🎲 Event ngẫu nhiên</h3>';
@@ -1200,12 +1307,8 @@ function openBook(){
         <div class="hd" style="color:#c92e72"><span>${ev.e}</span></div>
         <div class="ct">${ev.t}</div>
         <div style="font-size:11px;margin-top:4px;font-weight:800;color:#c92e72">
-          ${ev.hp?`HP ${ev.hp>0?'+':''}${ev.hp} `:''}
-          ${ev.sp?`SP ${ev.sp>0?'+':''}${ev.sp} `:''}
-          ${ev.m?`${ev.m>0?'+':''}${ev.m} tệ `:''}
-          ${ev.lu?`Luận ${ev.lu>0?'+':''}${ev.lu}%`:''}
-        </div>
-      </div>`;
+          ${ev.hp?`HP ${ev.hp} `:''}${ev.sp?`SP ${ev.sp} `:''}${ev.m?`${ev.m} tệ `:''}${ev.lu?`Luận ${ev.lu}%`:''}
+        </div></div>`;
     } else {
       html+=`<div class="noteIt" style="background:rgba(200,180,220,.15);opacity:.55">
         <div class="hd" style="color:var(--mu)"><span>❓ Ẩn</span></div>
@@ -1221,13 +1324,8 @@ function openBook(){
         <div class="hd" style="color:#3a8a70"><span>${ev.e}</span></div>
         <div class="ct">${ev.t}</div>
         <div style="font-size:11px;margin-top:4px;font-weight:800;color:#3a8a70">
-          ${ev.hp?`HP ${ev.hp>0?'+':''}${ev.hp} `:''}
-          ${ev.sp?`SP ${ev.sp>0?'+':''}${ev.sp} `:''}
-          ${ev.m?`${ev.m>0?'+':''}${ev.m} tệ `:''}
-          ${ev.kt?`KT +${ev.kt} `:''}
-          ${ev.lu?`Luận ${ev.lu>0?'+':''}${ev.lu}%`:''}
-        </div>
-      </div>`;
+          ${ev.hp?`HP +${ev.hp} `:''}${ev.sp?`SP +${ev.sp} `:''}${ev.m?`+${ev.m} tệ `:''}${ev.lu?`Luận +${ev.lu}%`:''}
+        </div></div>`;
     } else {
       html+=`<div class="noteIt" style="background:rgba(200,180,220,.15);opacity:.55">
         <div class="hd" style="color:var(--mu)"><span>❓ Ẩn</span></div>
@@ -1237,27 +1335,38 @@ function openBook(){
   });
 
   html+=`<div class="ev" style="font-size:11.5px;margin-top:12px">
-    💡 Bạn đã gặp <b>${Object.keys(seen).length}/${BAD.length+GOOD.length}</b> event.
+    💡 Bạn đã gặp <b>${Object.keys(seen).filter(k=>k[0]!=='o'&&k.slice(0,3)!=='be_').length}/${BAD.length+GOOD.length}</b> event.
   </div>`;
 
-  html+='<h3>🎁 Offer đặc biệt</h3>';
-  html+='<div style="font-size:11px;color:var(--mu);margin-bottom:6px">Offer báo trước, có thể chọn Đồng ý hoặc Từ chối.</div>';
+  html+='<h3>🎁 Offer & Event lớn</h3>';
+  html+='<div style="font-size:11px;color:var(--mu);margin-bottom:6px">Offer báo trước, có thể chọn. Event lớn (bố mẹ qua, hội thảo) mất nguyên ngày.</div>';
   OFFERS.forEach((o,i)=>{
     if(seen['o'+i]){
       html+=`<div class="noteIt">
         <div class="hd"><span>${o.e}</span></div>
         <div class="ct">${o.t}</div>
         <div style="font-size:11px;margin-top:4px;font-weight:800">
-          ${o.m} tệ
-          ${o.sp?` · +${o.sp} SP`:''}
-          ${o.hp?` · +${o.hp} HP`:''}
-          ${o.kt?` · +${o.kt} KT`:''}
-        </div>
-      </div>`;
+          ${o.m} tệ ${o.sp?` · +${o.sp} SP`:''} ${o.hp?` · +${o.hp} HP`:''} ${o.lu?` · +${o.lu}% luận`:''}
+        </div></div>`;
     } else {
       html+=`<div class="noteIt" style="background:rgba(200,180,220,.15);opacity:.55">
         <div class="hd" style="color:var(--mu)"><span>❓ Ẩn</span></div>
         <div class="ct" style="color:var(--mu);font-style:italic">Chưa gặp offer này</div>
+      </div>`;
+    }
+  });
+  BIG_EVENTS.forEach((ev,i)=>{
+    if(seen['be_'+ev.k]){
+      html+=`<div class="noteIt" style="background:linear-gradient(180deg,#fff5e0,#ffe4c0)">
+        <div class="hd"><span>${ev.e}</span></div>
+        <div class="ct">${ev.t}</div>
+        <div style="font-size:11px;margin-top:4px;font-weight:800">
+          −${ev.cost} tệ ${ev.hp?` · +${ev.hp} HP`:''} ${ev.sp?` · +${ev.sp} SP`:''} ${ev.lu?` · +${ev.lu}% luận`:''}
+        </div></div>`;
+    } else {
+      html+=`<div class="noteIt" style="background:rgba(200,180,220,.15);opacity:.55">
+        <div class="hd" style="color:var(--mu)"><span>❓ Ẩn</span></div>
+        <div class="ct" style="color:var(--mu);font-style:italic">Event cốt truyện — mở ở Chương ${ev.ch} tuần ${ev.week}</div>
       </div>`;
     }
   });
@@ -1317,19 +1426,19 @@ Học bổng miễn học phí + KTX, trợ cấp 750 tệ/tuần — không đ�
 
 const HELP=`<h2>🌸 Cách chơi</h2>
 <div class="body">
-1 ngày = <b>3 buổi</b>. Mỗi buổi chọn 1 trong <b>6 hành động</b>.
+1 ngày = <b>2 hành động</b>. Có thể làm bất kỳ buổi nào (Sáng/Chiều/Tối).
+<br><br>
+Hết 2 hành động → bấm <b>🌙 Kết thúc ngày</b>.
 <br><br>
 <b>Nút phụ:</b><br>
-🌙 Ngủ đêm — kết thúc ngày<br>
-🌌 Thức đêm — mở sau 24 tuần (MS) / 60 tuần (TS)
+🌙 Ngủ đêm — kết thúc ngày sớm<br>
+🌌 Thức đêm — mở sau 24/60 tuần
 <br><br>
 <b>Chỉ số:</b> HP &lt; 20 → nghỉ ốm · SP &lt; 20 → yếu 50% · Luận văn 100% → tốt nghiệp.
 <br><br>
-<b>Event:</b> Mỗi ngày tối đa 1 event ngẫu nhiên (20% xấu / 20% tốt). Có offer báo trước (du lịch, mua sắm...).
+<b>Event:</b> Mỗi ngày tối đa 1 event ngẫu nhiên. Event lớn (bố mẹ qua, hội thảo) mất nguyên ngày.
 <br><br>
-<b>📝 Nhật ký:</b> Vào tab Nhật ký để tự viết note. Xuất ra file .txt được.
-<br><br>
-<b>📔 Sổ tay:</b> Xem bảng hệ số của mọi hành động + danh sách event (đã gặp / chưa gặp).
+<b>📔 Sổ tay:</b> Xem bảng hệ số + giải thích chỉ số + danh sách event.
 </div>
 <div class="mb"><button class="btn p" data-a="mx">OK! 🌸</button></div>`;
 
@@ -1344,6 +1453,9 @@ document.addEventListener('click',e=>{
     case 'latewrite':lateWrite();break;
     case 'accOffer':acceptOffer();break;
     case 'decOffer':declineOffer();break;
+    case 'accBig':acceptBig();break;
+    case 'decBig':declineBig();break;
+    case 'bigEnd':bigEnd();break;
     case 'log':openLog();break;
     case 'book':openBook();break;
     case 'record':openRecord();break;
