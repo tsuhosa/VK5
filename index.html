@@ -118,7 +118,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 .ch1 #scene{background:linear-gradient(180deg,#ffe9c9 0 40px,#fff8ee 40px)}
 .ch2 #scene{background:linear-gradient(180deg,#a8c8e8 0 40px,#f0f8ff 40px)}
 #top-info{text-align:center;padding:8px 12px 6px}
-#top-info .date{font-family:"Comfortaa",sans-serif;font-size:14px;font-weight:700}
+#top-info .date{font-family:"Comfortaa",sans-serif;font-size:13.5px;font-weight:700}
 #top-info .weekday{font-size:11px;font-weight:700;color:var(--ink2);margin-top:1px}
 #top-info .period{
   display:inline-block;margin-top:6px;padding:4px 16px;
@@ -190,7 +190,6 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 .act.choi{background:linear-gradient(180deg,#ffc6dd,#ff9bbf);color:#fff}
 .act.ngu{background:linear-gradient(180deg,#c9b6f0,#a890e0);color:#fff}
 .act.an{background:linear-gradient(180deg,#ffd1dc,#ffb3c6)}
-.act.lot{background:linear-gradient(180deg,#ffe4a8,#ffd070);border-color:#c92e72;box-shadow:2px 2px 0 #c92e72}
 
 #nextBtn{
   width:100%;margin-top:8px;padding:11px;
@@ -201,11 +200,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   color:#fff;text-shadow:1px 1px 0 rgba(26,20,40,.4);
   box-shadow:2px 2px 0 var(--ink);letter-spacing:.5px;
 }
-#nextBtn:disabled{
-  background:linear-gradient(180deg,#e8e2f0,#d8d0e5);
-  color:var(--mu);text-shadow:none;opacity:.7;
-}
-#nextBtn:not(:disabled):active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink)}
+#nextBtn:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink)}
 
 .fab{
   position:fixed;width:56px;height:56px;
@@ -223,11 +218,25 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   background:rgba(255,255,255,.9);padding:1px 6px;
   border-radius:6px;border:1.5px solid var(--ink);white-space:nowrap;
 }
-#sleepFab{right:14px;bottom:calc(env(safe-area-inset-bottom) + 130px);background:linear-gradient(180deg,#c9b6f0,#a890e0)}
-#writeFab{right:14px;bottom:calc(env(safe-area-inset-bottom) + 196px);background:linear-gradient(180deg,#ff9bbf,#ff6b9d);display:none}
+#sleepFab{
+  right:14px;bottom:calc(env(safe-area-inset-bottom) + 130px);
+  background:linear-gradient(180deg,#c9b6f0,#a890e0);
+}
+#writeFab{
+  right:14px;bottom:calc(env(safe-area-inset-bottom) + 196px);
+  background:linear-gradient(180deg,#ff9bbf,#ff6b9d);
+  display:none;
+}
 #writeFab.on{display:grid}
+#lotteryFab{
+  right:14px;bottom:calc(env(safe-area-inset-bottom) + 64px);
+  background:linear-gradient(180deg,#ffe4a8,#ffd070);
+  color:#8a5a00;
+  display:none;
+}
+#lotteryFab.on{display:grid}
 @media (min-width:520px){
-  #sleepFab,#writeFab{right:calc(50% - 240px + 14px)}
+  #sleepFab,#writeFab,#lotteryFab{right:calc(50% - 240px + 14px)}
 }
 
 #nav{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
@@ -399,15 +408,15 @@ h3::before{content:"✿";color:#ff6b9d;font-size:16px}
       <div class="stat-cell money">
         <div class="lbl">💰 Tiền</div>
         <div class="val" id="moneyV">500</div>
-        <div class="sub" id="weekV2">Tuần 1/36</div>
+        <div class="sub" id="weekV2">Tuần 1/20</div>
       </div>
     </div>
   </header>
 
   <section id="scene">
     <div id="top-info">
-      <div class="date" id="dateV">Ngày 1 · Tuần 1/36</div>
-      <div class="weekday" id="weekV">Thứ Hai · còn 36 tuần</div>
+      <div class="date" id="dateV">Ngày 1 · Tuần 1/20</div>
+      <div class="weekday" id="weekV">Thứ Hai · còn 20 tuần</div>
       <div class="period" id="periodV">🌅 Buổi sáng</div>
     </div>
     <div id="notice"></div>
@@ -419,7 +428,7 @@ h3::before{content:"✿";color:#ff6b9d;font-size:16px}
   </section>
 
   <div id="acts-wrap">
-    <div id="period-lbl">NGÀY 1 · CÒN 6 HÀNH ĐỘNG</div>
+    <div id="period-lbl">NGÀY 1 · CÒN 2 HÀNH ĐỘNG</div>
     <div id="acts"></div>
     <button id="nextBtn" data-a="next">➡️ SANG BUỔI CHIỀU</button>
     <nav id="nav">
@@ -433,6 +442,7 @@ h3::before{content:"✿";color:#ff6b9d;font-size:16px}
 
 <button id="sleepFab" class="fab" data-a="sleep" data-label="Ngủ đêm">🌙</button>
 <button id="writeFab" class="fab" data-a="latewrite" data-label="Thức đêm">🌌</button>
+<button id="lotteryFab" class="fab" data-a="lottery" data-label="Xổ số">🎫</button>
 
 <div id="sheet" class="hide"><div class="shx"><div class="shh"><b id="sht"></b><button class="b2" data-a="closeSheet">✕</button></div><div id="shb"></div></div></div>
 <div id="modal" class="hide"></div>
@@ -444,29 +454,29 @@ const $=s=>document.querySelector(s);
 const cl=(v,a,b)=>Math.max(a,Math.min(b,v));
 const F=n=>Math.round(n).toLocaleString('vi-VN');
 
-const KEY='vkdiary_v13';
-const SLOT='vkdiary_slot_v13';
-const REC_KEY='vkdiary_rec_v13';
-const SAVE_VER=13;
+const KEY='vkdiary_v15';
+const SLOT='vkdiary_slot_v15';
+const REC_KEY='vkdiary_rec_v15';
+const SAVE_VER=15;
 const SCHOLAR=[0,750,875];
 const START_MONEY=500;
-const MAX_WEEKS=[0,36,72];
-const WRITE_RATE=[0,0.5,0.4];
-const FIX_RATE=[0,0.3,0.2];
-const MEET_RATE=[0,0.2,0.15];
-const LIB_RATE=[0,0.2,0.15];
-const NIGHT_RATE=[0,0.4,0.3];
+const MAX_WEEKS=[0,20,40];
+const WRITE_RATE=[0,2.0,1.4];
+const FIX_RATE=[0,1.0,0.7];
+const MEET_RATE=[0,0.7,0.4];
+const LIB_RATE=[0,0.7,0.4];
+const NIGHT_RATE=[0,1.3,1.0];
 const ACTIONS_PER_PERIOD=2;
 const PERIODS_PER_DAY=3;
-const ACTIONS_PER_DAY=ACTIONS_PER_PERIOD*PERIODS_PER_DAY;  // 6
-const WEEKS_PER_YEAR=12;
-const STIPEND_WEEKS=[0,24,60];
+const ACTIONS_PER_DAY=ACTIONS_PER_PERIOD*PERIODS_PER_DAY;
+const WEEKS_PER_YEAR=5;
+const STIPEND_WEEKS=[0,10,20];   // thức đêm mở ở tuần 10 (MS) / 20 (TS)
+const LOTTERY_MIN_WEEK=6;         // xổ số từ tuần 6 trở ra (trong năm)
 
 const WD=['Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy','Chủ Nhật'];
 const PERIODS=['🌅 Buổi sáng','☀️ Buổi chiều','🌙 Buổi tối'];
 
 const ACTS=[
-  /* 🌅 SÁNG */
   {k:'s_tv', n:'Thư viện',   e:'📚', p:0, hp:-6, sp:-12, lu:'lib', grp:'hoc'},
   {k:'s_lab',n:'Lab thầy',   e:'🧪', p:0, hp:-5, sp:+2,  lu:'lib', grp:'hoc'},
   {k:'s_ts', n:'Pha trà sữa',e:'🧋', p:0, hp:-8, sp:-10, m:+45,   grp:'lam'},
@@ -474,7 +484,6 @@ const ACTS=[
   {k:'s_an', n:'Ăn sáng',    e:'🍚', p:0, hp:+8, sp:+3,  m:-5,    grp:'an'},
   {k:'s_ngu',n:'Ngủ nướng',  e:'😴', p:0, hp:+10,sp:+15,          grp:'ngu'},
 
-  /* ☀️ CHIỀU */
   {k:'c_wr', n:'Viết luận',  e:'✍️', p:1, hp:-10,sp:-15, m:-30,   lu:'write', grp:'viet'},
   {k:'c_gv', n:'Gặp GV',     e:'🧑‍🏫',p:1, hp:-3, sp:-5,           lu:'meet',  grp:'viet'},
   {k:'c_ta', n:'Trợ giảng',  e:'🎓', p:1, hp:-10,sp:-10, m:+75,   grp:'lam'},
@@ -482,7 +491,6 @@ const ACTS=[
   {k:'c_an', n:'Ăn trưa',    e:'🍜', p:1, hp:+12,sp:+4,  m:-8,    grp:'an'},
   {k:'c_ngu',n:'Ngủ nướng',  e:'😴', p:1, hp:+10,sp:+15,          grp:'ngu'},
 
-  /* 🌙 TỐI */
   {k:'t_dh', n:'Dạy online', e:'💻', p:2, hp:-10,sp:-12, m:+70,   grp:'lam'},
   {k:'t_goi',n:'Gọi nhà',    e:'📞', p:2, hp:0,  sp:+25, m:-5,    grp:'choi'},
   {k:'t_sh', n:'Lướt shop',  e:'🛍️',p:2, hp:-3, sp:+22, m:-60,   grp:'choi'},
@@ -548,11 +556,16 @@ const BIG_EVENTS=[
   {e:'🏛️ Triển lãm bảo tàng',   t:'Bảo tàng Quốc gia mở triển lãm.',           m:-200,  lu:1, sp:25}
 ];
 
+/* Fixed event — tính lại tuần theo 5 tuần/năm */
 const FIXED_EVENTS=[
+  {ch:1, week:1,  e:'🌸 Ngày đầu ở Bắc Kinh', t:'Vân Khánh xuống sân bay, kéo vali đến CNU.', m:0, hp:0, sp:5, mandatory:true},
+  {ch:1, week:3,  e:'😰 Mất ví', t:'Mất ví ở tàu điện.', m:-80, sp:-5, mandatory:true},
+  {ch:1, week:5,  e:'🧑‍🏫 Gặp GS Trần', t:'Giáo sư Trần gọi lên văn phòng.', m:0, sp:5, mandatory:true},
   {ch:1, week:20, e:'👨‍👩‍👧‍👦 Bố mẹ qua thăm', t:'Bố mẹ và em trai sang Bắc Kinh thăm.', m:-300, hp:20, sp:40, mandatory:true},
-  {ch:2, week:3,  e:'🌏 Hội thảo Singapore',t:'Bay sang Singapore dự hội thảo.',       m:-2000,lu:4, sp:15},
-  {ch:2, week:7,  e:'🌏 Hội thảo Tokyo',    t:'Bay sang Tokyo trình bày nghiên cứu.', m:-2500,lu:5, sp:20},
-  {ch:2, week:40, e:'👨‍👩‍👧‍👦 Cả nhà qua thăm', t:'Bố mẹ, em gái, em trai sang Thượng Hải.', m:-500, hp:20, sp:50, mandatory:true}
+  {ch:2, week:1,  e:'🚄 Lên Thượng Hải', t:'Chuyển lên SISU Thượng Hải.', m:0, sp:5, mandatory:true},
+  {ch:2, week:3,  e:'🌏 Hội thảo Singapore', t:'Bay sang Singapore dự hội thảo.', m:-2000, lu:4, sp:15},
+  {ch:2, week:7,  e:'🌏 Hội thảo Tokyo', t:'Bay sang Tokyo trình bày nghiên cứu.', m:-2500, lu:5, sp:20},
+  {ch:2, week:35, e:'👨‍👩‍👧‍👦 Cả nhà qua thăm', t:'Bố mẹ, em gái, em trai sang Thượng Hải.', m:-500, hp:20, sp:50, mandatory:true}
 ];
 
 const D0=()=>({
@@ -561,7 +574,7 @@ const D0=()=>({
   periodActionsLeft:ACTIONS_PER_PERIOD,
   dayActionsLeft:ACTIONS_PER_DAY,
   rolledToday:false,
-  lotteryAvailable:true,
+  lotteryDoneThisYear:false,
   bigEventsThisYear:[],
   logDay:[],logWeek:[],logAll:[],
   pendingOffer:null,
@@ -581,6 +594,7 @@ if(typeof S.yearWeek!=='number') S.yearWeek=((S.week-1)%WEEKS_PER_YEAR)+1;
 if(typeof S.year!=='number') S.year=Math.ceil(S.week/WEEKS_PER_YEAR);
 if(!Array.isArray(S.bigEventsThisYear)) S.bigEventsThisYear=[];
 if(!S.seenEvents) S.seenEvents={};
+if(typeof S.lotteryDoneThisYear!=='boolean') S.lotteryDoneThisYear=false;
 
 const T={modal:0,mq:[],sheet:''};
 
@@ -765,7 +779,7 @@ function drawHead(){
 }
 function drawScene(){
   const weeksLeft=MAX_WEEKS[S.ch]-S.week+1;
-  setTxt('dateV',`Ngày ${S.day} · Tuần ${S.week}/${MAX_WEEKS[S.ch]} · Năm ${S.year} T${S.yearWeek}/12`);
+  setTxt('dateV',`Ngày ${S.day} · Tuần ${S.week}/${MAX_WEEKS[S.ch]} · Năm ${S.year} T${S.yearWeek}/5`);
   setTxt('weekV',WD[(S.day-1)%7]+` · còn ${Math.max(0,weeksLeft)} tuần`);
   setTxt('periodV',PERIODS[S.period]);
   setTxt('mood',moodText());
@@ -800,23 +814,19 @@ function drawScene(){
 }
 
 function canLottery(){
-  return S.yearWeek===1 && !S.lotteryDone && S.lu<100;
+  // Xổ số từ tuần 6 trở ra trong năm (yearWeek >= 6)
+  return S.yearWeek>=LOTTERY_MIN_WEEK && !S.lotteryDoneThisYear && S.lu<100;
 }
 function drawActs(){
   const period=S.period;
-  const list=ACTS.filter(a=>a.p==period).slice();
+  const list=ACTS.filter(a=>a.p==period);
   const done=S.periodActionsLeft<=0;
   setTxt('period-lbl',`${WD[(S.day-1)%7].toUpperCase()} · NGÀY ${S.day} · ${PERIODS[period].toUpperCase()} · CÒN ${S.periodActionsLeft}/${ACTIONS_PER_PERIOD} ACTION`);
-
-  // Thêm action xổ số nếu đủ điều kiện
-  if(canLottery()){
-    list.unshift({k:'lottery', n:'Mua xổ số', e:'🎫', p:period, hp:0, sp:0, m:-20, grp:'lot'});
-  }
 
   const html=[];
   for(let i=0;i<list.length;i++){
     const a=list[i];
-    const clsMap={hoc:'hoc',lam:'lam',viet:'viet',choi:'choi',ngu:'ngu',an:'an',lot:'lot'};
+    const clsMap={hoc:'hoc',lam:'lam',viet:'viet',choi:'choi',ngu:'ngu',an:'an'};
     let cls=clsMap[a.grp]||'';
     let dis=false;
     if(done) dis=true;
@@ -835,11 +845,14 @@ function drawActs(){
   if(S.period==0) nb.textContent='➡️ SANG BUỔI CHIỀU';
   else if(S.period==1) nb.textContent='➡️ SANG BUỔI TỐI';
   else nb.textContent='🌙 KẾT THÚC NGÀY';
-  nb.disabled=false;
 
   const wf=$('#writeFab');
   if(S.week>=STIPEND_WEEKS[S.ch] && S.lu<100) wf.classList.add('on');
   else wf.classList.remove('on');
+
+  const lf=$('#lotteryFab');
+  if(canLottery()) lf.classList.add('on');
+  else lf.classList.remove('on');
 }
 function drawAll(){drawHead();drawScene();drawActs()}
 
@@ -886,7 +899,7 @@ function showEventModal(ev){
 function maybeOffer(){
   if(S.pendingOffer||S.pendingBigEvent) return;
   if(Math.random()>0.15) return;
-  const list=OFFERS.filter(o=>true);
+  const list=OFFERS;
   if(!list.length) return;
   const o=list[Math.floor(Math.random()*list.length)];
   S.pendingOffer=Object.assign({},o);
@@ -904,11 +917,10 @@ function acceptOffer(){
   S.seenEvents['o'+OFFERS.findIndex(x=>x.k===o.k)]=1;
   addLog(`${o.e}: ${o.t}`);
   S.pendingOffer=null;
-  // Mất 1 buổi (2 action)
+  // Mất buổi này
   S.periodActionsLeft=0;
   S.dayActionsLeft=Math.max(0,S.dayActionsLeft-2);
   save();
-  // Chuyển sang buổi kế
   nextPeriod(true);
 }
 function declineOffer(){
@@ -918,7 +930,6 @@ function declineOffer(){
   save();drawAll();
 }
 
-/* Big event — random 2/năm + fixed theo tuần */
 function maybeFixedBigEvent(){
   if(S.pendingBigEvent) return;
   const fe=FIXED_EVENTS.find(ev=>ev.ch===S.ch && ev.week===S.week && !S.seenEvents['be_'+ev.e]);
@@ -929,10 +940,8 @@ function maybeFixedBigEvent(){
 function maybeRandomBigEvent(){
   if(S.pendingBigEvent) return;
   if(S.bigEventsThisYear.length>=2) return;
-  // 15% mỗi tuần, chỉ kích hoạt từ tuần 2 trở đi trong năm
   if(S.yearWeek<2) return;
   if(Math.random()>0.15) return;
-  // Chọn event chưa có
   const available=BIG_EVENTS.filter(ev=>!S.bigEventsThisYear.includes(ev.e) && !S.seenEvents['be_'+ev.e]);
   if(!available.length) return;
   const be=available[Math.floor(Math.random()*available.length)];
@@ -970,21 +979,19 @@ function declineBig(){
 }
 function bigEnd(){
   mclose();
-  // Mất cả ngày
   S.periodActionsLeft=0;
   S.dayActionsLeft=0;
   endDay();
 }
 
 function doLottery(){
-  if(S.money<20) return toast('Không đủ tiền');
+  if(S.money<20) return toast('❌ Không đủ 20 tệ');
+  if(S.lotteryDoneThisYear) return toast('Năm nay đã mua rồi');
   S.money-=20;
-  S.lotteryDone=true;
+  S.lotteryDoneThisYear=true;
   addLog('🎫 Mua tờ xổ số 20 tệ');
   beep(500,.1);
-  // 0.05% trúng
   if(Math.random()<0.0005){
-    // TRÚNG
     save();
     setTimeout(()=>{
       modal(`<div class="sp"><img src="icon-192.png" alt=""></div>
@@ -1008,12 +1015,12 @@ function doLottery(){
     return;
   }
   save();drawAll();
+  toast('🎫 Chúc may mắn lần sau!');
 }
 
 function doAct(k){
   if(T.modal) return;
   if(S.periodActionsLeft<=0) return toast('Hết action buổi này');
-  if(k==='lottery') return doLottery();
   const a=ACTS.find(x=>x.k==k);
   if(!a) return;
   if(a.m<0 && S.money<-a.m) return toast('Không đủ tiền');
@@ -1096,9 +1103,7 @@ function nextPeriod(silent){
   if(S.period>=2){endDay();return}
   S.period++;
   S.periodActionsLeft=ACTIONS_PER_PERIOD;
-  save();
-  if(!silent) drawAll();
-  else drawAll();
+  save();drawAll();
 }
 
 function endDay(){
@@ -1152,7 +1157,7 @@ function endWeek(){
     S.year++;
     newYear=true;
     S.bigEventsThisYear=[];
-    S.lotteryDone=false;   // reset để năm mới có thể mua lại
+    S.lotteryDoneThisYear=false;
   }
   save();
   const delta=S.money-before;
@@ -1184,7 +1189,7 @@ function endWeek(){
       modal(`<h2>🎉 Sang năm ${S.year}!</h2>
         <div class="body">Vân Khánh mở cuốn nhật ký, viết dòng đầu năm:</div>
         <div class="ev"><i>"Năm ${S.year} — cố lên."</i></div>
-        <div class="body">Tuần đầu năm, cô có thể mua xổ số. Biết đâu...</div>
+        <div class="body">Từ tuần 6 của năm, cô có thể mua xổ số.</div>
         <div class="mb"><button class="btn p" data-a="mx">Vào năm mới</button></div>`);
     },1200);
   }
@@ -1200,7 +1205,7 @@ function checkStory(){
     const ch1Days=S.day,ch1Weeks=S.week;
     S.ch=2;S.lu=0;S.day=1;S.week=1;S.year=1;S.yearWeek=1;S.period=0;
     S.periodActionsLeft=ACTIONS_PER_PERIOD;S.dayActionsLeft=ACTIONS_PER_DAY;
-    S.rolledToday=false;S.bigEventsThisYear=[];S.lotteryDone=false;S.logDay=[];
+    S.rolledToday=false;S.bigEventsThisYear=[];S.lotteryDoneThisYear=false;S.logDay=[];
     S.hp=Math.max(S.hp,70);S.sp=Math.max(S.sp,70);
     S.money=Math.max(S.money,2000);
     window.__ch1Days=ch1Days;window.__ch1Weeks=ch1Weeks;
@@ -1271,7 +1276,7 @@ function openLog(){
   let html=`
     <h3>📝 Ghi chú hôm nay</h3>
     <div style="font-size:11px;color:var(--mu);margin-bottom:6px">
-      Ngày ${S.day} · Tuần ${S.week} · Năm ${S.year} T${S.yearWeek}/12
+      Ngày ${S.day} · Tuần ${S.week} · Năm ${S.year} T${S.yearWeek}/5
     </div>
     <textarea id="noteBox" placeholder="Hôm nay Vân Khánh đã..."></textarea>
     <div class="bs" style="margin-top:6px">
@@ -1317,11 +1322,11 @@ function openBook(){
       • <b>HP</b> = Sức khỏe · <b>SP</b> = Tinh thần<br>
       • HP &lt; 20 → nghỉ ốm · SP &lt; 20 → hành động yếu 50%<br>
       • <b>Luận văn 100%</b> → tốt nghiệp<br>
-      • <b>Hạn:</b> Thạc sĩ 36 tuần · Tiến sĩ 72 tuần<br>
-      • <b>12 tuần = 1 năm</b><br>
+      • <b>Hạn:</b> Thạc sĩ 20 tuần · Tiến sĩ 40 tuần<br>
+      • <b>5 tuần = 1 năm</b><br>
       • Trợ cấp CSC: <b>+750/tuần</b> (MS) · <b>+875/tuần</b> (TS)<br>
       • Mỗi ngày tối đa <b>1 event ngẫu nhiên</b> · Mỗi năm tối đa <b>2 big event</b><br>
-      • Tuần đầu năm: mua xổ số (0.05% trúng → nghỉ học)
+      • Xổ số: mở từ tuần 6 mỗi năm (0.05% trúng → nghỉ học)
     </div>`;
 
   html+=`<h3>💡 Giải thích chỉ số</h3>
@@ -1374,7 +1379,7 @@ function openBook(){
     <td style="padding:5px;border:1px solid var(--ink);text-align:center;color:#c92e72">−20 tệ</td>
     <td style="padding:5px;border:1px solid var(--ink);text-align:center;color:#c92e72">0.05% trúng</td></tr>
     </table>
-    <div style="font-size:11px;color:var(--mu);margin-top:4px">Thức đêm: +${NIGHT_RATE[S.ch]}% luận văn · Xổ số chỉ tuần đầu năm</div>`;
+    <div style="font-size:11px;color:var(--mu);margin-top:4px">Thức đêm: +${NIGHT_RATE[S.ch]}% luận văn · Xổ số từ tuần 6 mỗi năm</div>`;
 
   const seen=S.seenEvents||{};
   html+='<h3>🎲 Event ngẫu nhiên (30%/action, max 1/ngày)</h3>';
@@ -1512,9 +1517,9 @@ Cô nhận <b>Học bổng Chính phủ Trung Quốc (CSC)</b> đi học thạc 
 <br><br>
 Học bổng miễn học phí + KTX, trợ cấp 750 tệ/tuần — không đủ sống. Cô phải tự lo ăn uống, sách vở, và cả luận văn.
 <br><br>
-🌸 <b>Mục tiêu:</b> Xong thạc sĩ (max 36 tuần) → SISU Thượng Hải → xong tiến sĩ (max 72 tuần).
+🌸 <b>Mục tiêu:</b> Xong thạc sĩ (max 20 tuần) → SISU Thượng Hải → xong tiến sĩ (max 40 tuần).
 <br><br>
-📅 <b>12 tuần = 1 năm.</b> Tuần đầu năm, cô có thể mua xổ số.
+📅 <b>5 tuần = 1 năm.</b> Mỗi năm từ tuần 6, cô có thể mua xổ số.
 </div>
 <div class="mb"><button class="btn p" data-a="mx">Bắt đầu 💕</button></div>`;
 
@@ -1526,8 +1531,8 @@ Hết 2 action buổi này → bấm <b>➡️ Sang buổi</b> để chuyển.
 <br><br>
 <b>Nút phụ:</b><br>
 🌙 Ngủ đêm — kết thúc ngày sớm<br>
-🌌 Thức đêm — mở sau 24/60 tuần<br>
-🎫 Mua xổ số — tuần đầu năm, 0.05% trúng
+🌌 Thức đêm — mở sau 10/20 tuần<br>
+🎫 Mua xổ số — từ tuần 6 mỗi năm, 0.05% trúng
 <br><br>
 <b>Chỉ số:</b> HP &lt; 20 → nghỉ ốm · SP &lt; 20 → yếu 50% · Luận văn 100% → tốt nghiệp.
 <br><br>
@@ -1546,6 +1551,7 @@ document.addEventListener('click',e=>{
     case 'next':nextPeriod(false);break;
     case 'sleep':sleepNow();break;
     case 'latewrite':lateWrite();break;
+    case 'lottery':doLottery();break;
     case 'accOffer':acceptOffer();break;
     case 'decOffer':declineOffer();break;
     case 'accBig':acceptBig();break;
