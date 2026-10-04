@@ -1,6 +1,6 @@
 // Vân Khánh Diary — Service Worker
 // Đổi CACHE_VERSION mỗi lần update game để trình duyệt tải bản mới
-const CACHE_VERSION = 'vkdiary-v12';
+const CACHE_VERSION = 'vkdiary-v13';
 
 const ASSETS = [
   './',
