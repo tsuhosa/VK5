@@ -74,7 +74,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   padding:5px 3px;font-weight:800;font-size:12.5px;
   box-shadow:1.5px 1.5px 0 var(--ink);min-width:0;
 }
-.stat b{font-weight:400;font-size:14px;line-height:1}
+.stat b{font-weight:400;font-size:13px;line-height:1}
 .bars{padding:2px 10px 10px;display:grid;gap:5px}
 .bar-w{
   position:relative;height:20px;
@@ -215,16 +215,16 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   #sleepFab,#writeFab{right:calc(50% - 240px + 14px)}
 }
 
-#nav{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+#nav{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
 #nav button{
   border:2px solid var(--ink);border-radius:10px;
-  font-size:11px;font-weight:800;padding:9px 4px;
+  font-size:10.5px;font-weight:800;padding:8px 2px;
   display:flex;flex-direction:column;align-items:center;gap:2px;
   background:linear-gradient(180deg,#fff,#f5eeff);
   color:var(--ink);box-shadow:2px 2px 0 var(--ink);
   font-family:"Comfortaa","Quicksand",sans-serif;
 }
-#nav button b{font-size:17px;line-height:1;font-weight:400}
+#nav button b{font-size:16px;line-height:1;font-weight:400}
 #nav button:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink)}
 
 #sheet{
@@ -322,7 +322,6 @@ h3::before{content:"✿";color:#ff6b9d;font-size:16px}
   text-shadow:1px 1px 0 rgba(26,20,40,.3);
 }
 
-/* NOTE */
 #noteBox{
   width:100%;min-height:80px;
   border:2px solid var(--ink);border-radius:10px;
@@ -367,10 +366,10 @@ h3::before{content:"✿";color:#ff6b9d;font-size:16px}
       </div>
     </div>
     <div class="stats-row">
-      <span class="stat">⚡<b id="hpV">80</b></span>
-      <span class="stat">💗<b id="spV">70</b></span>
       <span class="stat">💰<b id="moneyV">500</b></span>
       <span class="stat">📚<b id="ktV">5</b></span>
+      <span class="stat">📅<b id="weekV2">T1/36</b></span>
+      <span class="stat">📝<b id="countV">0</b></span>
     </div>
     <div class="bars">
       <div class="bar-w hp"><i id="hpB"></i><span class="lbl"><span>HP</span><span id="hpLbl">80 / 100</span></span></div>
@@ -398,6 +397,7 @@ h3::before{content:"✿";color:#ff6b9d;font-size:16px}
     <button id="nextBtn" data-a="next" disabled>➡️ SANG BUỔI CHIỀU</button>
     <nav id="nav">
       <button data-a="log"><b>📖</b>Nhật ký</button>
+      <button data-a="book"><b>📔</b>Sổ tay</button>
       <button data-a="record"><b>🏆</b>Kỷ lục</button>
       <button data-a="home"><b>🏠</b>Về nhà</button>
     </nav>
@@ -417,10 +417,10 @@ const $=s=>document.querySelector(s);
 const cl=(v,a,b)=>Math.max(a,Math.min(b,v));
 const F=n=>Math.round(n).toLocaleString('vi-VN');
 
-const KEY='vkdiary_v8';
-const SLOT='vkdiary_slot_v8';
-const REC_KEY='vkdiary_rec_v8';
-const SAVE_VER=8;
+const KEY='vkdiary_v10';
+const SLOT='vkdiary_slot_v10';
+const REC_KEY='vkdiary_rec_v10';
+const SAVE_VER=10;
 const SCHOLAR=[0,750,875];
 const START_MONEY=500;
 const MAX_WEEKS=[0,36,72];
@@ -430,7 +430,6 @@ const STIPEND_WEEKS=[0,24,60];
 const WD=['Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy','Chủ Nhật'];
 const PERIODS=['🌅 Buổi sáng','☀️ Buổi chiều','🌙 Buổi tối'];
 
-/* HÀNH ĐỘNG — 6 nút/buổi */
 const ACTS=[
   {k:'s_tv', n:'Thư viện',   e:'📚', p:0, hp:-6, sp:-12, kt:18, grp:'hoc'},
   {k:'s_lab',n:'Lab thầy',   e:'🧪', p:0, hp:-5, sp:3,  kt:8,  grp:'hoc'},
@@ -454,7 +453,6 @@ const ACTS=[
   {k:'t_ngu',n:'Ngủ nướng',  e:'😴', p:2, hp:10, sp:15,         grp:'ngu'}
 ];
 
-/* EVENT XẤU */
 const BAD=[
   {e:'🤒 Cảm cúm',        t:'Vân Khánh bị ốm.',              hp:-15},
   {e:'😰 Lo deadline',    t:'Deadline đến gần, cô lo lắng.', sp:-20},
@@ -471,7 +469,6 @@ const BAD=[
   {e:'🦷 Đau răng',       t:'Đau nhức cả đêm.',              hp:-10, m:-100}
 ];
 
-/* EVENT TỐT */
 const GOOD=[
   {e:'🎁 Được tặng sách',  t:'Hưng cho cuốn sách quý.',      kt:10},
   {e:'📞 Mẹ gọi',          t:'Mẹ gọi hỏi thăm.',             sp:20},
@@ -489,7 +486,6 @@ const GOOD=[
   {e:'🤝 Được khen',       t:'Được giáo sư khen trước lớp.', sp:20}
 ];
 
-/* EVENT TRUNG TÍNH — báo trước, có chọn */
 const OFFERS=[
   {k:'trip',  e:'✈️ Đi du lịch với bạn', t:'Hòa rủ đi Cố Cung.',           m:-400, sp:40, kt:10, onceMonth:1},
   {k:'picnic',e:'🏞️ Dã ngoại cuối tuần',t:'Cả lab đi dã ngoại.',           m:-150, sp:25, hp:5},
@@ -502,17 +498,17 @@ const OFFERS=[
   {k:'bday',  e:'🎂 Sinh nhật bạn',     t:'Sinh nhật Hòa.',                m:-80,  sp:20}
 ];
 
-/* ===== STATE ===== */
 const D0=()=>({
   day:1,week:1,ch:1,period:0,hp:80,sp:70,kt:5,lu:0,
   money:START_MONEY,
   actedInPeriod:false,
+  rolledToday:false,
   logDay:[],logWeek:[],logAll:[],
-  pendingEvent:null,   // {kind:'good'|'bad', ...}
-  pendingOffer:null,   // {k,...} chờ người chơi chọn
-  notes:[],            // [{k,c,w,d,t,ts}]
-  loan:null,           // {amount, dueDay}
+  pendingOffer:null,
+  notes:[],
+  loan:null,
   travelMonth:0,
+  seenEvents:{},
   seen:0,snd:1,endReason:''
 });
 let S=D0();
@@ -523,7 +519,6 @@ try{
 
 const T={modal:0,mq:[],sheet:''};
 
-/* ===== SAVE ===== */
 function pack(){return JSON.stringify({v:SAVE_VER,ts:Date.now(),data:S})}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 function saveSlot(){try{localStorage.setItem(SLOT,pack());return true}catch(e){return false}}
@@ -565,8 +560,7 @@ function exportSave(){
 }
 function exportNotes(){
   if(!S.notes||!S.notes.length) return toast('📭 Chưa có note');
-  let txt='NHẬT KÝ VÂN KHÁNH\n'+
-    '================\n\n';
+  let txt='NHẬT KÝ VÂN KHÁNH\n================\n\n';
   const sorted=S.notes.slice().sort((a,b)=>(a.c-b.c)||(a.w-b.w)||(a.d-b.d));
   sorted.forEach(n=>{
     txt+=`[Chương ${n.c} · Tuần ${n.w} · Ngày ${n.d}]\n${n.t}\n\n`;
@@ -610,7 +604,6 @@ function manualLoad(){
   else toast('❌ Save lỗi');
 }
 
-/* ===== NOTES ===== */
 function saveNote(){
   const tb=$('#noteBox');
   if(!tb) return;
@@ -636,7 +629,6 @@ function delNote(k){
   openLog();
 }
 
-/* ===== RECORD ===== */
 function getRec(){
   try{const r=localStorage.getItem(REC_KEY);return r?JSON.parse(r):{b1:null,b2:null,bT:null,fin:[]}}
   catch(e){return {b1:null,b2:null,bT:null,fin:[]}}
@@ -653,7 +645,6 @@ function addFinish(tot,c1,c2){
   saveRec(r);
 }
 
-/* ===== AUDIO ===== */
 let AC=null;
 function beep(f=600,d=.1){
   if(!S.snd) return;
@@ -669,7 +660,6 @@ function beep(f=600,d=.1){
   }catch(e){}
 }
 
-/* ===== UI ===== */
 function toast(m){
   const d=document.createElement('div');d.textContent=m;
   $('#toast').append(d);
@@ -706,10 +696,10 @@ function moodText(){
 function drawHead(){
   document.body.className='ch'+S.ch;
   setTxt('chapLbl',S.ch==1?'✿ THẠC SĨ · CNU BẮC KINH ✿':'✿ TIẾN SĨ · SISU THƯỢNG HẢI ✿');
-  setTxt('hpV',Math.round(S.hp));
-  setTxt('spV',Math.round(S.sp));
   setTxt('moneyV',F(S.money));
   setTxt('ktV',Math.round(S.kt));
+  setTxt('weekV2','T'+S.week+'/'+MAX_WEEKS[S.ch]);
+  setTxt('countV',(S.notes||[]).length);
   setW('hpB',S.hp);
   setW('lvB',S.lu);
   setTxt('hpLbl',Math.round(S.hp)+' / 100');
@@ -746,7 +736,11 @@ function drawActs(){
   const period=S.period;
   const list=ACTS.filter(a=>a.p==period);
   const done=S.actedInPeriod;
-  setTxt('period-lbl',`BUỔI ${['SÁNG','CHIỀU','TỐI'][period]} · Chọn 1 hành động`);
+  if(S.rolledToday){
+    setTxt('period-lbl',`BUỔI ${['SÁNG','CHIỀU','TỐI'][period]} · Đã có biến hôm nay`);
+  } else {
+    setTxt('period-lbl',`BUỔI ${['SÁNG','CHIỀU','TỐI'][period]} · Chọn 1 hành động`);
+  }
   const html=[];
   for(let i=0;i<list.length;i++){
     const a=list[i];
@@ -776,7 +770,6 @@ function drawActs(){
   else nb.textContent='➡️ SANG BUỔI '+['CHIỀU','TỐI'][period];
   nb.disabled=!done;
 
-  // FAB thức đêm
   const wf=$('#writeFab');
   if(S.week>=STIPEND_WEEKS[S.ch] && S.lu<100) wf.classList.add('on');
   else wf.classList.remove('on');
@@ -792,15 +785,20 @@ function addLog(s){
 
 function lowEff(){return (S.hp<30||S.sp<30)?0.5:1}
 
-/* Event ngẫu nhiên */
 function maybeRandomEvent(){
+  if(S.rolledToday) return null;
   if(Math.random()>0.4) return null;
+  S.rolledToday=true;
   const isGood=Math.random()<0.5;
   const pool=isGood?GOOD:BAD;
-  const ev=pool[Math.floor(Math.random()*pool.length)];
-  return Object.assign({kind:isGood?'good':'bad'},ev);
+  const idx=Math.floor(Math.random()*pool.length);
+  return Object.assign({kind:isGood?'good':'bad',idx},pool[idx]);
 }
 function applyEvent(ev){
+  if(!S.seenEvents) S.seenEvents={};
+  if(ev.idx!==undefined){
+    S.seenEvents[(ev.kind==='good'?'g':'b')+ev.idx]=1;
+  }
   if(ev.hp) S.hp=cl(S.hp+ev.hp,0,100);
   if(ev.sp) S.sp=cl(S.sp+ev.sp,0,100);
   if(ev.m)  S.money+=ev.m;
@@ -822,9 +820,7 @@ function showEventModal(ev){
     <div class="mb"><button class="btn p" data-a="mx">OK</button></div>`);
 }
 
-/* Offer (báo trước, có chọn) */
 function maybeOffer(){
-  // 15% cơ hội mỗi tuần mới, trừ nếu đang có offer
   if(S.pendingOffer) return;
   if(Math.random()>0.15) return;
   const list=OFFERS.filter(o=>{
@@ -857,7 +853,6 @@ function declineOffer(){
   save();drawAll();
 }
 
-/* ACTION */
 function doAct(k){
   if(T.modal) return;
   if(S.actedInPeriod) return toast('Buổi này đã làm rồi');
@@ -889,7 +884,6 @@ function doAct(k){
   S.actedInPeriod=true;
   beep(a.grp=='viet'?880:a.grp=='choi'?660:520,.08);
 
-  // HP thấp
   if(S.hp<20 && S.hp>0){
     save();drawAll();
     setTimeout(()=>{
@@ -897,7 +891,7 @@ function doAct(k){
       <div class="body">HP xuống dưới 20. Cô phải nghỉ ngơi một ngày.</div>
       <div class="mb"><button class="btn p" data-a="mx">Cố lên.</button></div>`);
       S.hp=50;S.sp=Math.max(30,S.sp);
-      S.day++;S.period=0;S.actedInPeriod=false;S.logDay=[];
+      S.day++;S.period=0;S.actedInPeriod=false;S.rolledToday=false;S.logDay=[];
       checkWeekLimit();
       save();drawAll();
     },400);
@@ -905,7 +899,6 @@ function doAct(k){
   }
   if(S.hp<=0) S.hp=30;
 
-  // Event ngẫu nhiên
   const ev=maybeRandomEvent();
   if(ev){
     applyEvent(ev);
@@ -916,7 +909,6 @@ function doAct(k){
   save();drawAll();
 }
 
-/* Nút Ngủ đêm */
 function sleepNow(){
   if(T.modal) return;
   const clean=S.period==0 && !S.actedInPeriod;
@@ -929,7 +921,6 @@ function sleepNow(){
   endDay();
 }
 
-/* Nút Thức đêm viết luận */
 function lateWrite(){
   if(T.modal) return;
   if(S.week<STIPEND_WEEKS[S.ch]) return toast('Chưa mở khóa');
@@ -944,18 +935,16 @@ function lateWrite(){
   addLog(`🌌 Thức đêm viết: +${g}% luận văn`);
   beep(440,.15);
   save();drawAll();
-  // nếu HP xuống thấp → ốm
   if(S.hp<20 && S.hp>0){
     setTimeout(()=>{
       modal(`<h2>🤒 Kiệt sức</h2><div class="body">Thức đêm quá nhiều, Vân Khánh ngất đi.</div><div class="mb"><button class="btn p" data-a="mx">Ôi...</button></div>`);
       S.hp=50;
-      S.day++;S.period=0;S.actedInPeriod=false;S.logDay=[];
+      S.day++;S.period=0;S.actedInPeriod=false;S.rolledToday=false;S.logDay=[];
       save();drawAll();
     },400);
   }
 }
 
-/* Chuyển buổi */
 function nextPeriod(){
   if(!S.actedInPeriod) return;
   if(S.period>=2){endDay();return}
@@ -964,18 +953,19 @@ function nextPeriod(){
   save();drawAll();
 }
 
-/* Kết thúc ngày */
 function endDay(){
   if(S.day%7==0){endWeek();return}
   S.day++;
   S.period=0;
   S.actedInPeriod=false;
+  S.rolledToday=false;
   S.logDay=[];
   S.hp=cl(S.hp+2,0,100);
   S.sp=cl(S.sp+2,0,100);
   checkWeekLimit();
   checkStory();
-  save();drawAll();
+  save();
+  drawAll();
 }
 
 function checkWeekLimit(){
@@ -992,7 +982,6 @@ function checkWeekLimit(){
   }
 }
 
-/* Tổng kết tuần */
 function endWeek(){
   const scholar=SCHOLAR[S.ch];
   const before=S.money;
@@ -1001,7 +990,6 @@ function endWeek(){
     scholar,lu:S.lu,kt:S.kt,hp:S.hp,sp:S.sp};
   S.logWeek.push(wLog);
   if(S.logWeek.length>50) S.logWeek.shift();
-  // trả nợ bạn cùng phòng
   if(S.loan && S.week>=S.loan.dueWeek){
     S.money+=S.loan.amount;
     S.sp=cl(S.sp+10,0,100);
@@ -1012,6 +1000,7 @@ function endWeek(){
   S.day++;
   S.period=0;
   S.actedInPeriod=false;
+  S.rolledToday=false;
   S.logDay=[];
   save();
   const delta=S.money-before;
@@ -1038,20 +1027,19 @@ function endWeek(){
     <button class="btn" data-a="note">📝 Viết note</button>
     <button class="btn p" data-a="mx">Sang tuần ${S.week} 💕</button>
   </div>`);
-  // offer ngẫu nhiên
   setTimeout(()=>maybeOffer(),500);
   checkWeekLimit();
   if(S.endReason) return;
   checkStory();
+  save();
   drawAll();
 }
 
-/* STORY */
 function checkStory(){
   if(S.lu>=100 && S.ch==1){
     const ch1Days=S.day,ch1Weeks=S.week;
     S.ch=2;S.lu=0;S.day=1;S.week=1;S.period=0;
-    S.actedInPeriod=false;S.logDay=[];
+    S.actedInPeriod=false;S.rolledToday=false;S.logDay=[];
     S.hp=Math.max(S.hp,70);S.sp=Math.max(S.sp,70);
     S.money=Math.max(S.money,2000);
     window.__ch1Days=ch1Days;window.__ch1Weeks=ch1Weeks;
@@ -1111,7 +1099,6 @@ function finishHome(){
   </div>`);
 }
 
-/* SHEETS */
 function openLog(){
   T.sheet='log';
   setTxt('sht','📖 Nhật ký');
@@ -1149,13 +1136,136 @@ function openLog(){
   $('#shb').innerHTML=html;
   setTimeout(()=>{
     const tb=$('#noteBox');
-    if(tb){
-      tb.value=todayNote?todayNote.t:'';
-      tb.focus();
-    }
+    if(tb){tb.value=todayNote?todayNote.t:'';tb.focus();}
   },50);
   $('#sheet').classList.remove('hide');
 }
+
+function openBook(){
+  T.sheet='book';
+  setTxt('sht','📔 Sổ tay');
+  let html='';
+
+  html+=`<h3>❓ Hướng dẫn nhanh</h3>
+    <div style="font-size:12px;line-height:1.6;padding:0 2px">
+      • 1 ngày = <b>3 buổi</b>: Sáng · Chiều · Tối<br>
+      • Mỗi buổi chọn <b>1 hành động</b> trong 6 nút<br>
+      • Bấm <b>🌙 Ngủ đêm</b> để kết thúc ngày bất cứ lúc nào<br>
+      • Bấm <b>🌌 Thức đêm</b> để viết luận thêm (mở sau 24/60 tuần)<br>
+      • <b>HP &lt; 20</b> → nghỉ ốm 1 ngày<br>
+      • <b>SP &lt; 20</b> → hành động yếu 50%<br>
+      • <b>Luận văn 100%</b> → tốt nghiệp<br>
+      • <b>Hạn:</b> Thạc sĩ 36 tuần · Tiến sĩ 72 tuần<br>
+      • Trợ cấp CSC: <b>+750/tuần</b> (MS) · <b>+875/tuần</b> (TS)<br>
+      • Mỗi ngày chỉ có tối đa <b>1 event ngẫu nhiên</b>
+    </div>`;
+
+  const periodNames=['🌅 SÁNG','☀️ CHIỀU','🌙 TỐI'];
+  for(let p=0;p<3;p++){
+    html+=`<h3>${periodNames[p]}</h3>`;
+    html+='<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11px;border:2px solid var(--ink);border-radius:8px;overflow:hidden">';
+    html+='<thead style="background:linear-gradient(180deg,#ffd1dc,#ffb3c6)">';
+    html+='<tr><th style="padding:5px 4px;border:1px solid var(--ink);text-align:left">HĐ</th>';
+    html+='<th style="padding:5px 4px;border:1px solid var(--ink)">HP</th>';
+    html+='<th style="padding:5px 4px;border:1px solid var(--ink)">SP</th>';
+    html+='<th style="padding:5px 4px;border:1px solid var(--ink)">KT</th>';
+    html+='<th style="padding:5px 4px;border:1px solid var(--ink)">💰</th>';
+    html+='<th style="padding:5px 4px;border:1px solid var(--ink)">📝</th></tr></thead><tbody>';
+    ACTS.filter(a=>a.p===p).forEach(a=>{
+      const hp=a.hp?(a.hp>0?'+':'')+a.hp:'—';
+      const sp=a.sp?(a.sp>0?'+':'')+a.sp:'—';
+      const kt=a.kt?'+'+a.kt:'—';
+      const m=a.m?(a.m>0?'+':'')+a.m:'—';
+      const lu=a.lu?(a.lu===1?'5%×KT':'+'+a.lu+'%'):'—';
+      html+=`<tr>
+        <td style="padding:5px 4px;border:1px solid var(--ink);font-weight:700">${a.e} ${a.n}</td>
+        <td style="padding:5px 4px;border:1px solid var(--ink);text-align:center;color:${a.hp>0?'#3a8a70':a.hp<0?'#c92e72':'var(--mu)'}">${hp}</td>
+        <td style="padding:5px 4px;border:1px solid var(--ink);text-align:center;color:${a.sp>0?'#3a8a70':a.sp<0?'#c92e72':'var(--mu)'}">${sp}</td>
+        <td style="padding:5px 4px;border:1px solid var(--ink);text-align:center;color:${a.kt?'#3a8a70':'var(--mu)'}">${kt}</td>
+        <td style="padding:5px 4px;border:1px solid var(--ink);text-align:center;color:${a.m>0?'#3a8a70':a.m<0?'#c92e72':'var(--mu)'}">${m}</td>
+        <td style="padding:5px 4px;border:1px solid var(--ink);text-align:center;color:${a.lu?'#3a8a70':'var(--mu)'};font-size:10px">${lu}</td>
+      </tr>`;
+    });
+    html+='</tbody></table></div>';
+  }
+
+  const seen=S.seenEvents||{};
+  html+='<h3>🎲 Event ngẫu nhiên</h3>';
+  html+='<div style="font-size:11px;color:var(--mu);margin-bottom:6px">Mỗi ngày tối đa 1 event. Cái nào đã gặp sẽ hiện rõ, chưa gặp thì ẩn.</div>';
+
+  html+='<div style="font-size:11.5px;font-weight:800;margin:8px 0 4px;color:#c92e72">💀 XẤU (20%)</div>';
+  BAD.forEach((ev,i)=>{
+    if(seen['b'+i]){
+      html+=`<div class="noteIt" style="background:linear-gradient(180deg,#fff0f5,#ffe0e8)">
+        <div class="hd" style="color:#c92e72"><span>${ev.e}</span></div>
+        <div class="ct">${ev.t}</div>
+        <div style="font-size:11px;margin-top:4px;font-weight:800;color:#c92e72">
+          ${ev.hp?`HP ${ev.hp>0?'+':''}${ev.hp} `:''}
+          ${ev.sp?`SP ${ev.sp>0?'+':''}${ev.sp} `:''}
+          ${ev.m?`${ev.m>0?'+':''}${ev.m} tệ `:''}
+          ${ev.lu?`Luận ${ev.lu>0?'+':''}${ev.lu}%`:''}
+        </div>
+      </div>`;
+    } else {
+      html+=`<div class="noteIt" style="background:rgba(200,180,220,.15);opacity:.55">
+        <div class="hd" style="color:var(--mu)"><span>❓ Ẩn</span></div>
+        <div class="ct" style="color:var(--mu);font-style:italic">Chưa gặp event này</div>
+      </div>`;
+    }
+  });
+
+  html+='<div style="font-size:11.5px;font-weight:800;margin:10px 0 4px;color:#3a8a70">🌸 TỐT (20%)</div>';
+  GOOD.forEach((ev,i)=>{
+    if(seen['g'+i]){
+      html+=`<div class="noteIt" style="background:linear-gradient(180deg,#f0fff5,#d8f5e3)">
+        <div class="hd" style="color:#3a8a70"><span>${ev.e}</span></div>
+        <div class="ct">${ev.t}</div>
+        <div style="font-size:11px;margin-top:4px;font-weight:800;color:#3a8a70">
+          ${ev.hp?`HP ${ev.hp>0?'+':''}${ev.hp} `:''}
+          ${ev.sp?`SP ${ev.sp>0?'+':''}${ev.sp} `:''}
+          ${ev.m?`${ev.m>0?'+':''}${ev.m} tệ `:''}
+          ${ev.kt?`KT +${ev.kt} `:''}
+          ${ev.lu?`Luận ${ev.lu>0?'+':''}${ev.lu}%`:''}
+        </div>
+      </div>`;
+    } else {
+      html+=`<div class="noteIt" style="background:rgba(200,180,220,.15);opacity:.55">
+        <div class="hd" style="color:var(--mu)"><span>❓ Ẩn</span></div>
+        <div class="ct" style="color:var(--mu);font-style:italic">Chưa gặp event này</div>
+      </div>`;
+    }
+  });
+
+  html+=`<div class="ev" style="font-size:11.5px;margin-top:12px">
+    💡 Bạn đã gặp <b>${Object.keys(seen).length}/${BAD.length+GOOD.length}</b> event.
+  </div>`;
+
+  html+='<h3>🎁 Offer đặc biệt</h3>';
+  html+='<div style="font-size:11px;color:var(--mu);margin-bottom:6px">Offer báo trước, có thể chọn Đồng ý hoặc Từ chối.</div>';
+  OFFERS.forEach((o,i)=>{
+    if(seen['o'+i]){
+      html+=`<div class="noteIt">
+        <div class="hd"><span>${o.e}</span></div>
+        <div class="ct">${o.t}</div>
+        <div style="font-size:11px;margin-top:4px;font-weight:800">
+          ${o.m} tệ
+          ${o.sp?` · +${o.sp} SP`:''}
+          ${o.hp?` · +${o.hp} HP`:''}
+          ${o.kt?` · +${o.kt} KT`:''}
+        </div>
+      </div>`;
+    } else {
+      html+=`<div class="noteIt" style="background:rgba(200,180,220,.15);opacity:.55">
+        <div class="hd" style="color:var(--mu)"><span>❓ Ẩn</span></div>
+        <div class="ct" style="color:var(--mu);font-style:italic">Chưa gặp offer này</div>
+      </div>`;
+    }
+  });
+
+  $('#shb').innerHTML=html;
+  $('#sheet').classList.remove('hide');
+}
+
 function openRecord(){
   T.sheet='record';
   setTxt('sht','🏆 Kỷ lục');
@@ -1185,9 +1295,13 @@ function openRecord(){
     </div>`;
   $('#sheet').classList.remove('hide');
 }
-function reSheet(){if(T.sheet){if(T.sheet=='log')openLog();else if(T.sheet=='record')openRecord()}}
+function reSheet(){
+  if(!T.sheet) return;
+  if(T.sheet=='log') openLog();
+  else if(T.sheet=='record') openRecord();
+  else if(T.sheet=='book') openBook();
+}
 
-/* TEXT */
 const INTRO=`<div class="sp"><img src="icon-192.png" alt=""></div>
 <h2>🌸 Vân Khánh Diary</h2>
 <div class="body">
@@ -1211,13 +1325,14 @@ const HELP=`<h2>🌸 Cách chơi</h2>
 <br><br>
 <b>Chỉ số:</b> HP &lt; 20 → nghỉ ốm · SP &lt; 20 → yếu 50% · Luận văn 100% → tốt nghiệp.
 <br><br>
-<b>Event:</b> 40% xảy ra sau mỗi action (20% xấu, 20% tốt). Có offer báo trước (du lịch, mua sắm...).
+<b>Event:</b> Mỗi ngày tối đa 1 event ngẫu nhiên (20% xấu / 20% tốt). Có offer báo trước (du lịch, mua sắm...).
 <br><br>
 <b>📝 Nhật ký:</b> Vào tab Nhật ký để tự viết note. Xuất ra file .txt được.
+<br><br>
+<b>📔 Sổ tay:</b> Xem bảng hệ số của mọi hành động + danh sách event (đã gặp / chưa gặp).
 </div>
 <div class="mb"><button class="btn p" data-a="mx">OK! 🌸</button></div>`;
 
-/* EVENT DELEGATION */
 document.addEventListener('click',e=>{
   const target=e.target.closest('[data-a]');
   if(!target) return;
@@ -1230,6 +1345,7 @@ document.addEventListener('click',e=>{
     case 'accOffer':acceptOffer();break;
     case 'decOffer':declineOffer();break;
     case 'log':openLog();break;
+    case 'book':openBook();break;
     case 'record':openRecord();break;
     case 'home':finishHome();break;
     case 'closeSheet':closeSheet();break;
@@ -1263,7 +1379,6 @@ if(sheetEl) sheetEl.addEventListener('click',e=>{
   if(e.target.id==='sheet') closeSheet();
 });
 
-/* KICKOFF */
 window.__ch1Days=null;
 window.__ch1Weeks=null;
 drawAll();
