@@ -69,29 +69,34 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 
 .stats-grid{
   display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:5px;padding:8px 10px 10px;
+  grid-template-columns:repeat(4,1fr);
+  gap:6px;padding:8px 10px 10px;
+  align-items:stretch;
 }
 .stat-cell{
-  min-width:0;width:100%;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  display:flex;flex-direction:column;align-items:center;justify-content:space-between;
   background:rgba(255,255,255,.95);
   border:2px solid var(--ink);border-radius:9px;
-  padding:5px 3px 4px;
+  padding:6px 4px 5px;
   box-shadow:1.5px 1.5px 0 var(--ink);
+  height:72px;
+  overflow:hidden;
+  min-width:0;
 }
 .stat-cell .lbl{
   font-size:9px;font-weight:800;letter-spacing:.3px;
   text-transform:uppercase;line-height:1;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   max-width:100%;
+  color:var(--ink2);
 }
 .stat-cell .val{
   font-family:"Comfortaa",sans-serif;
-  font-size:15px;font-weight:800;line-height:1.1;
-  margin:3px 0 3px;
+  font-size:15px;font-weight:800;line-height:1;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   max-width:100%;
+  flex:1;
+  display:flex;align-items:center;justify-content:center;
 }
 .stat-cell .bar-mini{
   width:100%;height:5px;border-radius:3px;
@@ -105,10 +110,13 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 .stat-cell.lu .bar-mini i{background:linear-gradient(90deg,#c9b6f0,#a890e0)}
 .stat-cell.money .sub{
   font-size:9px;font-weight:700;color:var(--mu);
-  line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-  max-width:100%;
+  line-height:1;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  max-width:100%;width:100%;
+  text-align:center;
+  height:5px;
+  display:flex;align-items:center;justify-content:center;
 }
-.stat-cell.money .val{font-size:13px;margin-bottom:0}
 
 #scene{
   position:relative;overflow:hidden;display:flex;flex-direction:column;
@@ -377,6 +385,19 @@ h3::before{content:"✿";color:#ff6b9d;font-size:16px}
   background:#fff;font-size:10px;font-weight:800;
   padding:2px 6px;color:#c92e72;
 }
+.ending-row{
+  display:grid;grid-template-columns:auto 1fr auto;
+  gap:8px;align-items:center;
+  padding:8px 10px;border:1.5px solid var(--ink);border-radius:9px;
+  background:#fff;box-shadow:1.5px 1.5px 0 var(--ink);
+  margin-bottom:6px;
+}
+.ending-row .ico{font-size:22px;line-height:1}
+.ending-row .nm{font-size:12.5px;font-weight:800}
+.ending-row .ct{
+  font-family:"Comfortaa",sans-serif;
+  font-size:16px;font-weight:800;color:#ff6b9d;
+}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
 </style>
 </head>
@@ -454,10 +475,10 @@ const $=s=>document.querySelector(s);
 const cl=(v,a,b)=>Math.max(a,Math.min(b,v));
 const F=n=>Math.round(n).toLocaleString('vi-VN');
 
-const KEY='vkdiary_v15';
-const SLOT='vkdiary_slot_v15';
-const REC_KEY='vkdiary_rec_v15';
-const SAVE_VER=15;
+const KEY='vkdiary_v16';
+const SLOT='vkdiary_slot_v16';
+const REC_KEY='vkdiary_rec_v16';
+const SAVE_VER=16;
 const SCHOLAR=[0,750,875];
 const START_MONEY=500;
 const MAX_WEEKS=[0,20,40];
@@ -470,8 +491,8 @@ const ACTIONS_PER_PERIOD=2;
 const PERIODS_PER_DAY=3;
 const ACTIONS_PER_DAY=ACTIONS_PER_PERIOD*PERIODS_PER_DAY;
 const WEEKS_PER_YEAR=5;
-const STIPEND_WEEKS=[0,10,20];   // thức đêm mở ở tuần 10 (MS) / 20 (TS)
-const LOTTERY_MIN_WEEK=6;         // xổ số từ tuần 6 trở ra (trong năm)
+const STIPEND_WEEKS=[0,10,20];
+const LOTTERY_MIN_WEEK=6;
 
 const WD=['Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy','Chủ Nhật'];
 const PERIODS=['🌅 Buổi sáng','☀️ Buổi chiều','🌙 Buổi tối'];
@@ -556,7 +577,6 @@ const BIG_EVENTS=[
   {e:'🏛️ Triển lãm bảo tàng',   t:'Bảo tàng Quốc gia mở triển lãm.',           m:-200,  lu:1, sp:25}
 ];
 
-/* Fixed event — tính lại tuần theo 5 tuần/năm */
 const FIXED_EVENTS=[
   {ch:1, week:1,  e:'🌸 Ngày đầu ở Bắc Kinh', t:'Vân Khánh xuống sân bay, kéo vali đến CNU.', m:0, hp:0, sp:5, mandatory:true},
   {ch:1, week:3,  e:'😰 Mất ví', t:'Mất ví ở tàu điện.', m:-80, sp:-5, mandatory:true},
@@ -701,19 +721,34 @@ function delNote(k){
   save();toast('🗑️ Đã xoá');openLog();
 }
 
+/* ===== RECORD ===== */
 function getRec(){
-  try{const r=localStorage.getItem(REC_KEY);return r?JSON.parse(r):{b1:null,b2:null,bT:null,fin:[]}}
-  catch(e){return {b1:null,b2:null,bT:null,fin:[]}}
+  try{
+    const r=localStorage.getItem(REC_KEY);
+    if(!r) return newRec();
+    const o=JSON.parse(r);
+    return Object.assign(newRec(),o);
+  }catch(e){return newRec()}
+}
+function newRec(){
+  return {
+    b1:null,b2:null,bT:null,fin:[],
+    endCount:{grad:0,home:0,lottery:0,timeout:0}
+  };
 }
 function saveRec(r){try{localStorage.setItem(REC_KEY,JSON.stringify(r))}catch(e){}}
-function addFinish(tot,c1,c2){
+function addFinish(tot,c1,c2,type){
   const r=getRec();
-  r.fin=r.fin||[];
-  r.fin.push({t:tot,c1,c2,ts:Date.now()});
-  if(r.fin.length>10) r.fin=r.fin.slice(-10);
-  if(!r.b1||c1<r.b1) r.b1=c1;
-  if(!r.b2||c2<r.b2) r.b2=c2;
-  if(!r.bT||tot<r.bT) r.bT=tot;
+  if(type==='grad'){
+    r.fin=r.fin||[];
+    r.fin.push({t:tot,c1,c2,ts:Date.now()});
+    if(r.fin.length>10) r.fin=r.fin.slice(-10);
+    if(!r.b1||c1<r.b1) r.b1=c1;
+    if(!r.b2||c2<r.b2) r.b2=c2;
+    if(!r.bT||tot<r.bT) r.bT=tot;
+  }
+  if(!r.endCount) r.endCount={grad:0,home:0,lottery:0,timeout:0};
+  if(type && r.endCount[type]!==undefined) r.endCount[type]++;
   saveRec(r);
 }
 
@@ -814,7 +849,6 @@ function drawScene(){
 }
 
 function canLottery(){
-  // Xổ số từ tuần 6 trở ra trong năm (yearWeek >= 6)
   return S.yearWeek>=LOTTERY_MIN_WEEK && !S.lotteryDoneThisYear && S.lu<100;
 }
 function drawActs(){
@@ -917,7 +951,6 @@ function acceptOffer(){
   S.seenEvents['o'+OFFERS.findIndex(x=>x.k===o.k)]=1;
   addLog(`${o.e}: ${o.t}`);
   S.pendingOffer=null;
-  // Mất buổi này
   S.periodActionsLeft=0;
   S.dayActionsLeft=Math.max(0,S.dayActionsLeft-2);
   save();
@@ -993,6 +1026,7 @@ function doLottery(){
   beep(500,.1);
   if(Math.random()<0.0005){
     save();
+    addFinish(0,0,0,'lottery');
     setTimeout(()=>{
       modal(`<div class="sp"><img src="icon-192.png" alt=""></div>
         <h2>🎉 TRÚNG XỔ SỐ!</h2>
@@ -1124,6 +1158,7 @@ function endDay(){
 function checkWeekLimit(){
   if(S.week>MAX_WEEKS[S.ch]){
     S.endReason='timeout';
+    addFinish(S.day,0,0,'timeout');
     save();
     modal(`<h2>⏰ Quá hạn</h2>
     <div class="body">Vân Khánh đã học quá ${MAX_WEEKS[S.ch]} tuần mà chưa bảo vệ được luận văn. Trường buộc cô thôi học.</div>
@@ -1226,7 +1261,7 @@ function finishGrad(){
   const total=S.day;
   const ch1=window.__ch1Days||total;
   const ch2=Math.max(0,total-ch1);
-  addFinish(total,ch1,ch2);
+  addFinish(total,ch1,ch2,'grad');
   save();
   beep(1200,.5);
   modal(`<div class="sp"><img src="icon-192.png" alt=""></div>
@@ -1250,6 +1285,7 @@ function finishHome(){
   if(!confirm('Vân Khánh gấp cuốn nhật ký, đặt bút xuống?\nCô sẽ bỏ học, về Việt Nam lấy chồng.')) return;
   if(!confirm('Chắc chắn chứ?\nBố mẹ đã chuẩn bị đám cưới ở quê.')) return;
   S.endReason='home';
+  addFinish(0,0,0,'home');
   save();
   modal(`<div class="sp"><img src="icon-192.png" alt=""></div>
   <h2>🌸 Về nhà lấy chồng</h2>
@@ -1477,15 +1513,43 @@ function openRecord(){
   setTxt('sht','🏆 Kỷ lục');
   const r=getRec();
   const fin=(r.fin||[]).slice().reverse().slice(0,5);
+  const ec=r.endCount||{grad:0,home:0,lottery:0,timeout:0};
+  const totalEnd=(ec.grad||0)+(ec.home||0)+(ec.lottery||0)+(ec.timeout||0);
   $('#shb').innerHTML=`
-    <div class="ev"><b>Kỷ lục tốt nhất</b>
-    <div class="g2" style="margin-top:6px">
-      <span>🥇 Chương 1</span><b>${r.b1?r.b1+' ngày':'—'}</b>
-      <span>🥇 Chương 2</span><b>${r.b2?r.b2+' ngày':'—'}</b>
-      <span>🥇 Tổng</span><b>${r.bT?r.bT+' ngày':'—'}</b>
+    <h3>🥇 Kỷ lục tốt nghiệp</h3>
+    <div class="ev">
+    <div class="g2">
+      <span>🥇 Chương 1 nhanh nhất</span><b>${r.b1?r.b1+' ngày':'—'}</b>
+      <span>🥇 Chương 2 nhanh nhất</span><b>${r.b2?r.b2+' ngày':'—'}</b>
+      <span>🥇 Tổng nhanh nhất</span><b>${r.bT?r.bT+' ngày':'—'}</b>
     </div></div>
-    <h3>Lần gần đây</h3>
-    ${fin.length? fin.map(f=>`<div class="it"><div class="m"><b>Tổng ${f.t} ngày</b><small>C1: ${f.c1} · C2: ${f.c2}</small></div></div>`).join('') : '<div class="sm mu">Chưa hoàn thành.</div>'}
+
+    <h3>📊 Thống kê kết thúc</h3>
+    <div class="ending-row">
+      <span class="ico">🎓</span>
+      <span class="nm">Tốt nghiệp tiến sĩ</span>
+      <span class="ct">${ec.grad||0}</span>
+    </div>
+    <div class="ending-row">
+      <span class="ico">💰</span>
+      <span class="nm">Trúng xổ số</span>
+      <span class="ct">${ec.lottery||0}</span>
+    </div>
+    <div class="ending-row">
+      <span class="ico">🌸</span>
+      <span class="nm">Về nhà lấy chồng</span>
+      <span class="ct">${ec.home||0}</span>
+    </div>
+    <div class="ending-row">
+      <span class="ico">⏰</span>
+      <span class="nm">Quá hạn (thua)</span>
+      <span class="ct">${ec.timeout||0}</span>
+    </div>
+    <div class="sm mu" style="text-align:center;margin:6px 0 2px">Tổng số ván: <b>${totalEnd}</b></div>
+
+    <h3>📜 Lần tốt nghiệp gần đây</h3>
+    ${fin.length? fin.map(f=>`<div class="it"><div class="m"><b>Tổng ${f.t} ngày</b><small>C1: ${f.c1} · C2: ${f.c2}</small></div></div>`).join('') : '<div class="sm mu">Chưa tốt nghiệp lần nào.</div>'}
+
     <h3>💾 Save</h3>
     <div class="bs" style="margin-bottom:8px">
       <button class="b2 p" data-a="save">💾 Lưu</button>
@@ -1496,6 +1560,7 @@ function openRecord(){
     <div class="bs" style="margin-top:8px">
       <button class="b2" data-a="snd">🔊 ${S.snd?'Bật':'Tắt'}</button>
       <button class="b2" data-a="help">❓ Hướng dẫn</button>
+      <button class="b2" data-a="wiperec">🗑️ Xoá kỷ lục</button>
       <button class="b2" data-a="wipeslot">🗑️ Xoá save</button>
       <button class="b2" data-a="restart">💥 Chơi lại</button>
     </div>`;
@@ -1575,6 +1640,11 @@ document.addEventListener('click',e=>{
     case 'wipeslot':
       if(!hasSlot()) return toast('📭 Chưa có save');
       if(confirm('Xoá save thủ công?')){deleteSlot();toast('🗑️ Đã xoá');reSheet()}
+      break;
+    case 'wiperec':
+      if(!confirm('Xoá toàn bộ kỷ lục và thống kê?')) return;
+      try{localStorage.removeItem(REC_KEY)}catch(e){}
+      toast('🗑️ Đã xoá kỷ lục');reSheet();
       break;
     case 'restart':
       if(!confirm('Chơi lại từ đầu?')) return;
