@@ -1,6 +1,7 @@
 {
   "name": "Vân Khánh Diary",
   "short_name": "VK Diary",
+  "description": "Du học sinh Việt Nam tại Trung Quốc — viết luận, tốt nghiệp thạc sĩ và tiến sĩ.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
@@ -8,8 +9,19 @@
   "background_color": "#fff5f9",
   "theme_color": "#ffb6d5",
   "lang": "vi",
+  "categories": ["games", "education"],
   "icons": [
-    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
-    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
   ]
 }
