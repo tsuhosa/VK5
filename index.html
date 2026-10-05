@@ -1277,8 +1277,6 @@ const MINIGAME_SENTENCES = {
 
 /* ====== STATE ====== */
 const T={modal:0,mq:[],sheet:'',mgActive:false,mgSentence:null,mgStart:0,mgInterval:null,mgBase:0};
-
-/* ====== END OF PART 2 ====== */
   /* ====== SAVE / LOAD ====== */
 function pack(){return JSON.stringify({v:SAVE_VER,ts:Date.now(),data:S})}
 function save(){
@@ -1753,7 +1751,13 @@ function doAct(k){
   // Trừ cost & action
   if(a.hp) S.hp=cl(S.hp+Math.round(a.hp*eff),0,100);
   if(a.sp) S.sp=cl(S.sp+Math.round(a.sp*eff),0,100);
-  if(a.m) S.money+=a.m;
+  if(a.m) {
+    let actualCost = a.m;
+    if(a.grp === 'an' && a.m < 0){
+      actualCost = -getFoodCost(-a.m);
+    }
+    S.money += actualCost;
+  }
 
   S.periodActionsLeft--;
   S.dayActionsLeft--;
@@ -2808,14 +2812,10 @@ function applyFlagEffects(){
     S.hp = cl(S.hp - 5, 0, 100);
     addLog('😴 Ngủ không ngon: −5 HP');
   }
-  
-  // have_cooker: giảm giá ăn 3 tệ/bữa
-  // (đã xử lý trong doAct khi check giá ăn)
 }
 
 /* ====== ÁP DỤNG FLAG VÀO ACTION ĂN ====== */
 function getFoodCost(baseCost){
-  // Nếu có nồi cơm → giảm 3 tệ
   return S.flags.have_cooker ? Math.max(0, baseCost - 3) : baseCost;
 }
 
@@ -2840,8 +2840,6 @@ window.__ch1Weeks=null;
 drawAll();
 if(!S.seen){S.seen=1;saveNow();modal(INTRO);}
 
-// Gọi applyFlagEffects mỗi khi bắt đầu ngày mới
-// (đã được gọi trong endDay qua checkAchievements — nhưng gọi thêm để chắc)
 setTimeout(() => applyFlagEffects(), 500);
 
 // Service Worker
