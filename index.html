@@ -37,9 +37,11 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 
 #app{
   height:100vh;height:100dvh;max-width:480px;margin:0 auto;
-  display:grid;grid-template-rows:auto auto minmax(0,1fr) auto;
+  display:flex;flex-direction:column;
   gap:6px;padding:calc(env(safe-area-inset-top) + 6px) 8px calc(env(safe-area-inset-bottom) + 6px);
   position:relative;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
 }
 
 /* ===== HEADER ===== */
@@ -47,6 +49,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   position:relative;border-radius:var(--radius);
   border:2px solid var(--ink);box-shadow:var(--shadow);overflow:hidden;
   background:linear-gradient(155deg,#ffb3d1 0%,#ff8fb8 40%,#c9b6f0 100%);
+  flex:none;
 }
 #hd .top{display:flex;align-items:center;gap:8px;padding:7px 10px;border-bottom:1.5px solid rgba(26,20,40,.35)}
 #logo{flex:none;width:28px;height:28px;border-radius:50%;object-fit:cover;border:2px solid var(--ink);background:#ffc6dd}
@@ -63,16 +66,22 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 /* ===== STATS ===== */
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:5px 8px 6px;align-items:stretch}
 .stat-cell{
-  display:flex;flex-direction:column;align-items:center;justify-content:space-between;
+  display:flex;flex-direction:column;align-items:center;
   background:rgba(255,255,255,.95);border:2px solid var(--ink);border-radius:8px;
-  padding:4px 3px 3px;box-shadow:1.5px 1.5px 0 var(--ink);
+  padding:3px 3px 3px;box-shadow:1.5px 1.5px 0 var(--ink);
   height:48px;overflow:hidden;min-width:0;position:relative;
 }
-.stat-cell .ico{position:absolute;top:2px;left:4px;font-size:10px;line-height:1}
+.stat-cell .ico{
+  position:absolute;top:3px;left:50%;
+  transform:translateX(-50%);
+  font-size:10px;line-height:1;
+  width:100%;text-align:center;
+}
 .stat-cell .val{
   font-family:"Comfortaa",sans-serif;font-size:14px;font-weight:800;line-height:1;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;width:100%;
-  text-align:center;margin-top:8px;flex:1;display:flex;align-items:center;justify-content:center;
+  text-align:center;flex:1;display:flex;align-items:center;justify-content:center;
+  padding-top:8px;padding-bottom:0;height:26px;box-sizing:border-box;
 }
 .stat-cell .bar-mini{
   width:100%;height:4px;border-radius:2px;background:rgba(26,20,40,.12);
@@ -100,6 +109,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   box-shadow:2px 2px 0 var(--ink);
   align-items:center;gap:8px;font-size:12px;font-weight:800;cursor:pointer;
   animation:badgeSlideIn .3s ease-out, badgePulse 2s ease-in-out infinite 1s;
+  flex:none;
 }
 #offerBadge.on{display:flex}
 #offerBadge b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -114,7 +124,8 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 #scene{
   position:relative;overflow:hidden;display:flex;flex-direction:column;
   border:2px solid var(--ink);border-radius:var(--radius);
-  box-shadow:var(--shadow);min-height:0;background:#fff;
+  box-shadow:var(--shadow);background:#fff;
+  flex:none;
 }
 .ch1 #scene{background:linear-gradient(180deg,#ffe9c9 0 40px,#fff8ee 40px)}
 .ch2 #scene{background:linear-gradient(180deg,#a8c8e8 0 40px,#f0f8ff 40px)}
@@ -141,7 +152,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 }
 #quote{font-size:9.5px;font-style:italic;color:var(--mu);text-align:center;padding:2px 12px 0}
 
-#log-wrap{flex:1;min-height:0;display:flex;flex-direction:column;padding:4px 10px 8px}
+#log-wrap{display:flex;flex-direction:column;padding:4px 10px 8px;flex:none}
 #log-header{
   display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;
   font-size:10.5px;font-weight:800;color:var(--ink2);letter-spacing:.3px;
@@ -152,7 +163,8 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   background:linear-gradient(180deg,#fff,#f5f0ff);box-shadow:1px 1px 0 var(--ink);
 }
 #log{
-  flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  height:200px;max-height:200px;min-height:200px;
+  overflow-y:auto;-webkit-overflow-scrolling:touch;
   padding:6px 10px;background:rgba(255,255,255,.92);
   border:1.5px solid var(--ink);border-radius:10px;box-shadow:1.5px 1.5px 0 var(--ink);
   font-size:11px;line-height:1.5;scrollbar-width:thin;
@@ -163,7 +175,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 #log .ln::before{content:"· ";opacity:.5;font-weight:800}
 
 /* ===== ACTIONS ===== */
-#acts-wrap{border:2px solid var(--ink);border-radius:var(--radius);background:#fff;box-shadow:var(--shadow);padding:8px}
+#acts-wrap{border:2px solid var(--ink);border-radius:var(--radius);background:#fff;box-shadow:var(--shadow);padding:8px;flex:none}
 #period-lbl{
   text-align:center;font-size:10.5px;font-weight:800;letter-spacing:.4px;
   margin-bottom:6px;padding-bottom:5px;border-bottom:1.5px dashed rgba(26,20,40,.3);
@@ -228,13 +240,12 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   background:rgba(255,255,255,.92);padding:1px 5px;
   border-radius:6px;border:1.5px solid var(--ink);white-space:nowrap;
 }
-#sleepFab{right:14px;bottom:calc(env(safe-area-inset-bottom) + 130px);background:linear-gradient(180deg,#c9b6f0,#a890e0)}
-#lotteryFab{right:14px;bottom:calc(env(safe-area-inset-bottom) + 194px);background:linear-gradient(180deg,#ffe4a8,#ffd070);color:#8a5a00;display:none}
+#lotteryFab{right:14px;bottom:calc(env(safe-area-inset-bottom) + 70px);background:linear-gradient(180deg,#ffe4a8,#ffd070);color:#8a5a00;display:none}
 #lotteryFab.on{display:grid}
-#writeFab{right:14px;bottom:calc(env(safe-area-inset-bottom) + 258px);background:linear-gradient(180deg,#ff9bbf,#ff6b9d);display:none}
+#writeFab{right:14px;bottom:calc(env(safe-area-inset-bottom) + 140px);background:linear-gradient(180deg,#ff9bbf,#ff6b9d);display:none}
 #writeFab.on{display:grid}
 @media (min-width:520px){
-  #sleepFab,#lotteryFab,#writeFab{right:calc(50% - 240px + 14px)}
+  #lotteryFab,#writeFab{right:calc(50% - 240px + 14px)}
 }
 
 /* ===== SHEET ===== */
@@ -279,13 +290,81 @@ h3::before{content:"✿";color:#ff6b9d;font-size:15px}
 .b2:disabled{opacity:.45;filter:grayscale(.5)}
 
 /* ===== MODAL ===== */
-#modal{position:fixed;inset:0;z-index:60;background:rgba(26,20,40,.82);display:grid;place-items:center;padding:16px}
+#modal{
+  position:fixed;inset:0;z-index:60;
+  background:rgba(26,20,40,.85);
+  display:grid;place-items:center;padding:16px;
+  animation:modalFadeIn .2s ease-out;
+}
+@keyframes modalFadeIn{from{background:rgba(26,20,40,0)}}
 .bx{
   width:100%;max-width:420px;max-height:88vh;overflow:auto;
-  border:2px solid var(--ink);border-radius:18px;padding:18px;background:#fff;
-  box-shadow:6px 6px 0 var(--ink);animation:pp .22s ease-out;will-change:transform,opacity;
+  border:3px solid var(--ink);border-radius:18px;padding:18px;background:#fff;
+  box-shadow:6px 6px 0 var(--ink);
+  animation:pp .22s ease-out;
+  will-change:transform,opacity;
+  position:relative;
 }
 @keyframes pp{from{transform:scale(.92);opacity:0}}
+
+/* Event highlight — BAD */
+.bx.event-highlight{
+  border-color:#ff6b9d;
+  box-shadow:
+    6px 6px 0 var(--ink),
+    0 0 0 6px rgba(255,107,157,.35),
+    0 0 30px rgba(255,107,157,.5);
+  animation:pp .22s ease-out, eventPulse 1.5s ease-in-out infinite .3s;
+}
+@keyframes eventPulse {
+  0%,100% {
+    box-shadow:
+      6px 6px 0 var(--ink),
+      0 0 0 6px rgba(255,107,157,.35),
+      0 0 30px rgba(255,107,157,.5);
+  }
+  50% {
+    box-shadow:
+      6px 6px 0 var(--ink),
+      0 0 0 12px rgba(255,107,157,.5),
+      0 0 50px rgba(255,107,157,.7);
+  }
+}
+
+/* Cultural event highlight */
+.bx.cultural-highlight{
+  border-color:#da251d;
+  box-shadow:
+    6px 6px 0 var(--ink),
+    0 0 0 6px rgba(218,37,29,.35),
+    0 0 30px rgba(218,37,29,.5);
+  animation:pp .22s ease-out, culturalPulse 2s ease-in-out infinite .3s;
+}
+@keyframes culturalPulse {
+  0%,100% {
+    box-shadow:
+      6px 6px 0 var(--ink),
+      0 0 0 6px rgba(218,37,29,.35),
+      0 0 30px rgba(218,37,29,.5);
+  }
+  50% {
+    box-shadow:
+      6px 6px 0 var(--ink),
+      0 0 0 12px rgba(218,37,29,.5),
+      0 0 50px rgba(218,37,29,.7);
+  }
+}
+
+.cultural-banner{
+  background:linear-gradient(90deg,#da251d,#ffcd00,#da251d);
+  color:#fff;font-weight:800;font-size:11px;
+  padding:5px 12px;border-radius:8px;
+  text-align:center;margin-bottom:10px;
+  text-shadow:1px 1px 0 rgba(0,0,0,.3);
+  letter-spacing:.5px;
+  border:2px solid var(--ink);
+}
+
 .bx h2{
   margin:0 0 10px;text-align:center;font-size:17px;
   padding-bottom:7px;border-bottom:2px dashed rgba(26,20,40,.35);
@@ -334,6 +413,12 @@ h3::before{content:"✿";color:#ff6b9d;font-size:15px}
 #toast div.ach{
   background:linear-gradient(180deg,#ffe4a8,#ffb850);color:#5a3000;text-shadow:none;
   animation:achIn .4s cubic-bezier(.34,1.56,.64,1),toastOut .2s ease-in 2.8s forwards;
+}
+#toast div.warn{
+  background:linear-gradient(180deg,#ffd0a0,#ffb070);
+  color:#5a3000;text-shadow:none;
+  border-color:#8a5a00;
+  animation:toastIn .2s ease-out,toastOut .2s ease-in 2.5s forwards;
 }
 @keyframes toastIn{from{opacity:0;transform:translate3d(0,-8px,0)}}
 @keyframes toastOut{to{opacity:0;transform:translate3d(0,-8px,0)}}
@@ -452,7 +537,6 @@ h3::before{content:"✿";color:#ff6b9d;font-size:15px}
   </div>
 </div>
 
-<button id="sleepFab" class="fab" data-a="sleep" data-label="Ngủ đêm">🌙</button>
 <button id="lotteryFab" class="fab" data-a="lottery" data-label="Xổ số">🎫</button>
 <button id="writeFab" class="fab" data-a="latewrite" data-label="Thức đêm">🌌</button>
 
@@ -466,14 +550,14 @@ const $=s=>document.querySelector(s);
 const cl=(v,a,b)=>Math.max(a,Math.min(b,v));
 const F=n=>Math.round(n).toLocaleString('vi-VN');
 
-/* ====== STORAGE KEYS ====== */
-const KEY='vkdiary_v17';
-const SLOT='vkdiary_slot_v17';
-const REC_KEY='vkdiary_rec_v17';
-const ACH_KEY='vkdiary_ach_v17';
-const SAVE_VER=17;
+/* ====== STORAGE ====== */
+const KEY='vkdiary_v18';
+const SLOT='vkdiary_slot_v18';
+const REC_KEY='vkdiary_rec_v18';
+const ACH_KEY='vkdiary_ach_v18';
+const SAVE_VER=18;
 
-/* ====== GAME CONSTANTS ====== */
+/* ====== CONSTANTS ====== */
 const SCHOLAR=[0,750,875];
 const START_MONEY=500;
 const MAX_WEEKS=[0,20,30];
@@ -487,10 +571,11 @@ const PERIODS_PER_DAY=3;
 const ACTIONS_PER_DAY=ACTIONS_PER_PERIOD*PERIODS_PER_DAY;
 const WEEKS_PER_YEAR=5;
 const STIPEND_WEEKS=[0,10,20];
-const LOTTERY_MIN_WEEK=1;
 const RENT_PER_WEEK=[0,0,200];
 const RANDOM_EVENT_CHANCE=0.30;
 const GOOD_EVENT_RATE=0.60;
+const DAILY_HP_RECOVER=12;
+const DAILY_SP_RECOVER=20;
 
 const WD=['Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy','Chủ Nhật'];
 const PERIODS=['🌅 Sáng','☀️ Chiều','🌙 Tối'];
@@ -677,7 +762,7 @@ const GOOD_EVENTS=[
    ]}
 ];
 
-/* ====== CHOICE EVENTS ====== */
+/* ====== CHOICE FIXED EVENTS ====== */
 const CHOICE_EVENTS = {
   'c1_w3_lostwallet': {
     ch:1, week:3, once:true,
@@ -791,28 +876,74 @@ const CHOICE_EVENTS = {
   }
 };
 
-/* ====== CULTURAL EVENTS ====== */
+/* ====== CULTURAL EVENTS (6 events) ====== */
 const CULTURAL_EVENTS = [
+  // LỄ HỘI ÂM LỊCH
   {
-    id:'khanh_wedding',
-    e:'💌', title:'Bạn Khanh ở quê cưới',
-    desc:'Thiệp cưới gửi từ quê. Khanh — bạn thân từ cấp 3.',
-    choices:[
-      {text:'Về dự cưới', sub:'−1000 tệ, +30 SP, mất 2 ngày',
-        result:{money:-1000,sp:+30,skipDays:2}, flag:'khanh_wedding'},
-      {text:'Gửi tiền mừng', sub:'−500 tệ, +10 SP',
-        result:{money:-500,sp:+10}}
+    id: 'tet_nguyen_dan',
+    e: '🧧', title: 'Tết Nguyên Đán xa nhà',
+    desc: 'Mùng 1 Tết. Mẹ gọi video. Cả nhà đang gói bánh chưng. Em trai Khang giơ điện thoại quay mâm cỗ: "Chị ơi, thiếu chị."',
+    choices: [
+      {text: 'Gọi video cả tiếng, xem cả nhà ăn Tết', sub: '+40 SP, −50 tệ, mất buổi tối',
+        result: {sp: +40, money: -50, skipActions: 2}, flag: 'tet_call'},
+      {text: 'Nói 5 phút, không muốn buồn thêm', sub: '+5 SP',
+        result: {sp: +5}, flag: 'tet_short'}
     ]
   },
   {
-    id:'hoa_birth',
-    e:'👶', title:'Hòa ở nhà sinh con',
-    desc:'Hòa gọi video. Con gái. Đặt tên là An Nhiên.',
-    choices:[
-      {text:'Về thăm Hòa và cháu', sub:'−800 tệ, +40 SP, mất 2 ngày',
-        result:{money:-800,sp:+40,skipDays:2}, flag:'hoa_birth_visit'},
-      {text:'Gửi tiền mừng', sub:'−300 tệ, +15 SP',
-        result:{money:-300,sp:+15}}
+    id: 'ram_thang_gieng',
+    e: '🍡', title: 'Rằm tháng Giêng — đi chùa',
+    desc: 'Bạn rủ đi chùa Bắc Kinh. Vân Khánh nhớ chùa Hương, nhớ mẹ dắt tay đi lễ.',
+    choices: [
+      {text: 'Đi chùa cầu bình an cho gia đình', sub: '+25 SP, −30 tệ',
+        result: {sp: +25, money: -30}, flag: 'chua_bk'},
+      {text: 'Ở nhà thắp hương', sub: '+10 SP',
+        result: {sp: +10}}
+    ]
+  },
+  {
+    id: 'gio_to_hung_vuong',
+    e: '🌸', title: 'Giỗ Tổ Hùng Vương',
+    desc: 'Ngày 10/3 âm lịch. Cộng đồng người Việt ở Bắc Kinh tổ chức offline. Có mâm cỗ, có hát Quốc ca, có kể chuyện cội nguồn.',
+    choices: [
+      {text: 'Tham gia, mặc áo dài', sub: '+50 SP, −100 tệ',
+        result: {sp: +50, money: -100, skipDays: 0.5}, flag: 'hungking'},
+      {text: 'Ở nhà, tự thắp hương', sub: '+15 SP',
+        result: {sp: +15}}
+    ]
+  },
+  {
+    id: 'trung_thu',
+    e: '🎏', title: 'Trung Thu cộng đồng',
+    desc: 'Tết Trung Thu. Cộng đồng Việt ở Bắc Kinh làm bánh trung thu. Chị Hà Nội rủ: "Em ơi, qua cho vui."',
+    choices: [
+      {text: 'Đi làm bánh, gặp cộng đồng người Việt', sub: '+35 SP, −50 tệ',
+        result: {sp: +35, money: -50, skipDays: 0.5}, flag: 'community'},
+      {text: 'Ở nhà, mua bánh siêu thị', sub: '+10 SP, −30 tệ',
+        result: {sp: +10, money: -30}}
+    ]
+  },
+  // RANDOM
+  {
+    id: 'khanh_wedding',
+    e: '💌', title: 'Bạn Khanh ở quê cưới',
+    desc: 'Thiệp cưới gửi từ quê. Khanh — bạn thân từ cấp 3.',
+    choices: [
+      {text: 'Về dự cưới', sub: '−1000 tệ, +30 SP, mất 2 ngày',
+        result: {money: -1000, sp: +30, skipDays: 2}, flag: 'khanh_wedding'},
+      {text: 'Gửi tiền mừng', sub: '−500 tệ, +10 SP',
+        result: {money: -500, sp: +10}}
+    ]
+  },
+  {
+    id: 'hoa_birth',
+    e: '👶', title: 'Hòa ở nhà sinh con',
+    desc: 'Hòa gọi video. Con gái. Đặt tên là An Nhiên.',
+    choices: [
+      {text: 'Về thăm Hòa và cháu', sub: '−800 tệ, +40 SP, mất 2 ngày',
+        result: {money: -800, sp: +40, skipDays: 2}, flag: 'hoa_birth_visit'},
+      {text: 'Gửi tiền mừng', sub: '−300 tệ, +15 SP',
+        result: {money: -300, sp: +15}}
     ]
   }
 ];
@@ -1032,7 +1163,7 @@ const DAILY_QUOTES=[
   "Hôm nay, cô viết tiếp câu chuyện của mình."
 ];
 
-/* ====== MINIGAME SENTENCES ====== */
+/* ====== MINIGAME ====== */
 const MINIGAME_SENTENCES = {
   1: [
     { cn: '汉语教育',     py: 'hànyǔ jiàoyù',       vi: 'Giáo dục Hán ngữ' },
@@ -1314,9 +1445,16 @@ function drawActs(){
   if(actsEl._h!==h){actsEl._h=h;actsEl.innerHTML=h}
 
   const nb=$('#nextBtn');
-  if(S.period==0) nb.textContent='➡️ SANG BUỔI CHIỀU';
-  else if(S.period==1) nb.textContent='➡️ SANG BUỔI TỐI';
-  else nb.textContent='🌙 KẾT THÚC NGÀY';
+  if(S.period==0) {
+    nb.textContent='➡️ SANG BUỔI CHIỀU';
+    nb.dataset.a='next';
+  } else if(S.period==1) {
+    nb.textContent='➡️ SANG BUỔI TỐI';
+    nb.dataset.a='next';
+  } else {
+    nb.textContent='🌅 SANG NGÀY MỚI';
+    nb.dataset.a='next';
+  }
 
   const wf=$('#writeFab');
   if(S.week>=STIPEND_WEEKS[S.ch] && S.lu<100) wf.classList.add('on');
@@ -1382,6 +1520,9 @@ function applyEvent(ev,choiceIdx){
     S.periodActionsLeft=Math.max(0,S.periodActionsLeft-r.skipActions);
     S.dayActionsLeft=Math.max(0,S.dayActionsLeft-r.skipActions);
   }
+  if(r.skipDays){
+    S.day += r.skipDays;
+  }
 
   if(choice.flag){
     S.flags=S.flags||{};
@@ -1400,7 +1541,10 @@ function applyEvent(ev,choiceIdx){
 }
 
 function showChoiceEvent(ev,callback){
+  const isCultural = ev.id && CULTURAL_EVENTS.some(c => c.id === ev.id);
+  
   const html=`
+    ${isCultural ? `<div class="cultural-banner">🇻🇳 SỰ KIỆN VĂN HÓA VIỆT NAM</div>` : ''}
     <h2>${ev.e} ${ev.title}</h2>
     <div class="body" style="text-align:center;margin-bottom:12px;font-style:italic">${ev.desc}</div>
     ${ev.choices.map((c,i)=>`
@@ -1411,6 +1555,8 @@ function showChoiceEvent(ev,callback){
     `).join('')}
   `;
   modal(html);
+  const bx=$('.bx');
+  if(bx) bx.classList.add(isCultural ? 'cultural-highlight' : 'event-highlight');
   window.__currentChoiceEvent=ev;
   window.__choiceCallback=callback||null;
 }
@@ -1446,6 +1592,8 @@ function maybeOffer(){
   if(Math.random()>0.15) return;
   const o=OFFERS[Math.floor(Math.random()*OFFERS.length)];
   S.pendingOffer=Object.assign({},o);
+  S.pendingOffer.weekCreated=S.week;
+  S.pendingOffer.chCreated=S.ch;
   saveNow();
 }
 
@@ -1479,6 +1627,8 @@ function maybeFixedBigEvent(){
       <h2>${fe.e} ${fe.title}</h2>
       <div class="body">${fe.text}</div>
       <div class="mb"><button class="btn p" data-a="mx">OK</button></div>`);
+    const bx=$('.bx');
+    if(bx) bx.classList.add('event-highlight');
   },400);
 }
 
@@ -1491,16 +1641,49 @@ function maybeRandomBigEvent(){
   if(!available.length) return;
   const be=available[Math.floor(Math.random()*available.length)];
   S.pendingBigEvent=Object.assign({},be);
+  S.pendingBigEvent.weekCreated=S.week;
+  S.pendingBigEvent.chCreated=S.ch;
   S.bigEventsThisYear.push(be.id);
   saveNow();
 }
 
 function maybeCulturalEvent(){
   if(S.culturalEventThisYear) return;
-  if(Math.random()>0.4) return;
-  const ev=CULTURAL_EVENTS[Math.floor(Math.random()*CULTURAL_EVENTS.length)];
-  S.culturalEventThisYear=ev.id;
-  S.pendingCulturalEvent=Object.assign({},ev);
+  if(Math.random()>0.5) return;
+
+  const weekMap = {
+    1: 'tet_nguyen_dan',
+    2: 'ram_thang_gieng',
+    3: 'gio_to_hung_vuong',
+    4: 'trung_thu',
+    5: null
+  };
+
+  const eventId = weekMap[S.yearWeek];
+
+  if(eventId && Math.random() < 0.9){
+    const ev = CULTURAL_EVENTS.find(e => e.id === eventId);
+    if(ev && !S.seenEvents['cult_'+ev.id]){
+      S.culturalEventThisYear = ev.id;
+      S.pendingCulturalEvent = Object.assign({}, ev);
+      S.pendingCulturalEvent.weekCreated = S.week;
+      S.pendingCulturalEvent.chCreated = S.ch;
+      saveNow();
+      return;
+    }
+  }
+
+  const randomEvents = CULTURAL_EVENTS.filter(e => 
+    ['khanh_wedding','hoa_birth'].includes(e.id) &&
+    !S.seenEvents['cult_'+e.id]
+  );
+  if(!randomEvents.length) return;
+
+  const ev = randomEvents[Math.floor(Math.random() * randomEvents.length)];
+  S.culturalEventThisYear = ev.id;
+  S.pendingCulturalEvent = Object.assign({}, ev);
+  S.pendingCulturalEvent.weekCreated = S.week;
+  S.pendingCulturalEvent.chCreated = S.ch;
   saveNow();
 }
 
@@ -1596,7 +1779,7 @@ function doAct(k){
   saveNow();drawAll();
 }
 
-/* ====== MINIGAME VIẾT LUẬN ====== */
+/* ====== MINIGAME ====== */
 function normalizeText(str){
   return str.toLowerCase()
     .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
@@ -1731,18 +1914,7 @@ function skipMinigame(){
   submitMinigame(0,true);
 }
 
-/* ====== SLEEP / NIGHT ====== */
-function sleepNow(){
-  if(T.modal) return;
-  if(S.dayActionsLeft>0){
-    if(!confirm('Kết thúc ngày sớm?\nCòn '+S.dayActionsLeft+' hành động chưa làm.')) return;
-  }
-  S.hp=cl(S.hp+18,0,100);
-  S.sp=cl(S.sp+35,0,100);
-  addLog('🌙 Ngủ đêm');
-  endDay();
-}
-
+/* ====== LATE WRITE ====== */
 function lateWrite(){
   if(T.modal) return;
   if(S.week<STIPEND_WEEKS[S.ch]) return toast('Chưa mở khóa');
@@ -1853,8 +2025,10 @@ function endDay(){
   S.dayActionsLeft=ACTIONS_PER_DAY;
   S.rolledToday=false;
   S.logDay=[];
-  S.hp=cl(S.hp+2,0,100);
-  S.sp=cl(S.sp+2,0,100);
+  // Tự động hồi phục khi hết buổi Tối
+  S.hp=cl(S.hp+DAILY_HP_RECOVER,0,100);
+  S.sp=cl(S.sp+DAILY_SP_RECOVER,0,100);
+  addLog(`🌅 Ngày mới — nghỉ ngơi hồi phục (+${DAILY_HP_RECOVER} HP, +${DAILY_SP_RECOVER} SP)`);
   checkWeekLimit();
   checkStory();
   checkAchievements();
@@ -1914,8 +2088,41 @@ function endWeek(){
 
   saveNow();
 
+  // Kiểm tra offer hết hạn
+  let expiredOffers = [];
+  const checkExpire = (pending) => {
+    if (!pending) return null;
+    if (pending.weekCreated === undefined) return null;
+    const weeksPassed = S.week - pending.weekCreated;
+    if (weeksPassed > 1) {
+      expiredOffers.push(pending);
+      addLog(`⏰ Bỏ lỡ: ${pending.e} ${pending.title}`);
+      return null;
+    }
+    return pending;
+  };
+
+  S.pendingOffer = checkExpire(S.pendingOffer);
+  S.pendingBigEvent = checkExpire(S.pendingBigEvent);
+  S.pendingCulturalEvent = checkExpire(S.pendingCulturalEvent);
+
+  if (expiredOffers.length > 0) {
+    setTimeout(() => {
+      expiredOffers.forEach(o => toast(`⏰ Bỏ lỡ: ${o.title}`, 'warn'));
+    }, 600);
+  }
+
   const delta=S.money-before;
   const weeksLeft=Math.max(0,MAX_WEEKS[S.ch]-S.week+1);
+
+  let expiredText = '';
+  if (expiredOffers.length > 0) {
+    expiredText = `
+      <div class="ev" style="background:linear-gradient(180deg,#ffe8d0,#ffd0a0);font-size:11px">
+        <b>⏰ Offer đã hết hạn:</b><br>
+        ${expiredOffers.map(o => `${o.e} ${o.title}`).join('<br>')}
+      </div>`;
+  }
 
   modal(`<div class="sp"><img src="icon-192.png" alt=""></div>
   <h2>📊 TỔNG KẾT TUẦN ${S.week-1}</h2>
@@ -1928,6 +2135,7 @@ function endWeek(){
     <span>⚡ HP / 💗 SP</span><b>${Math.round(S.hp)} / ${Math.round(S.sp)}</b>
     <span>⏳ Còn lại</span><b>${weeksLeft} tuần</b>
   </div>
+  ${expiredText}
   <div class="ev" style="font-size:11.5px">
     <b>📝 Gợi ý:</b> ${S.lu>0?`Tuần này viết được ${S.lu.toFixed(1)}% luận văn.`:'Chưa viết được gì.'}
     ${S.hp<50?'Cô thấy khá mệt.':''}
@@ -2260,9 +2468,9 @@ function openBook(){
 
   html+=`<h3>🌙 Nút đặc biệt</h3>
     <table style="width:100%;border-collapse:collapse;font-size:11px;border:2px solid var(--ink)">
-    <tr><td style="padding:5px;border:1px solid var(--ink);font-weight:700">🌙 Ngủ đêm</td>
-    <td style="padding:5px;border:1px solid var(--ink);text-align:center;color:#3a8a70">+18 HP</td>
-    <td style="padding:5px;border:1px solid var(--ink);text-align:center;color:#3a8a70">+35 SP</td></tr>
+    <tr><td style="padding:5px;border:1px solid var(--ink);font-weight:700">🌅 Qua ngày mới</td>
+    <td style="padding:5px;border:1px solid var(--ink);text-align:center;color:#3a8a70">+${DAILY_HP_RECOVER} HP</td>
+    <td style="padding:5px;border:1px solid var(--ink);text-align:center;color:#3a8a70">+${DAILY_SP_RECOVER} SP</td></tr>
     <tr><td style="padding:5px;border:1px solid var(--ink);font-weight:700">🌌 Thức đêm</td>
     <td style="padding:5px;border:1px solid var(--ink);text-align:center;color:#c92e72">−15 HP</td>
     <td style="padding:5px;border:1px solid var(--ink);text-align:center;color:#c92e72">−20 SP</td></tr>
@@ -2332,6 +2540,21 @@ function openBook(){
       html+=`<div class="noteIt" style="background:rgba(200,180,220,.15);opacity:.55">
         <div class="hd" style="color:var(--mu)"><span>❓ Ẩn</span></div>
         <div class="ct" style="color:var(--mu);font-style:italic">Big event ngẫu nhiên</div>
+      </div>`;
+    }
+  });
+
+  html+='<h3>🇻🇳 Sự kiện văn hóa Việt Nam</h3>';
+  CULTURAL_EVENTS.forEach(ev=>{
+    const has=seen[ev.id+'_0']||seen[ev.id+'_1'];
+    if(has){
+      html+=`<div class="noteIt" style="background:linear-gradient(180deg,#fff0e0,#ffd0a0);border-color:#da251d">
+        <div class="hd" style="color:#da251d"><span>${ev.e} ${ev.title}</span></div>
+        <div class="ct">${ev.desc}</div></div>`;
+    } else {
+      html+=`<div class="noteIt" style="background:rgba(200,180,220,.15);opacity:.55">
+        <div class="hd" style="color:var(--mu)"><span>❓ Ẩn</span></div>
+        <div class="ct" style="color:var(--mu);font-style:italic">Chưa gặp sự kiện này</div>
       </div>`;
     }
   });
@@ -2440,16 +2663,17 @@ const HELP=`<h2>🌸 Cách chơi</h2>
 <div class="body">
 1 ngày = <b>3 buổi</b>. Mỗi buổi = <b>2 hành động</b>.
 <br><br>
-Hết 2 action buổi này → bấm <b>➡️ Sang buổi</b> để chuyển.
+Hết buổi Tối → tự động qua ngày mới (+12 HP, +20 SP).
 <br><br>
 <b>Nút phụ:</b><br>
-🌙 Ngủ đêm — kết thúc ngày sớm<br>
 🌌 Thức đêm — mở sau 10/20 tuần<br>
 🎫 Mua xổ số — tuần đầu mỗi năm, 0.05% trúng
 <br><br>
 <b>Chỉ số:</b> HP &lt; 20 → nghỉ ốm · SP &lt; 20 → yếu 50% · Luận văn 100% → tốt nghiệp.
 <br><br>
-<b>Event:</b> 30%/action (max 1/ngày) — 60% tốt / 40% xấu. Mỗi event có <b>2 lựa chọn</b>, mỗi lựa chọn có consequence khác nhau.
+<b>Event:</b> 30%/action (max 1/ngày) — 60% tốt / 40% xấu. Mỗi event có <b>2 lựa chọn</b>.
+<br><br>
+<b>⏰ Offer hết hạn sau 1 tuần</b> nếu không xử lý.
 <br><br>
 <b>📔 Sổ tay:</b> Xem bảng hệ số + danh sách event.
 </div>
@@ -2463,7 +2687,6 @@ document.addEventListener('click',e=>{
   switch(a){
     case 'do':doAct(k);break;
     case 'next':nextPeriod();break;
-    case 'sleep':sleepNow();break;
     case 'latewrite':lateWrite();break;
     case 'lottery':doLottery();break;
     case 'lotteryResult':lotteryResult();break;
