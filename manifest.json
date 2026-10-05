@@ -1,15 +1,19 @@
 {
-  "name": "Vân Khánh Diary",
+  "name": "Vân Khánh Diary — Du học sinh Việt Nam",
   "short_name": "VK Diary",
-  "description": "Du học sinh Việt Nam tại Trung Quốc — viết luận, tốt nghiệp thạc sĩ và tiến sĩ.",
+  "description": "Câu chuyện về Vân Khánh — cô gái Phúc Thọ, Hà Nội theo đuổi giấc mơ học thuật tại Trung Quốc. Cân bằng giữa học tập, tiền bạc, sức khỏe và gia đình.",
   "start_url": "./index.html",
   "scope": "./",
+  "id": "/vkdiary/",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
   "orientation": "portrait",
   "background_color": "#fff5f9",
   "theme_color": "#ffb6d5",
   "lang": "vi",
-  "categories": ["games", "education"],
+  "dir": "ltr",
+  "categories": ["games", "education", "simulation"],
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "icon-192.png",
@@ -22,6 +26,31 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Nhật ký hôm nay",
+      "short_name": "Nhật ký",
+      "description": "Mở nhật ký và viết note",
+      "url": "./index.html?action=log",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Sổ tay",
+      "short_name": "Sổ tay",
+      "description": "Xem hướng dẫn và bảng hệ số",
+      "url": "./index.html?action=book",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Vân Khánh Diary — Màn hình chính"
     }
   ]
 }
