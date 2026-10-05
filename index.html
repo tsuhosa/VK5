@@ -1,3 +1,1057 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no,maximum-scale=1,minimum-scale=1">
+<meta name="theme-color" content="#ffb6d5">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="format-detection" content="telephone=no,email=no,address=no">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>🌸 Vân Khánh Diary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700;800&family=Comfortaa:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1a1428;--ink2:#3a2a4a;--mu:#8a7a9a;
+  --shadow:3px 3px 0 var(--ink);--radius:12px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+html,body{margin:0;height:100%;overflow:hidden;color:var(--ink);font:600 13.5px/1.35 "Quicksand",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+body{background:#fff5f9;padding:0}
+body::before{
+  content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(circle at 8% 12%,rgba(255,200,220,.5) 0 6px,transparent 7px),
+    radial-gradient(circle at 88% 22%,rgba(255,220,240,.45) 0 5px,transparent 6px),
+    radial-gradient(circle at 22% 78%,rgba(220,190,240,.4) 0 5px,transparent 6px),
+    radial-gradient(circle at 78% 88%,rgba(255,200,220,.4) 0 6px,transparent 7px),
+    linear-gradient(160deg,#fff5f9 0%,#fdeef8 25%,#f5ecff 55%,#e8f4ff 85%,#e0f0ff 100%);
+}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-action:manipulation;padding:0}
+.hide{display:none!important}.mu{color:var(--mu)}.sm{font-size:11px}
+
+#app{
+  height:100vh;height:100dvh;max-width:480px;margin:0 auto;
+  display:grid;grid-template-rows:auto auto minmax(0,1fr) auto;
+  gap:6px;padding:calc(env(safe-area-inset-top) + 6px) 8px calc(env(safe-area-inset-bottom) + 6px);
+  position:relative;
+}
+
+/* ===== HEADER ===== */
+#hd{
+  position:relative;border-radius:var(--radius);
+  border:2px solid var(--ink);box-shadow:var(--shadow);overflow:hidden;
+  background:linear-gradient(155deg,#ffb3d1 0%,#ff8fb8 40%,#c9b6f0 100%);
+}
+#hd .top{display:flex;align-items:center;gap:8px;padding:7px 10px;border-bottom:1.5px solid rgba(26,20,40,.35)}
+#logo{flex:none;width:28px;height:28px;border-radius:50%;object-fit:cover;border:2px solid var(--ink);background:#ffc6dd}
+.logo-wrap{flex:1;min-width:0}
+.logo-wrap .t{
+  font-family:"Comfortaa","Quicksand",sans-serif;font-weight:700;font-size:13px;color:#fff;
+  text-shadow:1px 1px 0 rgba(26,20,40,.5);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.logo-wrap .t small{
+  display:block;font-size:8px;opacity:.9;letter-spacing:1.5px;font-weight:700;margin-top:1px;color:#fff;
+  text-shadow:1px 1px 0 rgba(26,20,40,.5);
+}
+
+/* ===== STATS ===== */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:5px 8px 6px;align-items:stretch}
+.stat-cell{
+  display:flex;flex-direction:column;align-items:center;justify-content:space-between;
+  background:rgba(255,255,255,.95);border:2px solid var(--ink);border-radius:8px;
+  padding:4px 3px 3px;box-shadow:1.5px 1.5px 0 var(--ink);
+  height:48px;overflow:hidden;min-width:0;position:relative;
+}
+.stat-cell .ico{position:absolute;top:2px;left:4px;font-size:10px;line-height:1}
+.stat-cell .val{
+  font-family:"Comfortaa",sans-serif;font-size:14px;font-weight:800;line-height:1;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;width:100%;
+  text-align:center;margin-top:8px;flex:1;display:flex;align-items:center;justify-content:center;
+}
+.stat-cell .bar-mini{
+  width:100%;height:4px;border-radius:2px;background:rgba(26,20,40,.12);
+  border:1px solid var(--ink);overflow:hidden;position:relative;
+}
+.stat-cell .bar-mini i{
+  display:block;height:100%;width:100%;transform-origin:left center;transform:scaleX(0);
+  transition:transform .28s cubic-bezier(.4,0,.2,1);will-change:transform;
+}
+.stat-cell.hp .bar-mini i{background:linear-gradient(90deg,#ffb3c1,#ff6b9d)}
+.stat-cell.sp .bar-mini i{background:linear-gradient(90deg,#ffe4a8,#ffb84d)}
+.stat-cell.lu .bar-mini i{background:linear-gradient(90deg,#c9b6f0,#a890e0)}
+.stat-cell.money .sub{
+  font-size:8.5px;font-weight:700;color:var(--mu);line-height:1;text-align:center;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;
+}
+.stat-cell.warn .bar-mini i{animation:warnBlink 1s ease-in-out infinite}
+@keyframes warnBlink{50%{opacity:.4}}
+
+/* ===== BADGE OFFER ===== */
+#offerBadge{
+  display:none;padding:8px 12px;
+  background:linear-gradient(180deg,#fff3c9,#ffe0a0);
+  border:2px solid var(--ink);border-radius:10px;
+  box-shadow:2px 2px 0 var(--ink);
+  align-items:center;gap:8px;font-size:12px;font-weight:800;cursor:pointer;
+  animation:badgeSlideIn .3s ease-out, badgePulse 2s ease-in-out infinite 1s;
+}
+#offerBadge.on{display:flex}
+#offerBadge b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#offerBadge .x{font-size:10.5px;padding:3px 8px;border:1.5px solid var(--ink);border-radius:6px;background:#fff;color:var(--ink)}
+@keyframes badgeSlideIn{from{transform:translateY(-20px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes badgePulse{
+  0%,100%{box-shadow:2px 2px 0 var(--ink)}
+  50%{box-shadow:2px 2px 0 var(--ink),0 0 0 4px rgba(255,184,77,.3)}
+}
+
+/* ===== SCENE ===== */
+#scene{
+  position:relative;overflow:hidden;display:flex;flex-direction:column;
+  border:2px solid var(--ink);border-radius:var(--radius);
+  box-shadow:var(--shadow);min-height:0;background:#fff;
+}
+.ch1 #scene{background:linear-gradient(180deg,#ffe9c9 0 40px,#fff8ee 40px)}
+.ch2 #scene{background:linear-gradient(180deg,#a8c8e8 0 40px,#f0f8ff 40px)}
+
+#top-info{
+  text-align:center;padding:5px 10px 4px;font-size:11.5px;font-weight:800;
+  border-bottom:1px dashed rgba(26,20,40,.15);
+  font-family:"Comfortaa","Quicksand",sans-serif;
+}
+#top-info .period{
+  display:inline-block;margin-left:6px;padding:1px 8px;
+  border:1.5px solid var(--ink);border-radius:10px;
+  background:rgba(255,255,255,.85);font-size:10.5px;
+}
+#avatar-row{display:flex;align-items:center;gap:10px;padding:6px 12px 4px}
+#avatar{
+  flex:none;width:46px;height:46px;border-radius:50%;object-fit:cover;
+  border:2px solid var(--ink);box-shadow:2px 2px 0 var(--ink);background:#ffc6dd;
+}
+#mood{
+  flex:1;min-width:0;font-size:11px;font-weight:700;line-height:1.35;color:var(--ink2);
+  padding:5px 10px;background:rgba(255,255,255,.85);
+  border:1.5px solid var(--ink);border-radius:12px;box-shadow:1.5px 1.5px 0 var(--ink);
+}
+#quote{font-size:9.5px;font-style:italic;color:var(--mu);text-align:center;padding:2px 12px 0}
+
+#log-wrap{flex:1;min-height:0;display:flex;flex-direction:column;padding:4px 10px 8px}
+#log-header{
+  display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;
+  font-size:10.5px;font-weight:800;color:var(--ink2);letter-spacing:.3px;
+}
+#log-header button{
+  font-size:9.5px;font-weight:800;padding:2px 8px;
+  border:1.5px solid var(--ink);border-radius:8px;
+  background:linear-gradient(180deg,#fff,#f5f0ff);box-shadow:1px 1px 0 var(--ink);
+}
+#log{
+  flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:6px 10px;background:rgba(255,255,255,.92);
+  border:1.5px solid var(--ink);border-radius:10px;box-shadow:1.5px 1.5px 0 var(--ink);
+  font-size:11px;line-height:1.5;scrollbar-width:thin;
+}
+#log::-webkit-scrollbar{width:4px}
+#log::-webkit-scrollbar-thumb{background:rgba(26,20,40,.2);border-radius:2px}
+#log .ln{display:block;padding:1px 0}
+#log .ln::before{content:"· ";opacity:.5;font-weight:800}
+
+/* ===== ACTIONS ===== */
+#acts-wrap{border:2px solid var(--ink);border-radius:var(--radius);background:#fff;box-shadow:var(--shadow);padding:8px}
+#period-lbl{
+  text-align:center;font-size:10.5px;font-weight:800;letter-spacing:.4px;
+  margin-bottom:6px;padding-bottom:5px;border-bottom:1.5px dashed rgba(26,20,40,.3);
+  font-family:"Comfortaa","Quicksand",sans-serif;
+}
+#acts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.act{
+  position:relative;border:2px solid var(--ink);border-radius:9px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-weight:800;font-size:11.5px;line-height:1.15;
+  height:clamp(52px,6.8vh,64px);background:linear-gradient(180deg,#fff,#f5f0ff);
+  color:var(--ink);padding:2px;box-shadow:2px 2px 0 var(--ink);
+  transition:transform .08s ease-out;will-change:transform;transform:translateZ(0);
+}
+.act b{font-size:22px;line-height:1.1;margin-bottom:2px;font-weight:400}
+.act span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.act:active{transform:translate3d(2px,2px,0);box-shadow:0 0 0 var(--ink)}
+.act.dis{opacity:.42;filter:grayscale(.7)}
+.act.hoc{background:linear-gradient(180deg,#c9f2df,#a8e6d0)}
+.act.lam{background:linear-gradient(180deg,#ffeec4,#ffe4a8)}
+.act.viet{background:linear-gradient(180deg,#a8e6d0,#7ecbaf);color:#fff;text-shadow:1px 1px 0 rgba(26,20,40,.3)}
+.act.choi{background:linear-gradient(180deg,#ffc6dd,#ff9bbf);color:#fff;text-shadow:1px 1px 0 rgba(26,20,40,.3)}
+.act.ngu{background:linear-gradient(180deg,#c9b6f0,#a890e0);color:#fff;text-shadow:1px 1px 0 rgba(26,20,40,.3)}
+.act.an{background:linear-gradient(180deg,#ffd1dc,#ffb3c6)}
+
+#nextBtn{
+  width:100%;margin-top:7px;padding:10px;
+  border:2px solid var(--ink);border-radius:9px;
+  font-family:"Comfortaa",sans-serif;font-size:12.5px;font-weight:800;
+  background:linear-gradient(180deg,#a8e6d0,#7ecbaf);
+  color:#fff;text-shadow:1px 1px 0 rgba(26,20,40,.4);
+  box-shadow:2px 2px 0 var(--ink);letter-spacing:.4px;
+  will-change:transform;transform:translateZ(0);
+}
+#nextBtn:active{transform:translate3d(2px,2px,0);box-shadow:0 0 0 var(--ink)}
+
+/* ===== NAV ===== */
+#nav{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-top:7px}
+#nav button{
+  border:2px solid var(--ink);border-radius:9px;
+  font-size:9.5px;font-weight:800;padding:6px 1px;
+  display:flex;flex-direction:column;align-items:center;gap:1px;
+  background:linear-gradient(180deg,#fff,#f5eeff);
+  color:var(--ink);box-shadow:2px 2px 0 var(--ink);
+  font-family:"Comfortaa","Quicksand",sans-serif;
+  will-change:transform;transform:translateZ(0);
+}
+#nav button b{font-size:15px;line-height:1;font-weight:400}
+#nav button:active{transform:translate3d(2px,2px,0);box-shadow:0 0 0 var(--ink)}
+
+/* ===== FAB ===== */
+.fab{
+  position:fixed;width:52px;height:52px;border-radius:50%;border:2px solid var(--ink);
+  color:#fff;font-size:22px;display:grid;place-items:center;
+  box-shadow:3px 3px 0 var(--ink);z-index:20;
+  transition:transform .12s ease-out;will-change:transform;transform:translateZ(0);
+}
+.fab:active{transform:translate3d(2px,2px,0);box-shadow:1px 1px 0 var(--ink)}
+.fab::after{
+  content:attr(data-label);position:absolute;bottom:-15px;
+  font-size:8.5px;font-weight:800;color:var(--ink);
+  background:rgba(255,255,255,.92);padding:1px 5px;
+  border-radius:6px;border:1.5px solid var(--ink);white-space:nowrap;
+}
+#sleepFab{right:14px;bottom:calc(env(safe-area-inset-bottom) + 130px);background:linear-gradient(180deg,#c9b6f0,#a890e0)}
+#lotteryFab{right:14px;bottom:calc(env(safe-area-inset-bottom) + 194px);background:linear-gradient(180deg,#ffe4a8,#ffd070);color:#8a5a00;display:none}
+#lotteryFab.on{display:grid}
+#writeFab{right:14px;bottom:calc(env(safe-area-inset-bottom) + 258px);background:linear-gradient(180deg,#ff9bbf,#ff6b9d);display:none}
+#writeFab.on{display:grid}
+@media (min-width:520px){
+  #sleepFab,#lotteryFab,#writeFab{right:calc(50% - 240px + 14px)}
+}
+
+/* ===== SHEET ===== */
+#sheet{position:fixed;inset:0;z-index:50;background:rgba(26,20,40,.78);display:flex;align-items:flex-end;justify-content:center}
+.shx{
+  width:100%;max-width:480px;max-height:82vh;overflow:auto;
+  border:2px solid var(--ink);border-bottom:0;
+  border-radius:20px 20px 0 0;
+  padding:14px 16px calc(env(safe-area-inset-bottom) + 18px);
+  background:#fff;box-shadow:0 -6px 0 var(--ink);
+  animation:sup .25s ease-out;will-change:transform;
+}
+@keyframes sup{from{transform:translate3d(0,100%,0)}}
+.shh{
+  display:flex;align-items:center;font-size:15px;font-weight:800;
+  margin-bottom:10px;padding-bottom:8px;border-bottom:2px dashed rgba(26,20,40,.35);
+  font-family:"Comfortaa",sans-serif;
+}
+.shh b{flex:1}
+h3{margin:12px 0 5px;font-size:12.5px;font-weight:800;display:flex;align-items:center;gap:5px;font-family:"Comfortaa",sans-serif}
+h3::before{content:"✿";color:#ff6b9d;font-size:15px}
+.it{
+  display:flex;align-items:center;gap:8px;padding:7px 9px;
+  border:1.5px solid var(--ink);border-radius:9px;
+  background:#fff;box-shadow:1.5px 1.5px 0 var(--ink);
+  margin-bottom:5px;contain:layout paint;
+}
+.it .m{flex:1;min-width:0}
+.it .m b{display:block;font-size:12px}
+.it small{display:block;color:var(--ink2);font-weight:600;margin-top:1px;font-size:10.5px}
+.bs{display:flex;gap:5px;flex-wrap:wrap}
+.b2{
+  border:2px solid var(--ink);border-radius:9px;
+  padding:6px 10px;font-weight:800;font-size:11.5px;white-space:nowrap;
+  background:linear-gradient(180deg,#fff,#f0eaff);
+  color:var(--ink);box-shadow:2px 2px 0 var(--ink);
+  will-change:transform;transform:translateZ(0);
+}
+.b2.p{background:linear-gradient(180deg,#ffb3d1,#ff8fb8);color:#fff;text-shadow:1px 1px 0 rgba(26,20,40,.3)}
+.b2.g{background:linear-gradient(180deg,#a8e6d0,#7ecbaf);color:#fff;text-shadow:1px 1px 0 rgba(26,20,40,.3)}
+.b2:active{transform:translate3d(2px,2px,0);box-shadow:0 0 0 var(--ink)}
+.b2:disabled{opacity:.45;filter:grayscale(.5)}
+
+/* ===== MODAL ===== */
+#modal{position:fixed;inset:0;z-index:60;background:rgba(26,20,40,.82);display:grid;place-items:center;padding:16px}
+.bx{
+  width:100%;max-width:420px;max-height:88vh;overflow:auto;
+  border:2px solid var(--ink);border-radius:18px;padding:18px;background:#fff;
+  box-shadow:6px 6px 0 var(--ink);animation:pp .22s ease-out;will-change:transform,opacity;
+}
+@keyframes pp{from{transform:scale(.92);opacity:0}}
+.bx h2{
+  margin:0 0 10px;text-align:center;font-size:17px;
+  padding-bottom:7px;border-bottom:2px dashed rgba(26,20,40,.35);
+  font-family:"Comfortaa",sans-serif;
+}
+.bx .body{font-size:12.5px;line-height:1.55}
+.bx .body b{color:#ff6b9d}
+.ev{background:linear-gradient(180deg,#fff8e0,#ffeec0);border:2px solid var(--ink);border-radius:10px;padding:9px 11px;margin:7px 0;box-shadow:2px 2px 0 var(--ink)}
+.g2{display:grid;grid-template-columns:1fr auto;gap:5px 12px;font-size:12px}
+.mb{display:grid;gap:9px;margin-top:12px}
+.mb2{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
+.sp{display:flex;justify-content:center;margin:6px 0 5px}
+.sp img{width:70px;height:70px;border-radius:50%;object-fit:cover;border:2px solid var(--ink);box-shadow:3px 3px 0 var(--ink);background:#ffc6dd}
+.btn{
+  width:100%;padding:11px;border:2px solid var(--ink);border-radius:10px;
+  font-family:"Comfortaa",sans-serif;font-size:12.5px;font-weight:800;
+  background:linear-gradient(180deg,#fff,#f0eaff);color:var(--ink);
+  box-shadow:2px 2px 0 var(--ink);will-change:transform;transform:translateZ(0);
+}
+.btn.p{background:linear-gradient(180deg,#ffb3d1,#ff8fb8);color:#fff;text-shadow:1px 1px 0 rgba(26,20,40,.3)}
+.btn.g{background:linear-gradient(180deg,#a8e6d0,#7ecbaf);color:#fff;text-shadow:1px 1px 0 rgba(26,20,40,.3)}
+.btn:active{transform:translate3d(2px,2px,0);box-shadow:0 0 0 var(--ink)}
+
+.choice{
+  width:100%;padding:11px 13px;text-align:left;
+  border:2px solid var(--ink);border-radius:10px;
+  background:linear-gradient(180deg,#fff,#f5f0ff);color:var(--ink);
+  box-shadow:2px 2px 0 var(--ink);
+  font-size:12.5px;font-weight:700;line-height:1.4;
+  margin-bottom:7px;will-change:transform;transform:translateZ(0);
+  white-space:normal;
+}
+.choice.primary{background:linear-gradient(180deg,#ffb3d1,#ff8fb8);color:#fff;text-shadow:1px 1px 0 rgba(26,20,40,.3)}
+.choice:active{transform:translate3d(2px,2px,0);box-shadow:0 0 0 var(--ink)}
+.choice .sub{display:block;font-size:10.5px;opacity:.85;font-weight:600;margin-top:2px;font-style:italic}
+
+/* ===== TOAST ===== */
+#toast{position:fixed;left:50%;top:22%;transform:translateX(-50%);z-index:70;display:grid;gap:6px;width:min(92vw,420px);pointer-events:none}
+#toast div{
+  background:linear-gradient(180deg,#ffb3d1,#ff8fb8);color:#fff;
+  border:2px solid var(--ink);border-radius:12px;
+  padding:8px 14px;text-align:center;font-weight:800;font-size:12px;
+  box-shadow:3px 3px 0 var(--ink);text-shadow:1px 1px 0 rgba(26,20,40,.3);
+  animation:toastIn .2s ease-out,toastOut .2s ease-in 1.8s forwards;
+}
+#toast div.ach{
+  background:linear-gradient(180deg,#ffe4a8,#ffb850);color:#5a3000;text-shadow:none;
+  animation:achIn .4s cubic-bezier(.34,1.56,.64,1),toastOut .2s ease-in 2.8s forwards;
+}
+@keyframes toastIn{from{opacity:0;transform:translate3d(0,-8px,0)}}
+@keyframes toastOut{to{opacity:0;transform:translate3d(0,-8px,0)}}
+@keyframes achIn{from{transform:scale(.5) rotate(-10deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
+
+/* ===== NOTE ===== */
+#noteBox{
+  width:100%;min-height:80px;border:2px solid var(--ink);border-radius:10px;
+  padding:8px 10px;font:600 12px/1.5 "Quicksand",sans-serif;color:var(--ink);background:#fff;
+  box-shadow:inset 1.5px 1.5px 0 rgba(26,20,40,.1);resize:vertical;
+  -webkit-user-select:text;user-select:text;
+}
+#noteBox:focus{outline:none;border-color:#ff6b9d;box-shadow:0 0 0 3px rgba(255,107,157,.15)}
+.noteIt{
+  border:1.5px solid var(--ink);border-radius:9px;
+  background:linear-gradient(180deg,#fffdf5,#fff8e0);
+  box-shadow:1.5px 1.5px 0 var(--ink);padding:7px 9px;margin-bottom:5px;contain:layout paint;
+}
+.noteIt .hd{display:flex;justify-content:space-between;align-items:center;font-size:10.5px;font-weight:800;color:#8a5a00;margin-bottom:3px}
+.noteIt .ct{font-size:12px;font-weight:600;color:var(--ink);line-height:1.5;white-space:pre-wrap;word-break:break-word}
+.noteIt .del{border:1.5px solid var(--ink);border-radius:6px;background:#fff;font-size:9.5px;font-weight:800;padding:1px 5px;color:#c92e72}
+
+/* ===== ACHIEVEMENT ===== */
+.ach-item{
+  display:flex;align-items:center;gap:10px;padding:8px 10px;
+  border:2px solid var(--ink);border-radius:10px;
+  background:linear-gradient(180deg,#fff5e0,#ffe4a8);
+  box-shadow:2px 2px 0 var(--ink);margin-bottom:5px;contain:layout paint;
+}
+.ach-item.locked{background:rgba(200,180,220,.12);opacity:.55}
+.ach-item .ico{font-size:24px;width:32px;text-align:center;line-height:1}
+.ach-item .m{flex:1;min-width:0}
+.ach-item .m b{display:block;font-size:12px}
+.ach-item .m small{display:block;font-size:10.5px;color:var(--ink2);margin-top:1px}
+#achProgress{
+  text-align:center;padding:9px;margin-bottom:8px;
+  background:linear-gradient(180deg,#fff5e0,#ffe4a8);
+  border:2px solid var(--ink);border-radius:12px;box-shadow:2px 2px 0 var(--ink);
+}
+#achProgress .num{font-family:"Comfortaa";font-size:22px;font-weight:800;color:#8a5a00}
+#achProgress .lbl{font-size:11px;font-weight:700;color:#8a5a00}
+#achProgress .bar{height:7px;background:rgba(26,20,40,.15);border-radius:4px;margin-top:5px;overflow:hidden}
+#achProgress .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffd070,#ffb850);transition:transform .3s ease-out;transform-origin:left}
+
+/* ===== MINIGAME ===== */
+#mgInput{
+  width:100%;padding:11px;font-size:15px;font-weight:700;
+  border:2px solid var(--ink);border-radius:10px;
+  font-family:'Quicksand',sans-serif;text-align:center;background:#fff;color:var(--ink);
+  transition:border-color .15s,box-shadow .15s;
+}
+#mgInput:focus{outline:none;border-color:#ff6b9d;box-shadow:0 0 0 3px rgba(255,107,157,.15)}
+#mgInput::placeholder{color:rgba(138,122,154,.5);font-weight:600}
+#mgTimer{font-weight:800;font-size:12px}
+#mgBar{height:100%;width:100%;background:linear-gradient(90deg,#a8e6d0,#7ecbaf);transition:width .1s linear,background .3s}
+#mgBar.warn{background:linear-gradient(90deg,#ffe4a8,#ffb84d)}
+#mgBar.danger{background:linear-gradient(90deg,#ffb3c1,#ff6b9d);animation:warnBlink .5s ease-in-out infinite}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms!important;transition-duration:.001ms!important}
+}
+</style>
+</head>
+<body class="ch1">
+<div id="app">
+  <header id="hd">
+    <div class="top">
+      <img id="logo" src="icon-192.png" alt="Vân Khánh">
+      <div class="logo-wrap">
+        <div class="t">Vân Khánh Diary<small id="chapLbl">✿ THẠC SĨ · CNU BẮC KINH ✿</small></div>
+      </div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-cell hp" id="hpCell"><div class="ico">⚡</div><div class="val" id="hpV">80</div><div class="bar-mini"><i id="hpB"></i></div></div>
+      <div class="stat-cell sp" id="spCell"><div class="ico">💗</div><div class="val" id="spV">70</div><div class="bar-mini"><i id="spB"></i></div></div>
+      <div class="stat-cell lu"><div class="ico">📝</div><div class="val" id="lvV">0%</div><div class="bar-mini"><i id="lvB"></i></div></div>
+      <div class="stat-cell money"><div class="ico">💰</div><div class="val" id="moneyV">500</div><div class="sub" id="weekV2">T1/20</div></div>
+    </div>
+  </header>
+
+  <div id="offerBadge" data-a="openOffer">
+    <b id="offerText">✈️ Hòa rủ đi Cố Cung</b>
+    <span class="x">Xem →</span>
+  </div>
+
+  <section id="scene">
+    <div id="top-info">
+      <span id="dateV">Ngày 1 · Tuần 1/20 · Năm 1 T1</span>
+      <span class="period" id="periodV">🌅 Sáng</span>
+    </div>
+    <div id="avatar-row">
+      <img id="avatar" src="icon-192.png" alt="Vân Khánh">
+      <div id="mood">Vân Khánh đang chuẩn bị cho ngày mới.</div>
+    </div>
+    <div id="quote"></div>
+    <div id="log-wrap">
+      <div id="log-header">
+        <span>📖 NHẬT KÝ HÔM NAY</span>
+        <button data-a="log">Xem tất cả</button>
+      </div>
+      <div id="log"><span class="ln" style="opacity:.55">Nhật ký sẽ ghi lại ở đây...</span></div>
+    </div>
+  </section>
+
+  <div id="acts-wrap">
+    <div id="period-lbl">NGÀY 1 · CÒN 2 HÀNH ĐỘNG</div>
+    <div id="acts"></div>
+    <button id="nextBtn" data-a="next">➡️ SANG BUỔI CHIỀU</button>
+    <nav id="nav">
+      <button data-a="log"><b>📖</b>Nhật ký</button>
+      <button data-a="book"><b>📔</b>Sổ tay</button>
+      <button data-a="record"><b>🏆</b>Kỷ lục</button>
+      <button data-a="ach"><b>🏅</b>Thành tích</button>
+      <button data-a="home"><b>🏠</b>Về nhà</button>
+    </nav>
+  </div>
+</div>
+
+<button id="sleepFab" class="fab" data-a="sleep" data-label="Ngủ đêm">🌙</button>
+<button id="lotteryFab" class="fab" data-a="lottery" data-label="Xổ số">🎫</button>
+<button id="writeFab" class="fab" data-a="latewrite" data-label="Thức đêm">🌌</button>
+
+<div id="sheet" class="hide"><div class="shx"><div class="shh"><b id="sht"></b><button class="b2" data-a="closeSheet">✕</button></div><div id="shb"></div></div></div>
+<div id="modal" class="hide"></div>
+<div id="toast"></div>
+
+<script>
+  'use strict';
+const $=s=>document.querySelector(s);
+const cl=(v,a,b)=>Math.max(a,Math.min(b,v));
+const F=n=>Math.round(n).toLocaleString('vi-VN');
+
+/* ====== STORAGE KEYS ====== */
+const KEY='vkdiary_v17';
+const SLOT='vkdiary_slot_v17';
+const REC_KEY='vkdiary_rec_v17';
+const ACH_KEY='vkdiary_ach_v17';
+const SAVE_VER=17;
+
+/* ====== GAME CONSTANTS ====== */
+const SCHOLAR=[0,750,875];
+const START_MONEY=500;
+const MAX_WEEKS=[0,20,30];
+const WRITE_RATE=[0,2.0,1.4];
+const FIX_RATE=[0,1.0,0.7];
+const MEET_RATE=[0,0.7,0.4];
+const LIB_RATE=[0,0.7,0.4];
+const NIGHT_RATE=[0,1.3,1.0];
+const ACTIONS_PER_PERIOD=2;
+const PERIODS_PER_DAY=3;
+const ACTIONS_PER_DAY=ACTIONS_PER_PERIOD*PERIODS_PER_DAY;
+const WEEKS_PER_YEAR=5;
+const STIPEND_WEEKS=[0,10,20];
+const LOTTERY_MIN_WEEK=1;
+const RENT_PER_WEEK=[0,0,200];
+const RANDOM_EVENT_CHANCE=0.30;
+const GOOD_EVENT_RATE=0.60;
+
+const WD=['Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy','Chủ Nhật'];
+const PERIODS=['🌅 Sáng','☀️ Chiều','🌙 Tối'];
+
+/* ====== ACTIONS ====== */
+const ACTS=[
+  {k:'s_tv', n:'Thư viện',   e:'📚', p:0, hp:-6, sp:-12, lu:'lib', grp:'hoc'},
+  {k:'s_lab',n:'Lab thầy',   e:'🧪', p:0, hp:-5, sp:+2,  lu:'lib', grp:'hoc'},
+  {k:'s_ts', n:'Pha trà sữa',e:'🧋', p:0, hp:-8, sp:-10, m:+45,   grp:'lam', onlyCh:1},
+  {k:'s_sh', n:'Đi shopping',e:'🛍️',p:0, hp:-3, sp:+15,  m:-40,   grp:'choi'},
+  {k:'s_an', n:'Ăn sáng',    e:'🍚', p:0, hp:+8, sp:+3,  m:-5,    grp:'an'},
+  {k:'s_ngu',n:'Ngủ nướng',  e:'😴', p:0, hp:+10,sp:+15,          grp:'ngu'},
+
+  {k:'c_wr', n:'Viết luận',  e:'✍️', p:1, hp:-10,sp:-15, m:-30,   lu:'write', grp:'viet'},
+  {k:'c_gv', n:'Gặp GV',     e:'🧑‍🏫',p:1, hp:-3, sp:-5,           lu:'meet',  grp:'viet'},
+  {k:'c_ta', n:'Trợ giảng',  e:'🎓', p:1, hp:-10,sp:-10, m:+75,   grp:'lam'},
+  {k:'c_cf', n:'Đi cafe',    e:'☕', p:1, hp:-2, sp:+18, m:-25,   grp:'choi'},
+  {k:'c_an', n:'Ăn trưa',    e:'🍜', p:1, hp:+12,sp:+4,  m:-8,    grp:'an'},
+  {k:'c_ngu',n:'Ngủ nướng',  e:'😴', p:1, hp:+10,sp:+15,          grp:'ngu'},
+
+  {k:'t_dh', n:'Dạy online', e:'💻', p:2, hp:-10,sp:-12, m:+70,   grp:'lam'},
+  {k:'t_goi',n:'Gọi nhà',    e:'📞', p:2, hp:0,  sp:+25, m:-5,    grp:'choi'},
+  {k:'t_sh', n:'Lướt shop',  e:'🛍️',p:2, hp:-3, sp:+22, m:-60,   grp:'choi'},
+  {k:'t_fx', n:'Sửa lỗi',    e:'🔍', p:2, hp:-4, sp:-8,           lu:'fix', grp:'viet'},
+  {k:'t_an', n:'Ăn tối',     e:'🍲', p:2, hp:+12,sp:+4,  m:-8,    grp:'an'},
+  {k:'t_ngu',n:'Ngủ nướng',  e:'😴', p:2, hp:+10,sp:+15,          grp:'ngu'}
+];
+
+/* ====== BAD EVENTS ====== */
+const BAD_EVENTS=[
+  {id:'cold', e:'🤒', title:'Cảm cúm', desc:'Vân Khánh bị cảm. Sốt 38 độ.',
+   choices:[
+     {text:'Nghỉ ngơi 1 ngày', result:{hp:+15,skipActions:2}, sub:'Mất 2 action'},
+     {text:'Cố đi học', result:{hp:-5,sp:-10}, sub:'Có thể lây cho bạn'}
+   ]},
+  {id:'deadline', e:'😰', title:'Lo deadline', desc:'GS. Trần nhắn: "Tuần sau nộp bản thảo."',
+   choices:[
+     {text:'Thức đêm viết', result:{lu:+3,hp:-10,sp:-15}, sub:'+3% luận văn'},
+     {text:'Ngủ sớm, mai viết', result:{hp:+5,lu:-2}, sub:'Trễ deadline'}
+   ]},
+  {id:'phone', e:'📱', title:'Điện thoại hỏng', desc:'Màn hình nứt. Sửa 100 tệ.',
+   choices:[
+     {text:'Sửa ngay', result:{money:-100}, sub:'−100 tệ'},
+     {text:'Để đó, dùng tạm', result:{sp:-5}, sub:'−5 SP, khó liên lạc'}
+   ]},
+  {id:'lostdata', e:'📚', title:'Mất tài liệu', desc:'File luận văn bị lỗi.',
+   choices:[
+     {text:'Viết lại từ đầu', result:{lu:+3,hp:-10,sp:-10}, sub:'Mất thời gian'},
+     {text:'Tìm backup', result:{lu:0}, sub:'50% may mắn'}
+   ]},
+  {id:'rain', e:'🌧️', title:'Mưa ướt sách', desc:'Sách bị ướt do mưa.',
+   choices:[
+     {text:'Phơi sách, mua sách mới', result:{money:-50}, sub:'−50 tệ'},
+     {text:'Dùng sách cũ', result:{lu:-2}, sub:'−2% luận'}
+   ]},
+  {id:'block', e:'🧠', title:'Bí ý tưởng', desc:'Viết mãi không ra. 2 tiếng nhìn màn hình.',
+   choices:[
+     {text:'Đi dạo, thư giãn', result:{sp:+10,lu:+2}, sub:'70% có ý tưởng'},
+     {text:'Cố viết tiếp', result:{sp:-10,lu:+1}, sub:'30% có ý tưởng'}
+   ]},
+  {id:'homesick', e:'😔', title:'Nhớ nhà', desc:'Vân Khánh nhớ nhà. Muốn khóc.',
+   choices:[
+     {text:'Gọi mẹ', result:{sp:+20,hp:+5}, sub:'+20 SP, +5 HP'},
+     {text:'Viết nhật ký', result:{sp:+10}, sub:'+10 SP'}
+   ]},
+  {id:'laptop', e:'🔥', title:'Máy tính hỏng', desc:'Laptop sập nguồn. Sửa 80 tệ.',
+   choices:[
+     {text:'Sửa ngay', result:{money:-80}, sub:'−80 tệ'},
+     {text:'Mượn máy bạn', result:{sp:-5}, sub:'20% mất dữ liệu'}
+   ]},
+  {id:'dress', e:'💸', title:'Váy áo rách', desc:'Váy rách. Mua váy mới 80 tệ.',
+   choices:[
+     {text:'Mua váy mới', result:{money:-80,sp:+10}, sub:'−80 tệ, +10 SP'},
+     {text:'Vá lại', result:{sp:-5}, sub:'−5 SP'}
+   ]},
+  {id:'bowl', e:'🥢', title:'Bát đũa vỡ', desc:'Bát vỡ. Mua bát mới 30 tệ.',
+   choices:[
+     {text:'Mua bát mới', result:{money:-30}},
+     {text:'Dùng bát cũ', result:{sp:-5}}
+   ]},
+  {id:'friendangry', e:'😢', title:'Bạn thân giận', desc:'Hòa giận Vân Khánh vì hiểu lầm.',
+   choices:[
+     {text:'Xin lỗi, làm hòa', result:{sp:+15}, sub:'+15 SP'},
+     {text:'Để đó, chờ Hòa nguội', result:{sp:-15}, sub:'−15 SP'}
+   ]},
+  {id:'slip', e:'🩹', title:'Trượt chân', desc:'Vân Khánh trượt chân ở cầu thang.',
+   choices:[
+     {text:'Nghỉ ngơi 1 ngày', result:{hp:+10,skipActions:2}, sub:'Mất 2 action'},
+     {text:'Cố đi học', result:{hp:-8,sp:-5}, sub:'−8 HP'}
+   ]},
+  {id:'tooth', e:'🦷', title:'Đau răng', desc:'Đau răng. Khám nha sĩ 100 tệ.',
+   choices:[
+     {text:'Đi khám', result:{money:-100,hp:+15}, sub:'−100 tệ, +15 HP'},
+     {text:'Uống thuốc giảm đau', result:{hp:-5,sp:-10}, sub:'Đau kéo dài'}
+   ]},
+  {id:'water', e:'🚿', title:'Mất nước nóng', desc:'KTX mất nước nóng 3 ngày.',
+   choices:[
+     {text:'Ra ngoài tắm', result:{money:-30,sp:+5}, sub:'−30 tệ'},
+     {text:'Tắm nước lạnh', result:{sp:-8,hp:-5}, sub:'30% bị cảm'}
+   ]},
+  {id:'roach', e:'🐜', title:'Gián trong phòng', desc:'Có gián trong phòng. Vân Khánh sợ.',
+   choices:[
+     {text:'Mua thuốc diệt', result:{money:-20,sp:+5}, sub:'−20 tệ'},
+     {text:'Để đó, chịu đựng', result:{sp:-5}, sub:'−5 SP'}
+   ]}
+];
+
+/* ====== GOOD EVENTS ====== */
+const GOOD_EVENTS=[
+  {id:'giftbook', e:'🎁', title:'Được tặng sách', desc:'Đình Hưng tặng Vân Khánh cuốn sách quý.',
+   choices:[
+     {text:'Cảm ơn và đọc ngay', result:{lu:+1,sp:+5}, sub:'+1% luận'},
+     {text:'Cảm ơn và để đó', result:{sp:+3}}
+   ]},
+  {id:'momcall', e:'📞', title:'Mẹ gọi', desc:'Mẹ gọi hỏi thăm.',
+   choices:[
+     {text:'Nói chuyện lâu', result:{sp:+20}, sub:'+20 SP'},
+     {text:'Nói ngắn', result:{sp:+10}, sub:'+10 SP'}
+   ]},
+  {id:'freefood', e:'🍜', title:'Bà chủ tặng cơm', desc:'Bà Trương dúi cơm miễn phí.',
+   choices:[
+     {text:'Nhận và cảm ơn', result:{hp:+10,sp:+5}},
+     {text:'Từ chối', result:{sp:-3}}
+   ]},
+  {id:'idea', e:'💡', title:'Ý tưởng mới', desc:'Ý tưởng hay chợt đến.',
+   choices:[
+     {text:'Viết ngay', result:{lu:+2}, sub:'+2% luận'},
+     {text:'Ghi chú, viết sau', result:{lu:+1}, sub:'+1% luận'}
+   ]},
+  {id:'lucky', e:'💰', title:'Quà nhỏ', desc:'Nhận được tiền lì xì 50 tệ.',
+   choices:[
+     {text:'Nhận', result:{money:+50}},
+     {text:'Từ chối', result:{sp:-3}}
+   ]},
+  {id:'flower', e:'🌸', title:'Hoa nở', desc:'Thấy hoa nở trên đường.',
+   choices:[
+     {text:'Dừng lại ngắm', result:{sp:+10}, sub:'+10 SP'},
+     {text:'Đi tiếp', result:{}}
+   ]},
+  {id:'sister', e:'💌', title:'Em gái nhắn', desc:'Em gái Vân Anh nhắn: "Chị ơi, em được bonus!"',
+   choices:[
+     {text:'Nhận', result:{money:+200,sp:+15}, sub:'+200 tệ, +15 SP'},
+     {text:'Từ chối', result:{sp:-3}}
+   ]},
+  {id:'refund', e:'💵', title:'Hoàn học phí', desc:'Trường hoàn tiền 300 tệ.',
+   choices:[
+     {text:'Nhận', result:{money:+300}},
+     {text:'Từ chối', result:{sp:-3}}
+   ]},
+  {id:'lixi', e:'🧧', title:'Lì xì muộn', desc:'Họ hàng gửi lì xì 100 tệ.',
+   choices:[
+     {text:'Nhận', result:{money:+100}},
+     {text:'Từ chối', result:{sp:-3}}
+   ]},
+  {id:'tea', e:'🍵', title:'Trà gừng', desc:'Uống trà gừng ấm.',
+   choices:[
+     {text:'Uống', result:{hp:+10}},
+     {text:'Không uống', result:{}}
+   ]},
+  {id:'paper', e:'📜', title:'Bài báo duyệt', desc:'Bài báo được chấp nhận.',
+   choices:[
+     {text:'Ăn mừng', result:{money:-50,sp:+20,lu:+3}, sub:'−50 tệ, +3% luận'},
+     {text:'Tiếp tục làm việc', result:{lu:+3,sp:+5}, sub:'+3% luận'}
+   ]},
+  {id:'rarebook', e:'📖', title:'Tài liệu quý', desc:'Tìm được tài liệu hiếm.',
+   choices:[
+     {text:'Đọc ngay', result:{lu:+1}},
+     {text:'Lưu lại, đọc sau', result:{lu:+0.5}}
+   ]},
+  {id:'praise', e:'🤝', title:'Được khen', desc:'Được GS. Trần khen trước lớp.',
+   choices:[
+     {text:'Cảm ơn thầy', result:{sp:+20}},
+     {text:'Im lặng, cúi đầu', result:{sp:+15}}
+   ]},
+  {id:'cake', e:'🎂', title:'Bạn tặng bánh', desc:'Hòa tặng bánh sinh nhật.',
+   choices:[
+     {text:'Ăn cùng Hòa', result:{hp:+10,sp:+10}},
+     {text:'Ăn một mình', result:{hp:+5}}
+   ]},
+  {id:'lotterywin', e:'🍀', title:'Trúng thưởng nhỏ', desc:'Trúng thưởng nội bộ 200 tệ.',
+   choices:[
+     {text:'Nhận', result:{money:+200,sp:+10}},
+     {text:'Chia cho bạn bè', result:{money:+100,sp:+20}}
+   ]}
+];
+
+/* ====== CHOICE EVENTS ====== */
+const CHOICE_EVENTS = {
+  'c1_w3_lostwallet': {
+    ch:1, week:3, once:true,
+    e:'😰', title:'Mất ví',
+    desc:'Mất ví 200 tệ ở tàu điện. Vân Khánh sờ túi — trống không.',
+    choices:[
+      {text:'Kể với Hòa, vay tiền', sub:'+100 tệ, +10 SP. Nợ 100 tệ phải trả tuần 6',
+        result:{money:+100,sp:+10}, flag:'debt_hoa'},
+      {text:'Giấu, không kể ai', sub:'−15 SP. 1 tuần sau giảm 10% thu nhập',
+        result:{sp:-15}, flag:'secret_loss'}
+    ]
+  },
+  'c1_w8_linh': {
+    ch:1, week:8, once:true, isLinh:true,
+    e:'💔', title:'Linh khóc trong thư viện',
+    desc:'Linh ngồi co ro ở góc thư viện. "Tao không chịu nổi nữa Khánh ạ..."',
+    choices:[
+      {text:'"Mày ở lại thêm 1 học kỳ nữa."', sub:'+15 SP, mất 1 ngày. Linh sẽ ở lại',
+        result:{sp:+15,skipDays:1}, flag:'linh_stayed'},
+      {text:'"Nếu mày muốn về thì về."', sub:'+5 SP. Linh về cuối học kỳ 1',
+        result:{sp:+5}, flag:'linh_left_early'}
+    ]
+  },
+  'c1_w12_hoa': {
+    ch:1, week:12, once:true,
+    e:'📞', title:'Hòa tâm sự',
+    desc:'Hòa gọi lúc 11h đêm. Giọng run. "Tao... tao không ổn."',
+    choices:[
+      {text:'Ở bên Hòa cả đêm', sub:'+20 SP, mất 1 ngày',
+        result:{sp:+20,skipDays:1}, flag:'hoa_friend'},
+      {text:'Nghe 30 phút rồi về', sub:'+5 SP, −5 SP cảm giác có lỗi',
+        result:{sp:-5}, flag:'hoa_distant'}
+    ]
+  },
+  'c1_w15_truongkien': {
+    ch:1, week:15, once:true,
+    e:'😤', title:'Trương Kiến xúc phạm',
+    desc:'"Sinh viên Việt Nam chỉ biết học bổng, không có thực lực."',
+    choices:[
+      {text:'Im lặng, để Đình Hưng bảo vệ', sub:'+10 SP, quan hệ tốt với Đình Hưng',
+        result:{sp:+10}, flag:'dinhhung_friend'},
+      {text:'Tự đứng lên phản bác', sub:'+20 SP, quan hệ xấu với Trương Kiến',
+        result:{sp:+20}, flag:'confident'}
+    ]
+  },
+  'c1_w18_suytbohoc': {
+    ch:1, week:18, once:true,
+    e:'💔', title:'Suýt bỏ học',
+    desc:'11h đêm. Bản thảo đầy lỗi. Vân Khánh gọi mẹ — không ai nghe.',
+    choices:[
+      {text:'Đứng dậy, viết lại từ đầu', sub:'−15 SP, +1% luận văn, +flag kiên định',
+        result:{sp:-15,lu:+1}, flag:'resilient'},
+      {text:'Bỏ học, về nhà', sub:'Mở ending "Về nhà" sớm',
+        result:{}, flag:'quit_early', special:'quit'}
+    ]
+  },
+  'c2_w1_shanghai': {
+    ch:2, week:1, once:true,
+    e:'🚄', title:'Lên Thượng Hải',
+    desc:'Đình Hưng đưa Vân Khánh cuốn sổ trắng ở ga Bắc Kinh.',
+    choices:[
+      {text:'Nhận sổ, hứa viết', sub:'+10 SP, mở flag "gratitude"',
+        result:{sp:+10}, flag:'gratitude'},
+      {text:'Cảm ơn nhưng từ chối', sub:'+5 SP',
+        result:{sp:+5}}
+    ]
+  },
+  'c2_w3_singapore': {
+    ch:2, week:3, once:true,
+    e:'🌏', title:'Hội thảo Singapore',
+    desc:'Cơ hội vàng. 2000 tệ. Vân Khánh chỉ có 3500.',
+    choices:[
+      {text:'Vay em gái, đi dự', sub:'−2000 tệ, +4% luận, +15 SP',
+        result:{money:-2000,lu:+4,sp:+15}, flag:'singapore'},
+      {text:'Không đi, tiết kiệm', sub:'−10 SP, không mất tiền',
+        result:{sp:-10}, flag:'skip_singapore'}
+    ]
+  },
+  'c2_w7_tokyo': {
+    ch:2, week:7, once:true,
+    e:'🌏', title:'Hội thảo Tokyo',
+    desc:'Bay sang Tokyo trình bày nghiên cứu. 2500 tệ.',
+    choices:[
+      {text:'Đi, trình bày', sub:'−2500 tệ, +5% luận, +20 SP',
+        result:{money:-2500,lu:+5,sp:+20}, flag:'tokyo'},
+      {text:'Không đi', sub:'−5 SP',
+        result:{sp:-5}}
+    ]
+  },
+  'c2_w24_dad': {
+    ch:2, week:24, once:true,
+    e:'📵', title:'Bố không nghe máy',
+    desc:'Bố không nghe máy. Mẹ nói "bố mệt". Vân Khánh biết mẹ đang giấu.',
+    choices:[
+      {text:'Về thăm bố ngay', sub:'−3000 tệ, +30 SP, mất 1 tuần',
+        result:{money:-3000,sp:+30,skipDays:7}, flag:'filial'},
+      {text:'Ở lại, tin mẹ', sub:'−20 SP. Lo lắng kéo dài',
+        result:{sp:-20}, flag:'worried'}
+    ]
+  },
+  'c2_w28_dad_pride': {
+    ch:2, week:28, once:true,
+    e:'👨‍👩‍👧‍👦', title:'Bố nói "Bố tự hào về con"',
+    desc:'Cả nhà qua thăm. Bố đứng dậy, tay run cầm ly: "...Bố tự hào về con."',
+    choices:[
+      {text:'Ôm bố', sub:'+60 SP, +30 HP, mở flag "pride"',
+        result:{sp:+60,hp:+30}, flag:'pride'},
+      {text:'Cúi đầu, im lặng', sub:'+40 SP',
+        result:{sp:+40}}
+    ]
+  }
+};
+
+/* ====== CULTURAL EVENTS ====== */
+const CULTURAL_EVENTS = [
+  {
+    id:'khanh_wedding',
+    e:'💌', title:'Bạn Khanh ở quê cưới',
+    desc:'Thiệp cưới gửi từ quê. Khanh — bạn thân từ cấp 3.',
+    choices:[
+      {text:'Về dự cưới', sub:'−1000 tệ, +30 SP, mất 2 ngày',
+        result:{money:-1000,sp:+30,skipDays:2}, flag:'khanh_wedding'},
+      {text:'Gửi tiền mừng', sub:'−500 tệ, +10 SP',
+        result:{money:-500,sp:+10}}
+    ]
+  },
+  {
+    id:'hoa_birth',
+    e:'👶', title:'Hòa ở nhà sinh con',
+    desc:'Hòa gọi video. Con gái. Đặt tên là An Nhiên.',
+    choices:[
+      {text:'Về thăm Hòa và cháu', sub:'−800 tệ, +40 SP, mất 2 ngày',
+        result:{money:-800,sp:+40,skipDays:2}, flag:'hoa_birth_visit'},
+      {text:'Gửi tiền mừng', sub:'−300 tệ, +15 SP',
+        result:{money:-300,sp:+15}}
+    ]
+  }
+];
+
+/* ====== OFFERS ====== */
+const OFFERS = [
+  {id:'trip', e:'✈️', title:'Hòa rủ đi Cố Cung', desc:'Đi chơi cả buổi ở Cố Cung.',
+   choices:[
+     {text:'Đi cùng Hòa', sub:'−400 tệ, +40 SP, +2% luận', result:{money:-400,sp:+40,lu:+2,skipDays:0.5}},
+     {text:'Ở nhà viết luận', sub:'+2% luận, −5 SP', result:{lu:+2,sp:-5}}
+   ]},
+  {id:'picnic', e:'🏞️', title:'Dã ngoại cuối tuần', desc:'Cả lab đi dã ngoại.',
+   choices:[
+     {text:'Đi', sub:'−150 tệ, +25 SP, +5 HP', result:{money:-150,sp:+25,hp:+5,skipDays:0.5}},
+     {text:'Không đi', sub:'+1% luận, −10 SP', result:{lu:+1,sp:-10}}
+   ]},
+  {id:'ktv', e:'🎤', title:'KTV cùng lớp', desc:'Lớp tổ chức hát karaoke.',
+   choices:[
+     {text:'Đi', sub:'−200 tệ, +30 SP, +10 HP', result:{money:-200,sp:+30,hp:+10,skipDays:0.5}},
+     {text:'Không đi', sub:'+1% luận, −5 SP', result:{lu:+1,sp:-5}}
+   ]},
+  {id:'party', e:'🍲', title:'Liên hoan cuối kỳ', desc:'Liên hoan nhóm nghiên cứu.',
+   choices:[
+     {text:'Đi', sub:'−100 tệ, +20 SP, +5 HP', result:{money:-100,sp:+20,hp:+5,skipDays:0.5}},
+     {text:'Không đi', sub:'+1% luận, −10 SP', result:{lu:+1,sp:-10}}
+   ]},
+  {id:'coat', e:'🧥', title:'Mùa đông mua áo', desc:'Trời trở lạnh.',
+   choices:[
+     {text:'Mua áo', sub:'−250 tệ, +5 HP, +10 SP', result:{money:-250,hp:+5,sp:+10,skipDays:0.3}},
+     {text:'Mặc áo cũ', sub:'20% bị cảm', result:{}, flag:'cold_risk'}
+   ]},
+  {id:'books', e:'📚', title:'Hiệu sách giảm giá', desc:'Sale 50% sách chuyên ngành.',
+   choices:[
+     {text:'Mua sách', sub:'−180 tệ, +2% luận', result:{money:-180,lu:+2,skipDays:0.3}},
+     {text:'Không mua', sub:'Không mất gì', result:{}}
+   ]},
+  {id:'bed', e:'🛏️', title:'Chăn ga mới', desc:'Chăn ga mùa đông.',
+   choices:[
+     {text:'Mua', sub:'−120 tệ, +5 HP, +10 SP', result:{money:-120,hp:+5,sp:+10,skipDays:0.3}},
+     {text:'Dùng chăn cũ', sub:'−5 HP/tuần', result:{}, flag:'poor_sleep'}
+   ]},
+  {id:'cook', e:'🥢', title:'Nồi cơm mini', desc:'Nấu ăn tiết kiệm.',
+   choices:[
+     {text:'Mua', sub:'−100 tệ, tiết kiệm 3 tệ/bữa mãi mãi', result:{money:-100,skipDays:0.3}, flag:'have_cooker'},
+     {text:'Không mua', sub:'Tiếp tục ăn ngoài', result:{}}
+   ]},
+  {id:'bday', e:'🎂', title:'Sinh nhật bạn', desc:'Sinh nhật Hòa.',
+   choices:[
+     {text:'Mua quà', sub:'−80 tệ, +20 SP', result:{money:-80,sp:+20,skipDays:0.3}},
+     {text:'Chỉ chúc mừng', sub:'−10 SP', result:{sp:-10}}
+   ]}
+];
+
+/* ====== BIG EVENTS ====== */
+const BIG_EVENTS=[
+  {id:'conf', e:'🎓', title:'Hội nghị SV Quốc tế', desc:'Hội nghị nghiên cứu sinh quốc tế.',
+   choices:[
+     {text:'Tham gia', sub:'−800 tệ, +3% luận, +25 SP', result:{money:-800,lu:+3,sp:+25,skipDays:1}},
+     {text:'Bỏ qua', sub:'Không mất gì', result:{}}
+   ]},
+  {id:'essay', e:'🏆', title:'Cuộc thi viết luận', desc:'Cuộc thi viết luận cấp quốc gia.',
+   choices:[
+     {text:'Tham gia', sub:'−500 tệ, +5% luận, +30 SP', result:{money:-500,lu:+5,sp:+30,skipDays:1}},
+     {text:'Bỏ qua', sub:'', result:{}}
+   ]},
+  {id:'seoul', e:'🌏', title:'Hội thảo Seoul', desc:'Bay sang Seoul dự hội thảo.',
+   choices:[
+     {text:'Đi', sub:'−1800 tệ, +4% luận, +15 SP', result:{money:-1800,lu:+4,sp:+15,skipDays:2}},
+     {text:'Bỏ qua', sub:'', result:{}}
+   ]},
+  {id:'forum', e:'🎤', title:'Diễn đàn Hán ngữ', desc:'Diễn đàn Hán ngữ quốc tế tại Bắc Kinh.',
+   choices:[
+     {text:'Tham gia', sub:'−1200 tệ, +3% luận, +20 SP', result:{money:-1200,lu:+3,sp:+20,skipDays:1}},
+     {text:'Bỏ qua', sub:'', result:{}}
+   ]},
+  {id:'culture', e:'📖', title:'Tuần lễ văn hóa', desc:'Tuần lễ giao lưu văn hóa Việt-Trung.',
+   choices:[
+     {text:'Tham gia', sub:'−600 tệ, +2% luận, +35 SP', result:{money:-600,lu:+2,sp:+35,skipDays:1}},
+     {text:'Bỏ qua', sub:'', result:{}}
+   ]},
+  {id:'museum', e:'🏛️', title:'Triển lãm bảo tàng', desc:'Bảo tàng Quốc gia mở triển lãm.',
+   choices:[
+     {text:'Đi', sub:'−200 tệ, +1% luận, +25 SP', result:{money:-200,lu:+1,sp:+25,skipDays:0.5}},
+     {text:'Bỏ qua', sub:'', result:{}}
+   ]}
+];
+
+/* ====== FIXED STORY ====== */
+const FIXED_STORY = [
+  {ch:1, week:1, e:'🌸', title:'Ngày đầu ở Bắc Kinh',
+   text:'Bà cụ Trung Quốc dẫn đường đến CNU. Bà nói: "Con gái, cố lên."',
+   reward:{sp:+5}},
+  {ch:1, week:5, e:'🧑‍🏫', title:'GS. Trần giao đề tài',
+   text:'"Tôi tin cô." — Lần đầu tiên Vân Khánh khóc ở Trung Quốc.',
+   reward:{sp:+10}},
+  {ch:1, week:17, e:'📄', title:'Bài báo đầu tiên được duyệt',
+   text:'GS. Trần: "Tiếp tục." — Vân Khánh đứng ở hành lang, nước mắt chảy.',
+   reward:{sp:+15, lu:+3}},
+  {ch:1, week:20, e:'👨‍👩‍👧‍👦', title:'Bố mẹ qua thăm',
+   text:'Bố đi khập khiễng nhưng cố đi nhanh. Tối đó, Vân Khánh nghe tiếng bố khóc.',
+   reward:{hp:+20, sp:+40, money:-300}},
+  {ch:2, week:12, e:'🎂', title:'Sinh nhật em trai',
+   text:'Khang 24 tuổi. Có người yêu. Vân Khánh cười — nhưng nước mắt chảy.',
+   reward:{sp:+15}},
+  {ch:2, week:15, e:'🎄', title:'Giáng sinh — Anna mời',
+   text:'Vân Khánh về phòng lúc 11h. Cô mở sổ, viết: "Mình không cô đơn."',
+   reward:{sp:+25}},
+  {ch:2, week:20, e:'😰', title:'Khủng hoảng luận án',
+   text:'3 tuần không viết được. 3h sáng, Đình Hưng gọi từ Bắc Kinh: "Em ổn không?"',
+   reward:{sp:+20, lu:-1}},
+  {ch:2, week:30, e:'🎓', title:'Bảo vệ luận án tiến sĩ',
+   text:'→ Xem ending',
+   reward:{}}
+];
+
+/* ====== SAVE STATE ====== */
+const D0=()=>({
+  day:1,week:1,yearWeek:1,year:1,ch:1,period:0,
+  hp:80,sp:70,lu:0,money:START_MONEY,
+  periodActionsLeft:ACTIONS_PER_PERIOD,
+  dayActionsLeft:ACTIONS_PER_DAY,
+  rolledToday:false,
+  lotteryDoneThisYear:false,
+  bigEventsThisYear:[],
+  culturalEventThisYear:null,
+  logDay:[],logWeek:[],logAll:[],
+  pendingOffer:null,
+  pendingBigEvent:null,
+  pendingCulturalEvent:null,
+  pendingChoiceEvent:null,
+  notes:[],
+  seenEvents:{},
+  seen:0,
+  snd:1,
+  endReason:'',
+  flags:{}
+});
+
+let S=D0();
+try{
+  const raw=localStorage.getItem(KEY);
+  if(raw){const o=JSON.parse(raw);if(o&&o.ch&&o.day) S=Object.assign(D0(),o);}
+}catch(e){}
+
+if(typeof S.periodActionsLeft!=='number') S.periodActionsLeft=ACTIONS_PER_PERIOD;
+if(typeof S.dayActionsLeft!=='number') S.dayActionsLeft=ACTIONS_PER_DAY;
+if(typeof S.yearWeek!=='number') S.yearWeek=((S.week-1)%WEEKS_PER_YEAR)+1;
+if(typeof S.year!=='number') S.year=Math.ceil(S.week/WEEKS_PER_YEAR);
+if(!Array.isArray(S.bigEventsThisYear)) S.bigEventsThisYear=[];
+if(!S.seenEvents) S.seenEvents={};
+if(!S.flags) S.flags={};
+if(typeof S.lotteryDoneThisYear!=='boolean') S.lotteryDoneThisYear=false;
+
+/* ====== ACHIEVEMENTS ====== */
+const ACHIEVEMENTS=[
+  {id:'a_first_action', ico:'🎬', name:'Bước đầu tiên', desc:'Thực hiện action đầu tiên'},
+  {id:'a_first_week',   ico:'📅', name:'Tuần đầu tiên', desc:'Hoàn thành 1 tuần'},
+  {id:'a_first_month',  ico:'🗓️', name:'Tháng đầu tiên', desc:'Hoàn thành 4 tuần'},
+  {id:'a_first_year',   ico:'🎊', name:'Năm đầu tiên', desc:'Hoàn thành 5 tuần'},
+  {id:'a_ch1_done',     ico:'🎓', name:'Thạc sĩ', desc:'Hoàn thành Chương 1'},
+  {id:'a_ch2_done',     ico:'🎓🎓', name:'Tiến sĩ', desc:'Hoàn thành Chương 2'},
+  {id:'a_grad',         ico:'🏆', name:'Tốt nghiệp', desc:'Mở ending tốt nghiệp'},
+  {id:'a_home',         ico:'🌸', name:'Về nhà', desc:'Mở ending về nhà'},
+  {id:'a_lottery',      ico:'💰', name:'Trúng số', desc:'Mở ending trúng xổ số'},
+  {id:'a_timeout',      ico:'⏰', name:'Quá hạn', desc:'Mở ending quá hạn'},
+  {id:'a_writer_10',    ico:'✍️', name:'Cây bút nhỏ', desc:'Viết luận 10 lần'},
+  {id:'a_writer_50',    ico:'📝', name:'Cây bút lớn', desc:'Viết luận 50 lần'},
+  {id:'a_note_10',      ico:'📖', name:'Nhà văn nhí', desc:'Viết 10 note'},
+  {id:'a_note_50',      ico:'📚', name:'Nhà văn thực thụ', desc:'Viết 50 note'},
+  {id:'a_hungry',       ico:'🍜', name:'Đói bụng', desc:'HP < 20 lần đầu'},
+  {id:'a_sad',          ico:'😢', name:'Tâm trạng tệ', desc:'SP < 20 lần đầu'},
+  {id:'a_rich',         ico:'💵', name:'Tiểu phú', desc:'Tiền > 10,000 tệ'},
+  {id:'a_rich2',        ico:'💰💰', name:'Đại phú', desc:'Tiền > 50,000 tệ'},
+  {id:'a_poor',         ico:'🪙', name:'Nghèo', desc:'Tiền < 100 tệ'},
+  {id:'a_event_10',     ico:'🎲', name:'Người trải nghiệm', desc:'Gặp 10 event'},
+  {id:'a_night_owl',    ico:'🌌', name:'Cú đêm', desc:'Thức đêm 10 lần'},
+  {id:'a_perfect',      ico:'⭐', name:'Hoàn hảo', desc:'Tốt nghiệp với HP+SP > 80, tiền > 20k'},
+  {id:'a_speedrun',     ico:'⚡', name:'Thần tốc', desc:'Tốt nghiệp < 200 ngày'},
+  {id:'a_slowrun',      ico:'🐢', name:'Chậm mà chắc', desc:'Tốt nghiệp > 400 ngày'},
+  {id:'a_linh_friend',  ico:'💗', name:'Bạn của Linh', desc:'Ở bên Linh khi cô cần'},
+  {id:'a_hoa_friend',   ico:'🤝', name:'Bạn của Hòa', desc:'Ở bên Hòa cả đêm'},
+  {id:'a_resilient',    ico:'🛡️', name:'Kiên định', desc:'Suýt bỏ học nhưng không bỏ'},
+  {id:'a_pride',        ico:'🌸', name:'Niềm tự hào', desc:'Nghe bố nói "Bố tự hào về con"'}
+];
+
+/* ====== DAILY QUOTES ====== */
+const DAILY_QUOTES=[
+  "Hôm nay trời đẹp. Vân Khánh thấy nhẹ lòng.",
+  "Một ngày mới, một cơ hội mới.",
+  "Không ai sinh ra đã giỏi. Tất cả đều phải học.",
+  "Xa nhà không có nghĩa là cô đơn.",
+  "Mỗi trang sách là một bước gần hơn đến ước mơ.",
+  "Đôi khi chỉ cần cố thêm một chút.",
+  "Vân Khánh nhớ mùi cơm mẹ nấu.",
+  "Bắc Kinh mùa này đẹp lắm.",
+  "Tiếng Trung khó, nhưng không khó bằng bỏ cuộc.",
+  "Thư viện là nhà thứ hai của cô.",
+  "Hôm qua khó khăn, hôm nay cố gắng hơn.",
+  "Mỗi bước đi đều có ý nghĩa.",
+  "Vân Khánh không cô đơn — cô có ước mơ.",
+  "Trời lạnh, nhưng lòng ấm.",
+  "Một tách trà nóng làm mọi thứ dịu lại.",
+  "Hôm nay cô sẽ viết được nhiều hơn hôm qua.",
+  "Không có con đường nào trải hoa hồng.",
+  "Nhưng có những người bạn đồng hành.",
+  "Mẹ luôn ở đây, dù con ở đâu.",
+  "Vân Khánh tin vào chính mình.",
+  "Mỗi ngày là một món quà.",
+  "Cô không hoàn hảo. Nhưng cô đang cố gắng.",
+  "Đôi khi nghỉ ngơi cũng là cách tiến về phía trước.",
+  "Không có gì là mãi mãi — kể cả khó khăn.",
+  "Hôm nay trời trong. Cô mỉm cười.",
+  "Cô nhớ Phúc Thọ. Nhớ sông Hồng.",
+  "Nhưng cô cũng yêu Bắc Kinh.",
+  "Mỗi nơi cô đến đều để lại một phần trong cô.",
+  "Cô sẽ về nhà — khi cô sẵn sàng.",
+  "Hôm nay, cô viết tiếp câu chuyện của mình."
+];
+
+/* ====== MINIGAME SENTENCES ====== */
+const MINIGAME_SENTENCES = {
+  1: [
+    { cn: '汉语教育',     py: 'hànyǔ jiàoyù',       vi: 'Giáo dục Hán ngữ' },
+    { cn: '越南学生',     py: 'yuènán xuéshēng',    vi: 'Sinh viên Việt Nam' },
+    { cn: '研究生',       py: 'yánjiūshēng',        vi: 'Nghiên cứu sinh' },
+    { cn: '论文写作',     py: 'lùnwén xiězuò',      vi: 'Viết luận văn' },
+    { cn: '北京大学',     py: 'běijīng dàxué',      vi: 'Đại học Bắc Kinh' }
+  ],
+  2: [
+    { cn: '汉语教育在越南', py: 'hànyǔ jiàoyù zài yuènán',        vi: 'Giáo dục Hán ngữ ở Việt Nam' },
+    { cn: '对比视角研究',   py: 'duìbǐ shìjiǎo yánjiū',            vi: 'Nghiên cứu góc nhìn so sánh' },
+    { cn: '语言文化差异',   py: 'yǔyán wénhuà chāyì',              vi: 'Khác biệt ngôn ngữ và văn hóa' },
+    { cn: '国际学术会议',   py: 'guójì xuéshù huìyì',              vi: 'Hội nghị học thuật quốc tế' },
+    { cn: '博士论文答辩',   py: 'bóshì lùnwén dábiàn',             vi: 'Bảo vệ luận án tiến sĩ' }
+  ]
+};
+
+/* ====== STATE ====== */
+const T={modal:0,mq:[],sheet:'',mgActive:false,mgSentence:null,mgStart:0,mgInterval:null,mgBase:0};
 /* ====== SAVE / LOAD ====== */
 function pack(){return JSON.stringify({v:SAVE_VER,ts:Date.now(),data:S})}
 function save(){
