@@ -89,7 +89,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 }
 .stat-cell .bar-mini i{
   display:block;height:100%;width:100%;transform-origin:left center;transform:scaleX(0);
-  transition:transform .28s cubic-bezier(.4,0,.2,1);will-change:transform;
+  transition:transform .28s cubic-bezier(.4,0,.2,1);
 }
 .stat-cell.hp .bar-mini i{background:linear-gradient(90deg,#ffb3c1,#ff6b9d)}
 .stat-cell.sp .bar-mini i{background:linear-gradient(90deg,#ffe4a8,#ffb84d)}
@@ -98,7 +98,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   font-size:8.5px;font-weight:700;color:var(--mu);line-height:1;text-align:center;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;
 }
-.stat-cell.warn .bar-mini i{animation:warnBlink 1s ease-in-out infinite}
+.stat-cell.warn{background:#ffe0e8}
 @keyframes warnBlink{50%{opacity:.4}}
 
 /* ===== BADGE OFFER ===== */
@@ -108,7 +108,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   border:2px solid var(--ink);border-radius:10px;
   box-shadow:2px 2px 0 var(--ink);
   align-items:center;gap:8px;font-size:12px;font-weight:800;cursor:pointer;
-  animation:badgeSlideIn .3s ease-out, badgePulse 2s ease-in-out infinite 1s;
+  animation:badgeSlideIn .3s ease-out;box-shadow:2px 2px 0 var(--ink),0 0 0 3px rgba(255,184,77,.4);
   flex:none;
 }
 #offerBadge.on{display:flex}
@@ -188,7 +188,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   font-weight:800;font-size:11.5px;line-height:1.15;
   height:clamp(52px,6.8vh,64px);background:linear-gradient(180deg,#fff,#f5f0ff);
   color:var(--ink);padding:2px;box-shadow:2px 2px 0 var(--ink);
-  transition:transform .08s ease-out;will-change:transform;transform:translateZ(0);
+  transition:transform .08s ease-out;
 }
 .act b{font-size:22px;line-height:1.1;margin-bottom:2px;font-weight:400}
 .act span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -208,7 +208,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   background:linear-gradient(180deg,#a8e6d0,#7ecbaf);
   color:#fff;text-shadow:1px 1px 0 rgba(26,20,40,.4);
   box-shadow:2px 2px 0 var(--ink);letter-spacing:.4px;
-  will-change:transform;transform:translateZ(0);
+  
 }
 #nextBtn:active{transform:translate3d(2px,2px,0);box-shadow:0 0 0 var(--ink)}
 
@@ -221,7 +221,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   background:linear-gradient(180deg,#fff,#f5eeff);
   color:var(--ink);box-shadow:2px 2px 0 var(--ink);
   font-family:"Comfortaa","Quicksand",sans-serif;
-  will-change:transform;transform:translateZ(0);
+  
 }
 #nav button b{font-size:15px;line-height:1;font-weight:400}
 #nav button:active{transform:translate3d(2px,2px,0);box-shadow:0 0 0 var(--ink)}
@@ -231,7 +231,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   position:fixed;width:52px;height:52px;border-radius:50%;border:2px solid var(--ink);
   color:#fff;font-size:22px;display:grid;place-items:center;
   box-shadow:3px 3px 0 var(--ink);z-index:20;
-  transition:transform .12s ease-out;will-change:transform;transform:translateZ(0);
+  transition:transform .12s ease-out;
 }
 .fab:active{transform:translate3d(2px,2px,0);box-shadow:1px 1px 0 var(--ink)}
 .fab::after{
@@ -256,7 +256,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   border-radius:20px 20px 0 0;
   padding:14px 16px calc(env(safe-area-inset-bottom) + 18px);
   background:#fff;box-shadow:0 -6px 0 var(--ink);
-  animation:sup .25s ease-out;will-change:transform;
+  animation:sup .25s ease-out;
 }
 @keyframes sup{from{transform:translate3d(0,100%,0)}}
 .shh{
@@ -282,7 +282,7 @@ h3::before{content:"✿";color:#ff6b9d;font-size:15px}
   padding:6px 10px;font-weight:800;font-size:11.5px;white-space:nowrap;
   background:linear-gradient(180deg,#fff,#f0eaff);
   color:var(--ink);box-shadow:2px 2px 0 var(--ink);
-  will-change:transform;transform:translateZ(0);
+  
 }
 .b2.p{background:linear-gradient(180deg,#ffb3d1,#ff8fb8);color:#fff;text-shadow:1px 1px 0 rgba(26,20,40,.3)}
 .b2.g{background:linear-gradient(180deg,#a8e6d0,#7ecbaf);color:#fff;text-shadow:1px 1px 0 rgba(26,20,40,.3)}
@@ -302,56 +302,14 @@ h3::before{content:"✿";color:#ff6b9d;font-size:15px}
   border:3px solid var(--ink);border-radius:18px;padding:18px;background:#fff;
   box-shadow:6px 6px 0 var(--ink);
   animation:pp .22s ease-out;
-  will-change:transform,opacity;
+  
   position:relative;
 }
 @keyframes pp{from{transform:scale(.92);opacity:0}}
 
-.bx.event-highlight{
-  border-color:#ff6b9d;
-  box-shadow:
-    6px 6px 0 var(--ink),
-    0 0 0 6px rgba(255,107,157,.35),
-    0 0 30px rgba(255,107,157,.5);
-  animation:pp .22s ease-out, eventPulse 1.5s ease-in-out infinite .3s;
-}
-@keyframes eventPulse {
-  0%,100% {
-    box-shadow:
-      6px 6px 0 var(--ink),
-      0 0 0 6px rgba(255,107,157,.35),
-      0 0 30px rgba(255,107,157,.5);
-  }
-  50% {
-    box-shadow:
-      6px 6px 0 var(--ink),
-      0 0 0 12px rgba(255,107,157,.5),
-      0 0 50px rgba(255,107,157,.7);
-  }
-}
+.bx.event-highlight{border-color:#ff6b9d;box-shadow:6px 6px 0 var(--ink),0 0 0 5px rgba(255,107,157,.4)}
 
-.bx.cultural-highlight{
-  border-color:#da251d;
-  box-shadow:
-    6px 6px 0 var(--ink),
-    0 0 0 6px rgba(218,37,29,.35),
-    0 0 30px rgba(218,37,29,.5);
-  animation:pp .22s ease-out, culturalPulse 2s ease-in-out infinite .3s;
-}
-@keyframes culturalPulse {
-  0%,100% {
-    box-shadow:
-      6px 6px 0 var(--ink),
-      0 0 0 6px rgba(218,37,29,.35),
-      0 0 30px rgba(218,37,29,.5);
-  }
-  50% {
-    box-shadow:
-      6px 6px 0 var(--ink),
-      0 0 0 12px rgba(218,37,29,.5),
-      0 0 50px rgba(218,37,29,.7);
-  }
-}
+.bx.cultural-highlight{border-color:#da251d;box-shadow:6px 6px 0 var(--ink),0 0 0 5px rgba(218,37,29,.35)}
 
 .cultural-banner{
   background:linear-gradient(90deg,#da251d,#ffcd00,#da251d);
@@ -380,7 +338,7 @@ h3::before{content:"✿";color:#ff6b9d;font-size:15px}
   width:100%;padding:11px;border:2px solid var(--ink);border-radius:10px;
   font-family:"Comfortaa",sans-serif;font-size:12.5px;font-weight:800;
   background:linear-gradient(180deg,#fff,#f0eaff);color:var(--ink);
-  box-shadow:2px 2px 0 var(--ink);will-change:transform;transform:translateZ(0);
+  box-shadow:2px 2px 0 var(--ink);
 }
 .btn.p{background:linear-gradient(180deg,#ffb3d1,#ff8fb8);color:#fff;text-shadow:1px 1px 0 rgba(26,20,40,.3)}
 .btn.g{background:linear-gradient(180deg,#a8e6d0,#7ecbaf);color:#fff;text-shadow:1px 1px 0 rgba(26,20,40,.3)}
@@ -392,7 +350,7 @@ h3::before{content:"✿";color:#ff6b9d;font-size:15px}
   background:linear-gradient(180deg,#fff,#f5f0ff);color:var(--ink);
   box-shadow:2px 2px 0 var(--ink);
   font-size:12.5px;font-weight:700;line-height:1.4;
-  margin-bottom:7px;will-change:transform;transform:translateZ(0);
+  margin-bottom:7px;
   white-space:normal;
 }
 .choice.primary{background:linear-gradient(180deg,#ffb3d1,#ff8fb8);color:#fff;text-shadow:1px 1px 0 rgba(26,20,40,.3)}
@@ -471,9 +429,9 @@ h3::before{content:"✿";color:#ff6b9d;font-size:15px}
 #mgInput:focus{outline:none;border-color:#ff6b9d;box-shadow:0 0 0 3px rgba(255,107,157,.15)}
 #mgInput::placeholder{color:rgba(138,122,154,.5);font-weight:600}
 #mgTimer{font-weight:800;font-size:12px}
-#mgBar{height:100%;width:100%;background:linear-gradient(90deg,#a8e6d0,#7ecbaf);transition:width .1s linear,background .3s}
+#mgBar{height:100%;width:100%;background:linear-gradient(90deg,#a8e6d0,#7ecbaf);transform-origin:left center;transition:transform .1s linear}
 #mgBar.warn{background:linear-gradient(90deg,#ffe4a8,#ffb84d)}
-#mgBar.danger{background:linear-gradient(90deg,#ffb3c1,#ff6b9d);animation:warnBlink .5s ease-in-out infinite}
+#mgBar.danger{background:linear-gradient(90deg,#ffb3c1,#ff6b9d)}
 
 @media (prefers-reduced-motion:reduce){
   *{animation-duration:.001ms!important;transition-duration:.001ms!important}
@@ -618,8 +576,8 @@ const BAD_EVENTS=[
    ]},
   {id:'lostdata', e:'📚', title:'Mất tài liệu', desc:'File luận văn bị lỗi.',
    choices:[
-     {text:'Viết lại từ đầu', result:{lu:+3,hp:-10,sp:-10}, sub:'Mất thời gian'},
-     {text:'Tìm backup', result:{lu:0}, sub:'50% may mắn'}
+     {text:'Viết lại từ đầu', result:{lu:-1,hp:-10,sp:-10}, sub:'−1% luận, mất thời gian'},
+     {text:'Tìm backup', result:{}, sub:'50% tìm thấy, nếu không −3% luận', rnd:{p:.5,win:{sp:+5},lose:{lu:-3},ok:'💾 Tìm thấy backup!',bad:'😭 Không có backup: −3% luận'}}
    ]},
   {id:'rain', e:'🌧️', title:'Mưa ướt sách', desc:'Sách bị ướt do mưa.',
    choices:[
@@ -628,8 +586,8 @@ const BAD_EVENTS=[
    ]},
   {id:'block', e:'🧠', title:'Bí ý tưởng', desc:'Viết mãi không ra. 2 tiếng nhìn màn hình.',
    choices:[
-     {text:'Đi dạo, thư giãn', result:{sp:+10,lu:+2}, sub:'70% có ý tưởng'},
-     {text:'Cố viết tiếp', result:{sp:-10,lu:+1}, sub:'30% có ý tưởng'}
+     {text:'Đi dạo, thư giãn', result:{sp:+10}, sub:'70% có ý tưởng (+2% luận)', rnd:{p:.7,win:{lu:+2},lose:{},ok:'💡 Có ý tưởng: +2% luận',bad:'🚶 Đi dạo xong vẫn chưa nghĩ ra'}},
+     {text:'Cố viết tiếp', result:{sp:-10}, sub:'30% có ý tưởng (+1% luận)', rnd:{p:.3,win:{lu:+1},lose:{},ok:'💡 Bật ra ý tưởng: +1% luận',bad:'😩 Vẫn bí'}}
    ]},
   {id:'homesick', e:'😔', title:'Nhớ nhà', desc:'Vân Khánh nhớ nhà. Muốn khóc.',
    choices:[
@@ -639,7 +597,7 @@ const BAD_EVENTS=[
   {id:'laptop', e:'🔥', title:'Máy tính hỏng', desc:'Laptop sập nguồn. Sửa 80 tệ.',
    choices:[
      {text:'Sửa ngay', result:{money:-80}, sub:'−80 tệ'},
-     {text:'Mượn máy bạn', result:{sp:-5}, sub:'20% mất dữ liệu'}
+     {text:'Mượn máy bạn', result:{sp:-5}, sub:'20% mất dữ liệu', rnd:{p:.8,win:{},lose:{lu:-2},ok:'May quá, dữ liệu vẫn còn',bad:'💥 Mất dữ liệu: −2% luận'}}
    ]},
   {id:'dress', e:'💸', title:'Váy áo rách', desc:'Váy rách. Mua váy mới 80 tệ.',
    choices:[
@@ -669,7 +627,7 @@ const BAD_EVENTS=[
   {id:'water', e:'🚿', title:'Mất nước nóng', desc:'KTX mất nước nóng 3 ngày.',
    choices:[
      {text:'Ra ngoài tắm', result:{money:-30,sp:+5}, sub:'−30 tệ'},
-     {text:'Tắm nước lạnh', result:{sp:-8,hp:-5}, sub:'30% bị cảm'}
+     {text:'Tắm nước lạnh', result:{sp:-8,hp:-5}, sub:'30% bị cảm', rnd:{p:.7,win:{},lose:{hp:-10},ok:'Lạnh run nhưng không sao',bad:'🤧 Bị cảm: −10 HP'}}
    ]},
   {id:'roach', e:'🐜', title:'Gián trong phòng', desc:'Có gián trong phòng. Vân Khánh sợ.',
    choices:[
@@ -1111,8 +1069,10 @@ const D0=()=>({
   seen:0,
   snd:1,
   endReason:'',
-  flags:{}
+  flags:{},
+  extraWeeks:0,ch1Days:0,ch1Weeks:0,luWeekStart:0,nightToday:false
 });
+const maxW=()=>MAX_WEEKS[S.ch]+(S.extraWeeks||0);
 
 let S=D0();
 try{
@@ -1225,18 +1185,15 @@ const MINIGAME_SENTENCES = {
 };
 
 /* ===== STATE ===== */
-const T={modal:0,mq:[],sheet:'',mgActive:false,mgSentence:null,mgStart:0,mgInterval:null,mgBase:0,_modalTimeout:null};
+const T={modal:0,mq:[],sheet:'',mgActive:false,mgSentence:null,mgStart:0,mgInterval:null,mgBase:0,_sv:0,noSave:0};
 /* ===== SAVE / LOAD ===== */
 function pack(){return JSON.stringify({v:SAVE_VER,ts:Date.now(),data:S})}
-function save(){
-  clearTimeout(window.__saveTimer);
-  window.__saveTimer=setTimeout(()=>{
-    try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
-  },300);
-}
-function saveNow(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
-window.addEventListener('pagehide',saveNow);
-window.addEventListener('visibilitychange',()=>{if(document.hidden)saveNow()});
+function flushSave(){clearTimeout(T._sv);T._sv=0;if(T.noSave)return;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+// Gom nhiều lần lưu liên tiếp thành 1 lần ghi (đỡ tốn CPU khi bấm nhanh)
+function save(){clearTimeout(T._sv);T._sv=setTimeout(flushSave,400)}
+const saveNow=save;
+window.addEventListener('pagehide',flushSave);
+document.addEventListener('visibilitychange',()=>{if(document.hidden){flushSave();if(AC&&AC.state==='running')AC.suspend()}});
 
 function saveSlot(){try{localStorage.setItem(SLOT,pack());return true}catch(e){return false}}
 function loadSlot(){
@@ -1373,6 +1330,7 @@ function beep(f=600,d=.1){
     o.connect(g).connect(AC.destination);
     o.start(t);o.stop(t+d);
     o.onended=()=>{o.disconnect();g.disconnect()};
+    clearTimeout(AC._idle);AC._idle=setTimeout(()=>{if(AC&&AC.state==='running')AC.suspend()},1500);
   }catch(e){}
 }
 
@@ -1387,25 +1345,17 @@ function toast(m,cls){
 }
 
 /* ===== MODAL ===== */
-function modal(h){
-  if(T.modal){T.mq.push(h);return}
+function modal(h,cls){
+  if(T.modal){T.mq.push({h,cls});return}
   T.modal=1;
-  $('#modal').innerHTML=`<div class="bx">${h}</div>`;
+  $('#modal').innerHTML=`<div class="bx ${cls||''}">${h}</div>`;
   $('#modal').classList.remove('hide');
-  
-  clearTimeout(T._modalTimeout);
-  T._modalTimeout = setTimeout(()=>{
-    if(T.modal){
-      console.warn('[v6.6] Modal auto-closed after 30s');
-      mclose();
-    }
-  }, 30000);
 }
 function mclose(){
   T.modal=0;
-  clearTimeout(T._modalTimeout);
   $('#modal').classList.add('hide');
-  if(T.mq.length) modal(T.mq.shift());
+  $('#modal').innerHTML='';
+  if(T.mq.length){const n=T.mq.shift();typeof n==='function'?n():modal(n.h,n.cls)}
 }
 function closeSheet(){T.sheet='';$('#sheet').classList.add('hide')}
 
@@ -1436,7 +1386,7 @@ function drawHead(){
   document.body.className='ch'+S.ch;
   
   // Deadline warning
-  const totalWeeks = MAX_WEEKS[S.ch];
+  const totalWeeks = maxW();
   const timeRatio = S.week / totalWeeks;
   const progressRatio = S.lu / 100;
   const deadlineWarn = timeRatio > 0.75 && progressRatio < 0.5;
@@ -1461,7 +1411,7 @@ function drawHead(){
   setTxt('spV',Math.round(S.sp));
   setTxt('lvV',S.lu.toFixed(1)+'%');
   setTxt('moneyV',F(S.money));
-  setTxt('weekV2','T'+S.week+'/'+MAX_WEEKS[S.ch]);
+  setTxt('weekV2','T'+S.week+'/'+maxW());
   setScaleX('hpB',S.hp);
   setScaleX('spB',S.sp);
   setScaleX('lvB',S.lu);
@@ -1470,7 +1420,7 @@ function drawHead(){
 }
 
 function drawScene(){
-  setTxt('dateV',`Ngày ${S.day} · Tuần ${S.week}/${MAX_WEEKS[S.ch]} · Năm ${S.year} T${S.yearWeek}/5`);
+  setTxt('dateV',`Ngày ${S.day} · Tuần ${S.week}/${maxW()} · Năm ${S.year} T${S.yearWeek}/5`);
   setTxt('periodV',PERIODS[S.period]);
   setTxt('mood',moodText());
   setTxt('quote','— '+getDailyQuote());
@@ -1536,7 +1486,7 @@ function drawActs(){
   else nb.textContent='🌅 SANG NGÀY MỚI';
 
   const wf=$('#writeFab');
-  if(S.week>=STIPEND_WEEKS[S.ch] && S.lu<100) wf.classList.add('on');
+  if(S.week>=STIPEND_WEEKS[S.ch] && S.lu<100 && S.period===2 && !S.nightToday) wf.classList.add('on');
   else wf.classList.remove('on');
 
   const lf=$('#lotteryFab');
@@ -1551,7 +1501,7 @@ function addLog(s){
   S.logDay.push(s);
   if(S.logDay.length>100) S.logDay.shift();
   S.logAll.push({d:S.day,s:s});
-  if(S.logAll.length>800) S.logAll.shift();
+  if(S.logAll.length>400) S.logAll.splice(0,S.logAll.length-400);
 }
 
 /* ===== LOW EFFICIENCY ===== */
@@ -1607,48 +1557,42 @@ function maybeRandomEvent(){
   return pool[Math.floor(Math.random()*pool.length)];
 }
 
-function applyEvent(ev,choiceIdx){
-  const choice=ev.choices[choiceIdx];
-  const r=choice.result||{};
-
+function applyRes(r){
+  if(!r) return;
   if(r.hp) S.hp=cl(S.hp+r.hp,0,100);
   if(r.sp) S.sp=cl(S.sp+r.sp,0,100);
   if(r.money) S.money+=r.money;
   if(r.lu) S.lu=cl(S.lu+r.lu,0,100);
+}
+function applyEvent(ev,choiceIdx){
+  const choice=ev.choices[choiceIdx];
+  const r=choice.result||{};
+
+  applyRes(r);
+  if(choice.rnd){
+    const ok=Math.random()<choice.rnd.p;
+    applyRes(ok?choice.rnd.win:choice.rnd.lose);
+    const m=ok?choice.rnd.ok:choice.rnd.bad;
+    addLog(m);setTimeout(()=>toast(m,ok?'':'warn'),300);
+  }
   if(r.skipActions){
     S.periodActionsLeft=Math.max(0,S.periodActionsLeft-r.skipActions);
     S.dayActionsLeft=Math.max(0,S.dayActionsLeft-r.skipActions);
   }
   
-  // skipDays — trigger endWeek nếu qua ngày 7
+  // Vắng mặt nhiều ngày: qua tuần thì vẫn nhận trợ cấp, trừ tiền nhà như bình thường
   if(r.skipDays){
-    const skip = Math.max(1, Math.round(r.skipDays));
-    for(let i = 0; i < skip; i++){
-      if(S.day % 7 === 0){
-        const scholar = SCHOLAR[S.ch];
-        const rent = RENT_PER_WEEK[S.ch] || 0;
-        S.money += scholar - rent;
-        S.week++;
-        S.yearWeek++;
-        if(S.yearWeek > WEEKS_PER_YEAR){
-          S.yearWeek = 1;
-          S.year++;
-          S.bigEventsThisYear = [];
-          S.lotteryDoneThisYear = false;
-          S.culturalEventThisYear = null;
-        }
-        addLog(`📊 Tuần ${S.week-1} kết thúc (bị skip)`);
-      }
-      S.day++;
+    const n=Math.max(1,Math.round(r.skipDays));let rolled=false;
+    for(let i=0;i<n;i++){
+      if(S.day%7===0){weekRoll();rolled=true}
+      else{S.day++;S.rolledToday=false;S.nightToday=false;S.logDay=[]}
     }
+    S.period=0;S.periodActionsLeft=ACTIONS_PER_PERIOD;S.dayActionsLeft=ACTIONS_PER_DAY;S.wroteThisPeriod=false;
+    addLog(`🧳 Vắng mặt ${n} ngày`);
+    setTimeout(()=>{checkWeekLimit();if(S.endReason)return;checkStory();if(rolled)weekEvents();drawAll()},250);
   }
-  
-  // addWeeks — rescue2
-  if(r.addWeeks){
-    S.week = Math.max(1, S.week - r.addWeeks);
-    S.yearWeek = ((S.week - 1) % WEEKS_PER_YEAR) + 1;
-    S.year = Math.ceil(S.week / WEEKS_PER_YEAR);
-  }
+  // Gia hạn: cộng thêm tuần vào hạn chót, không quay ngược lịch
+  if(r.addWeeks){S.extraWeeks=(S.extraWeeks||0)+r.addWeeks;addLog(`📅 Được gia hạn thêm ${r.addWeeks} tuần`)}
   
   if(S.day !== Math.floor(S.day)) S.day = Math.ceil(S.day);
 
@@ -1674,9 +1618,7 @@ function showChoiceEvent(ev,callback){
     return;
   }
   
-  T.modal = 0;
-  T.mq = [];
-  $('#modal').classList.add('hide');
+  if(T.modal){T.mq.push(()=>showChoiceEvent(ev,callback));return}
 
   const isCultural = ev.id && CULTURAL_EVENTS.some(c => c.id === ev.id);
   const isRescue = ev.id && RESCUE_EVENTS[ev.id];
@@ -1696,9 +1638,7 @@ function showChoiceEvent(ev,callback){
       </button>
     `).join('')}
   `;
-  modal(html);
-  const bx=$('.bx');
-  if(bx) bx.classList.add(isCultural ? 'cultural-highlight' : 'event-highlight');
+  modal(html, isCultural ? 'cultural-highlight' : 'event-highlight');
   window.__currentChoiceEvent=ev;
   window.__choiceCallback=callback||null;
 }
@@ -1715,9 +1655,11 @@ function pickChoice(idx){
     return;
   }
 
+  // Xoá tham chiếu TRƯỚC khi đóng modal, vì mclose() có thể mở ngay sự kiện kế tiếp trong hàng đợi
+  const cb=window.__choiceCallback;
+  window.__currentChoiceEvent=null;window.__choiceCallback=null;
   if(choice.special==='quit'){
     mclose();
-    window.__currentChoiceEvent=null;
     setTimeout(()=>finishHome(),150);
     return;
   }
@@ -1725,14 +1667,8 @@ function pickChoice(idx){
   applyEvent(ev,idx);
 
   mclose();
-  window.__currentChoiceEvent=null;
-  if(window.__choiceCallback){
-    const cb=window.__choiceCallback;
-    window.__choiceCallback=null;
-    setTimeout(cb,200);
-  } else {
-    saveNow();drawAll();
-  }
+  if(cb) setTimeout(cb,200);
+  else {saveNow();drawAll();}
 }
 
 /* ===== OFFER ===== */
@@ -1782,9 +1718,7 @@ function maybeFixedBigEvent(){
     modal(`<div class="sp"><img src="icon-192.png" alt=""></div>
       <h2>${fe.e} ${fe.title}</h2>
       <div class="body">${fe.text}</div>
-      <div class="mb"><button class="btn p" data-a="mx">OK</button></div>`);
-    const bx=$('.bx');
-    if(bx) bx.classList.add('event-highlight');
+      <div class="mb"><button class="btn p" data-a="mx">OK</button></div>`,'event-highlight');
   },400);
 }
 
@@ -1847,7 +1781,7 @@ function maybeCulturalEvent(){
 function maybeRescue() {
   if (S.pendingRescue) return;
   
-  const totalWeeks = MAX_WEEKS[S.ch];
+  const totalWeeks = maxW();
   const timeRatio = S.week / totalWeeks;
   const progressRatio = S.lu / 100;
   
@@ -1919,8 +1853,9 @@ function doAct(k){
 
   const eff=lowEff();
 
-  if(a.hp) S.hp=cl(S.hp+Math.round(a.hp*eff),0,100);
-  if(a.sp) S.sp=cl(S.sp+Math.round(a.sp*eff),0,100);
+  if(a.hp) S.hp=cl(S.hp+a.hp,0,100);
+  if(a.sp) S.sp=cl(S.sp+a.sp,0,100);
+  unlockAch('a_first_action');
   if(a.m){
     let actualCost=a.m;
     if(a.grp==='an' && a.m<0) actualCost=-getFoodCost(-a.m);
@@ -1956,23 +1891,15 @@ function doAct(k){
     addLog(`${a.e} ${a.n}`);
   }
 
-  if(S.hp<20 && S.hp>0){
-    saveNow();drawAll();
-    setTimeout(()=>{
-      modal(`<h2>🤒 Vân Khánh ốm</h2>
-      <div class="body">HP xuống dưới 20. Cô phải nghỉ ngơi một ngày.</div>
+  if(S.hp<20){
+    addLog('🤒 Kiệt sức — nghỉ ốm hết ngày');
+    modal(`<h2>🤒 Vân Khánh ốm</h2>
+      <div class="body">HP xuống dưới 20. Cô phải nghỉ ngơi hết hôm nay.</div>
       <div class="mb"><button class="btn p" data-a="mx">Cố lên.</button></div>`);
-      S.hp=50;S.sp=Math.max(30,S.sp);
-      S.day++;S.period=0;
-      S.periodActionsLeft=ACTIONS_PER_PERIOD;
-      S.dayActionsLeft=ACTIONS_PER_DAY;
-      S.rolledToday=false;S.logDay=[];
-      S.wroteThisPeriod=false;
-      checkWeekLimit();saveNow();drawAll();
-    },400);
+    S.hp=47;S.sp=Math.max(25,S.sp);
+    endDay();
     return;
   }
-  if(S.hp<=0) S.hp=30;
 
   const ev=maybeRandomEvent();
   if(ev){
@@ -2032,7 +1959,7 @@ function startWritingMinigame(baseReward){
     const barEl=document.getElementById('mgBar');
     if(timerEl) timerEl.textContent=`⏱️ ${(remain/1000).toFixed(1)}s`;
     if(barEl){
-      barEl.style.width=(remain/100)+'%';
+      barEl.style.transform='scaleX('+(remain/10000)+')';
       if(remain<3000) barEl.className='danger';
       else if(remain<5000) barEl.className='warn';
       else barEl.className='';
@@ -2057,6 +1984,7 @@ function startWritingMinigame(baseReward){
 function submitMinigame(elapsed,skipped){
   if(!T.mgActive) return;
   T.mgActive=false;
+  clearInterval(T.mgInterval);
 
   const input=document.getElementById('mgInput');
   const answer=input?input.value:'';
@@ -2126,6 +2054,8 @@ function lateWrite(){
   if(T.modal) return;
   if(S.week<STIPEND_WEEKS[S.ch]) return toast('Chưa mở khóa');
   if(S.lu>=100) return toast('Luận văn đã xong');
+  if(S.period<2) return toast('🌙 Chỉ thức đêm vào buổi tối');
+  if(S.nightToday) return toast('Đêm nay thức rồi, đi ngủ thôi!');
   if(S.hp<15) return toast('Quá mệt, không thức được');
   if(!confirm(`Thức đêm viết luận?\n−15 HP, −20 SP, +${NIGHT_RATE[S.ch]}% luận văn.`)) return;
   S.hp=cl(S.hp-15,0,100);
@@ -2134,6 +2064,7 @@ function lateWrite(){
   S.lu=cl(S.lu+g,0,100);
   addLog(`🌌 Thức đêm viết: +${g}% luận văn`);
   S.flags.nightWrites=(S.flags.nightWrites||0)+1;
+  S.nightToday=true;
   beep(440,.15);
   checkAchievements();
   saveNow();drawAll();
@@ -2170,6 +2101,7 @@ function lotteryResult(){
   mclose();
   setTimeout(()=>{
     if(Math.random()<0.0005){
+      S.endReason='lottery';
       saveNow();
       addFinish(0,0,0,'lottery');
       checkAchievements('a_lottery');
@@ -2248,6 +2180,7 @@ function endDay(){
   S.dayActionsLeft=ACTIONS_PER_DAY;
   S.wroteThisPeriod=false;
   S.rolledToday=false;
+  S.nightToday=false;
   S.logDay=[];
   S.hp=cl(S.hp+DAILY_HP_RECOVER,0,100);
   S.sp=cl(S.sp+DAILY_SP_RECOVER,0,100);
@@ -2259,13 +2192,13 @@ function endDay(){
 }
 
 function checkWeekLimit(){
-  if(S.week>MAX_WEEKS[S.ch]){
+  if(S.week>maxW()){
     S.endReason='timeout';
     addFinish(S.day,0,0,'timeout');
     checkAchievements('a_timeout');
     saveNow();
     modal(`<h2>⏰ Quá hạn</h2>
-      <div class="body">Vân Khánh đã học quá ${MAX_WEEKS[S.ch]} tuần mà chưa bảo vệ được luận văn. Trường buộc cô thôi học.</div>
+      <div class="body">Vân Khánh đã học quá ${maxW()} tuần mà chưa bảo vệ được luận văn. Trường buộc cô thôi học.</div>
       <div class="ev">Cô ngồi trong phòng, nhìn cuốn nhật ký dở dang.</div>
       <div class="mb2">
         <button class="btn" data-a="record">🏆 Kỷ lục</button>
@@ -2274,90 +2207,47 @@ function checkWeekLimit(){
   }
 }
 
-function endWeek(){
-  const scholar=SCHOLAR[S.ch];
-  const before=S.money;
-  S.money+=scholar;
-
-  let rent=0;
-  if(RENT_PER_WEEK[S.ch]>0){
-    rent=RENT_PER_WEEK[S.ch];
-    S.money-=rent;
-  }
-
-  // Auto-cứu khi money âm
-  if(S.money < 0){
-    S.money = 300;
+function weekRoll(){
+  const scholar=SCHOLAR[S.ch],rent=RENT_PER_WEEK[S.ch]||0,before=S.money;
+  S.money+=scholar-rent;
+  if(S.money<0){
+    S.money=300;
     addLog('💸 Hết tiền — mẹ gửi 300 tệ cứu đói');
     setTimeout(()=>toast('💸 Hết tiền — mẹ gửi 300 tệ cứu','warn'),500);
   }
-
-  const wLog={week:S.week,ch:S.ch,year:S.year,yearWeek:S.yearWeek,moneyAfter:S.money,
-    scholar,rent,lu:S.lu,hp:S.hp,sp:S.sp};
-  S.logWeek.push(wLog);
+  const wrote=S.lu-(S.luWeekStart||0);S.luWeekStart=S.lu;
+  S.logWeek.push({week:S.week,ch:S.ch,year:S.year,yearWeek:S.yearWeek,moneyAfter:S.money,scholar,rent,lu:S.lu,hp:S.hp,sp:S.sp});
   if(S.logWeek.length>80) S.logWeek.shift();
-
-  S.week++;
-  S.day++;
-  S.period=0;
-  S.periodActionsLeft=ACTIONS_PER_PERIOD;
-  S.dayActionsLeft=ACTIONS_PER_DAY;
-  S.wroteThisPeriod=false;
-  S.rolledToday=false;
-  S.logDay=[];
+  S.week++;S.day++;S.period=0;
+  S.periodActionsLeft=ACTIONS_PER_PERIOD;S.dayActionsLeft=ACTIONS_PER_DAY;
+  S.wroteThisPeriod=false;S.rolledToday=false;S.nightToday=false;S.logDay=[];
   S.yearWeek++;
-
-  // Cảnh báo bỏ lỡ xổ số
-  if(S.yearWeek === 2 && !S.lotteryDoneThisYear && !S._lotteryWarned){
-    S._lotteryWarned = true;
+  if(S.yearWeek===2 && !S.lotteryDoneThisYear && !S._lotteryWarned){
+    S._lotteryWarned=true;
     setTimeout(()=>toast('💡 Bạn đã bỏ lỡ cơ hội mua xổ số năm nay!','warn'),800);
   }
-
-  let newYear=false;
   if(S.yearWeek>WEEKS_PER_YEAR){
-    S.yearWeek=1;
-    S.year++;
-    newYear=true;
-    S.bigEventsThisYear=[];
-    S.lotteryDoneThisYear=false;
-    S.culturalEventThisYear=null;
-    S._lotteryWarned=false;
+    S.yearWeek=1;S.year++;S.bigEventsThisYear=[];S.lotteryDoneThisYear=false;S.culturalEventThisYear=null;S._lotteryWarned=false;
   }
-
-  // Apply flag consequences
   applyFlagConsequences();
-
-  saveNow();
-
-  // Kiểm tra offer hết hạn
-  let expiredOffers = [];
-  const checkExpire = (pending) => {
-    if (!pending) return null;
-    if (pending.weekCreated === undefined) return null;
-    const weeksPassed = S.week - pending.weekCreated;
-    if (weeksPassed >= 1) {
-      expiredOffers.push(pending);
-      addLog(`⏰ Bỏ lỡ: ${pending.e} ${pending.title}`);
-      return null;
-    }
-    return pending;
+  const expiredOffers=[];
+  const chk=p=>{
+    if(!p||p.weekCreated===undefined) return p;
+    if(S.week-p.weekCreated>=1){expiredOffers.push(p);addLog(`⏰ Bỏ lỡ: ${p.e} ${p.title}`);return null}
+    return p;
   };
+  S.pendingOffer=chk(S.pendingOffer);S.pendingBigEvent=chk(S.pendingBigEvent);S.pendingCulturalEvent=chk(S.pendingCulturalEvent);
+  return {scholar,rent,delta:S.money-before,wrote,expiredOffers};
+}
 
-  S.pendingOffer = checkExpire(S.pendingOffer);
-  S.pendingBigEvent = checkExpire(S.pendingBigEvent);
-  S.pendingCulturalEvent = checkExpire(S.pendingCulturalEvent);
-
-  if (expiredOffers.length > 0) {
-    setTimeout(()=>{
-      expiredOffers.forEach(o => toast(`⏰ Bỏ lỡ: ${o.title}`, 'warn'));
-    }, 600);
-  }
-
-  const delta=S.money-before;
-  const weeksLeft=Math.max(0,MAX_WEEKS[S.ch]-S.week+1);
+function endWeek(){
+  const {scholar,rent,delta,wrote,expiredOffers}=weekRoll();
+  saveNow();
+  if(expiredOffers.length) setTimeout(()=>expiredOffers.forEach(o=>toast(`⏰ Bỏ lỡ: ${o.title}`,'warn')),600);
+  const weeksLeft=Math.max(0,maxW()-S.week+1);
 
   // Warning level
-  const timeRatio = S.week / MAX_WEEKS[S.ch];
+  const timeRatio = S.week / maxW();
   const progressRatio = S.lu / 100;
   let warningLevel = '';
   if (timeRatio > 0.75 && progressRatio < 0.5) warningLevel = 'danger';
@@ -2401,7 +2291,7 @@ function endWeek(){
   ${warningText}
   ${expiredText}
   <div class="ev" style="font-size:11.5px">
-    <b>📝 Gợi ý:</b> ${S.lu>0?`Tuần này viết được ${S.lu.toFixed(1)}% luận văn.`:'Chưa viết được gì.'}
+    <b>📝 Gợi ý:</b> ${wrote>0?`Tuần này viết thêm được ${wrote.toFixed(1)}% luận văn.`:'Tuần này chưa viết thêm được gì.'}
     ${S.hp<50?'Cô thấy khá mệt.':''}
     ${S.sp<50?'Tinh thần có chút xuống.':''}
   </div>
@@ -2411,31 +2301,27 @@ function endWeek(){
   </div>`);
 }
 
+function weekEvents(){
+  if(S.endReason) return;
+  maybeFixedBigEvent();
+  maybeChoiceFixed();
+  maybeRandomBigEvent();
+  maybeOffer();
+  maybeCulturalEvent();
+  maybeRescue();
+  drawAll();
+  if(S.pendingRescue) setTimeout(()=>showRescueEvent(),600);
+}
 function afterWeek(){
   mclose();
-  setTimeout(()=>{
-    maybeFixedBigEvent();
-    maybeChoiceFixed();
-    maybeRandomBigEvent();
-    maybeOffer();
-    maybeCulturalEvent();
-    maybeRescue();
-  },400);
   checkWeekLimit();
   if(S.endReason) return;
   checkStory();
   checkAchievements();
   saveNow();
   drawAll();
-
-  if(S.yearWeek===1 && S.week>1){
-    setTimeout(()=>newYearGreeting(),800);
-  }
-  
-  // Nếu có rescue pending → hiện sau 1s
-  if (S.pendingRescue) {
-    setTimeout(() => showRescueEvent(), 1000);
-  }
+  setTimeout(weekEvents,400);
+  if(S.yearWeek===1 && S.week>1) setTimeout(()=>{if(!S.endReason)newYearGreeting()},800);
 }
 
 function newYearGreeting(){
@@ -2458,6 +2344,8 @@ function newYearGreeting(){
 function checkStory(){
   if(S.lu>=100 && S.ch==1){
     const ch1Days=S.day,ch1Weeks=S.week;
+    S.ch1Days=ch1Days;S.ch1Weeks=ch1Weeks;S.extraWeeks=0;S.luWeekStart=0;
+    S.pendingOffer=S.pendingBigEvent=S.pendingCulturalEvent=S.pendingRescue=null;
     S.ch=2;S.lu=0;S.day=1;S.week=1;S.year=1;S.yearWeek=1;S.period=0;
     S.periodActionsLeft=ACTIONS_PER_PERIOD;
     S.dayActionsLeft=ACTIONS_PER_DAY;
@@ -2469,8 +2357,6 @@ function checkStory(){
     S.logDay=[];
     S.hp=Math.max(S.hp,70);S.sp=Math.max(S.sp,70);
     S.money=Math.max(S.money,2000);
-    window.__ch1Days=ch1Days;
-    window.__ch1Weeks=ch1Weeks;
     checkAchievements('a_ch1_done');
     saveNow();
     modal(`<div class="sp"><img src="icon-192.png" alt=""></div>
@@ -2490,9 +2376,9 @@ Mẹ nấu cơm. Bố ngồi uống trà. Em gái khoe lương mới. Em trai đ
 function finishGrad(){
   if(S.endReason=='grad') return;
   S.endReason='grad';
-  const total=S.day;
-  const ch1=window.__ch1Days||total;
-  const ch2=Math.max(0,total-ch1);
+  const ch1=S.ch1Days||0;
+  const ch2=S.day;
+  const total=ch1+ch2;
   addFinish(total,ch1,ch2,'grad');
   checkAchievements('a_grad');
   saveNow();
@@ -2691,7 +2577,7 @@ function openBook(){
     <div style="font-size:11.5px;line-height:1.7;padding:0 2px">
       • 1 ngày = <b>3 buổi</b> · Mỗi buổi = <b>2 hành động</b><br>
       • HP = Sức khỏe · SP = Tinh thần · Luận văn = Tiến độ<br>
-      • HP &lt; 20 → nghỉ ốm · SP &lt; 20 → action yếu 50%<br>
+      • HP &lt; 20 → nghỉ ốm · HP hoặc SP &lt; 30 → viết luận chỉ hiệu quả 50%<br>
       • <b>Luận văn 100%</b> → tốt nghiệp<br>
       • Hạn: Thạc sĩ <b>20 tuần</b> · Tiến sĩ <b>30 tuần</b><br>
       • <b>5 tuần = 1 năm</b> · Trợ cấp: 600 (MS) / 700 (TS)<br>
@@ -2949,10 +2835,10 @@ const HELP=`<h2>🌸 Cách chơi</h2>
 Hết buổi Tối → tự động qua ngày mới (+3 HP, +5 SP).
 <br><br>
 <b>Nút phụ:</b><br>
-🌌 Thức đêm — mở sau 10/20 tuần<br>
+🌌 Thức đêm — mở sau 10/20 tuần, chỉ buổi tối, 1 lần/đêm<br>
 🎫 Mua xổ số — tuần đầu mỗi năm, 0.05% trúng
 <br><br>
-<b>Chỉ số:</b> HP &lt; 20 → nghỉ ốm · SP &lt; 20 → yếu 50% · Luận văn 100% → tốt nghiệp.
+<b>Chỉ số:</b> HP &lt; 20 → nghỉ ốm · HP hoặc SP &lt; 30 → viết luận chỉ hiệu quả 50% · Luận văn 100% → tốt nghiệp.
 <br><br>
 <b>Event:</b> 30%/action (max 1/ngày) — 60% tốt / 40% xấu.
 <br><br>
@@ -3002,12 +2888,13 @@ document.addEventListener('click',e=>{
       break;
     case 'restart':
       if(!confirm('Chơi lại từ đầu?')) return;
+      T.noSave=1;clearTimeout(T._sv);
       localStorage.removeItem(KEY);
       location.reload();
       break;
     case 'note':
-      mclose();
-      setTimeout(()=>openLog(),200);
+      afterWeek();
+      setTimeout(()=>openLog(),300);
       break;
     case 'afterWeek':afterWeek();break;
     case 'mgSubmit':
@@ -3039,11 +2926,14 @@ if(sheetEl) sheetEl.addEventListener('click',e=>{
 })();
 
 /* ===== INIT ===== */
-window.__ch1Days=null;
-window.__ch1Weeks=null;
 drawAll();
 if(!S.seen){S.seen=1;saveNow();modal(INTRO);}
-setTimeout(()=>applyFlagEffects(),500);
+if(S.endReason){
+  const END={grad:'🎓 Tốt nghiệp tiến sĩ',home:'🌸 Về nhà',lottery:'💰 Trúng xổ số',timeout:'⏰ Quá hạn'};
+  modal(`<h2>📕 Ván chơi đã kết thúc</h2>
+    <div class="body" style="text-align:center">Kết thúc: <b>${END[S.endReason]||S.endReason}</b><br>Xem kỷ lục hoặc bắt đầu ván mới nhé.</div>
+    <div class="mb2"><button class="btn" data-a="record">🏆 Kỷ lục</button><button class="btn p" data-a="restart">🔄 Chơi lại</button></div>`);
+}
 
 if('serviceWorker'in navigator&&location.protocol.startsWith('http'))
   navigator.serviceWorker.register('sw.js').catch(()=>{});
