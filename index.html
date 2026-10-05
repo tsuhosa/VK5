@@ -307,7 +307,6 @@ h3::before{content:"✿";color:#ff6b9d;font-size:15px}
 }
 @keyframes pp{from{transform:scale(.92);opacity:0}}
 
-/* Event highlight — BAD */
 .bx.event-highlight{
   border-color:#ff6b9d;
   box-shadow:
@@ -331,7 +330,6 @@ h3::before{content:"✿";color:#ff6b9d;font-size:15px}
   }
 }
 
-/* Cultural event highlight */
 .bx.cultural-highlight{
   border-color:#da251d;
   box-shadow:
@@ -550,61 +548,58 @@ const $=s=>document.querySelector(s);
 const cl=(v,a,b)=>Math.max(a,Math.min(b,v));
 const F=n=>Math.round(n).toLocaleString('vi-VN');
 
-/* ====== STORAGE ====== */
-const KEY='vkdiary_v18';
-const SLOT='vkdiary_slot_v18';
-const REC_KEY='vkdiary_rec_v18';
-const ACH_KEY='vkdiary_ach_v18';
-const SAVE_VER=18;
+/* ===== STORAGE ===== */
+const KEY='vkdiary_v22';
+const SLOT='vkdiary_slot_v22';
+const REC_KEY='vkdiary_rec_v22';
+const ACH_KEY='vkdiary_ach_v22';
+const SAVE_VER=22;
 
-/* ====== CONSTANTS ====== */
-const SCHOLAR=[0,750,875];
+/* ===== CONSTANTS — v6.6 FINAL ===== */
+const SCHOLAR=[0,600,700];
 const START_MONEY=500;
 const MAX_WEEKS=[0,20,30];
-const WRITE_RATE=[0,2.0,1.4];
-const FIX_RATE=[0,1.0,0.7];
-const MEET_RATE=[0,0.7,0.4];
-const LIB_RATE=[0,0.7,0.4];
-const NIGHT_RATE=[0,1.3,1.0];
+const WRITE_RATE=[0,0.45,0.32];
+const FIX_RATE=[0,0.25,0.18];
+const MEET_RATE=[0,0.2,0.14];
+const LIB_RATE=[0,0.15,0.1];
+const NIGHT_RATE=[0,0.7,0.5];
 const ACTIONS_PER_PERIOD=2;
-const PERIODS_PER_DAY=3;
-const ACTIONS_PER_DAY=ACTIONS_PER_PERIOD*PERIODS_PER_DAY;
+const ACTIONS_PER_DAY=ACTIONS_PER_PERIOD*3;
 const WEEKS_PER_YEAR=5;
 const STIPEND_WEEKS=[0,10,20];
 const RENT_PER_WEEK=[0,0,200];
 const RANDOM_EVENT_CHANCE=0.30;
 const GOOD_EVENT_RATE=0.60;
-const DAILY_HP_RECOVER=12;
-const DAILY_SP_RECOVER=20;
+const DAILY_HP_RECOVER=3;
+const DAILY_SP_RECOVER=5;
 
 const WD=['Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy','Chủ Nhật'];
 const PERIODS=['🌅 Sáng','☀️ Chiều','🌙 Tối'];
 
-/* ====== ACTIONS ====== */
+/* ===== ACTIONS ===== */
 const ACTS=[
   {k:'s_tv', n:'Thư viện',   e:'📚', p:0, hp:-6, sp:-12, lu:'lib', grp:'hoc'},
   {k:'s_lab',n:'Lab thầy',   e:'🧪', p:0, hp:-5, sp:+2,  lu:'lib', grp:'hoc'},
   {k:'s_ts', n:'Pha trà sữa',e:'🧋', p:0, hp:-8, sp:-10, m:+45,   grp:'lam', onlyCh:1},
   {k:'s_sh', n:'Đi shopping',e:'🛍️',p:0, hp:-3, sp:+15,  m:-40,   grp:'choi'},
-  {k:'s_an', n:'Ăn sáng',    e:'🍚', p:0, hp:+8, sp:+3,  m:-5,    grp:'an'},
+  {k:'s_an', n:'Ăn sáng',    e:'🍚', p:0, hp:+8, sp:+3,  m:-10,   grp:'an'},
   {k:'s_ngu',n:'Ngủ nướng',  e:'😴', p:0, hp:+10,sp:+15,          grp:'ngu'},
-
-  {k:'c_wr', n:'Viết luận',  e:'✍️', p:1, hp:-10,sp:-15, m:-30,   lu:'write', grp:'viet'},
+  {k:'c_wr', n:'Viết luận',  e:'✍️', p:1, hp:-12,sp:-18, m:-40,   lu:'write', grp:'viet'},
   {k:'c_gv', n:'Gặp GV',     e:'🧑‍🏫',p:1, hp:-3, sp:-5,           lu:'meet',  grp:'viet'},
   {k:'c_ta', n:'Trợ giảng',  e:'🎓', p:1, hp:-10,sp:-10, m:+75,   grp:'lam'},
   {k:'c_cf', n:'Đi cafe',    e:'☕', p:1, hp:-2, sp:+18, m:-25,   grp:'choi'},
-  {k:'c_an', n:'Ăn trưa',    e:'🍜', p:1, hp:+12,sp:+4,  m:-8,    grp:'an'},
+  {k:'c_an', n:'Ăn trưa',    e:'🍜', p:1, hp:+12,sp:+4,  m:-15,   grp:'an'},
   {k:'c_ngu',n:'Ngủ nướng',  e:'😴', p:1, hp:+10,sp:+15,          grp:'ngu'},
-
   {k:'t_dh', n:'Dạy online', e:'💻', p:2, hp:-10,sp:-12, m:+70,   grp:'lam'},
   {k:'t_goi',n:'Gọi nhà',    e:'📞', p:2, hp:0,  sp:+25, m:-5,    grp:'choi'},
   {k:'t_sh', n:'Lướt shop',  e:'🛍️',p:2, hp:-3, sp:+22, m:-60,   grp:'choi'},
   {k:'t_fx', n:'Sửa lỗi',    e:'🔍', p:2, hp:-4, sp:-8,           lu:'fix', grp:'viet'},
-  {k:'t_an', n:'Ăn tối',     e:'🍲', p:2, hp:+12,sp:+4,  m:-8,    grp:'an'},
+  {k:'t_an', n:'Ăn tối',     e:'🍲', p:2, hp:+12,sp:+4,  m:-15,   grp:'an'},
   {k:'t_ngu',n:'Ngủ nướng',  e:'😴', p:2, hp:+10,sp:+15,          grp:'ngu'}
 ];
 
-/* ====== BAD EVENTS ====== */
+/* ===== BAD EVENTS ===== */
 const BAD_EVENTS=[
   {id:'cold', e:'🤒', title:'Cảm cúm', desc:'Vân Khánh bị cảm. Sốt 38 độ.',
    choices:[
@@ -683,7 +678,7 @@ const BAD_EVENTS=[
    ]}
 ];
 
-/* ====== GOOD EVENTS ====== */
+/* ===== GOOD EVENTS ===== */
 const GOOD_EVENTS=[
   {id:'giftbook', e:'🎁', title:'Được tặng sách', desc:'Đình Hưng tặng Vân Khánh cuốn sách quý.',
    choices:[
@@ -702,8 +697,8 @@ const GOOD_EVENTS=[
    ]},
   {id:'idea', e:'💡', title:'Ý tưởng mới', desc:'Ý tưởng hay chợt đến.',
    choices:[
-     {text:'Viết ngay', result:{lu:+2}, sub:'+2% luận'},
-     {text:'Ghi chú, viết sau', result:{lu:+1}, sub:'+1% luận'}
+     {text:'Viết ngay', result:{lu:+1}, sub:'+1% luận'},
+     {text:'Ghi chú, viết sau', result:{lu:+0.5}, sub:'+0.5% luận'}
    ]},
   {id:'lucky', e:'💰', title:'Quà nhỏ', desc:'Nhận được tiền lì xì 50 tệ.',
    choices:[
@@ -737,13 +732,13 @@ const GOOD_EVENTS=[
    ]},
   {id:'paper', e:'📜', title:'Bài báo duyệt', desc:'Bài báo được chấp nhận.',
    choices:[
-     {text:'Ăn mừng', result:{money:-50,sp:+20,lu:+3}, sub:'−50 tệ, +3% luận'},
-     {text:'Tiếp tục làm việc', result:{lu:+3,sp:+5}, sub:'+3% luận'}
+     {text:'Ăn mừng', result:{money:-50,sp:+20,lu:+2}, sub:'−50 tệ, +2% luận'},
+     {text:'Tiếp tục làm việc', result:{lu:+2,sp:+5}, sub:'+2% luận'}
    ]},
   {id:'rarebook', e:'📖', title:'Tài liệu quý', desc:'Tìm được tài liệu hiếm.',
    choices:[
-     {text:'Đọc ngay', result:{lu:+1}},
-     {text:'Lưu lại, đọc sau', result:{lu:+0.5}}
+     {text:'Đọc ngay', result:{lu:+0.5}},
+     {text:'Lưu lại, đọc sau', result:{lu:+0.3}}
    ]},
   {id:'praise', e:'🤝', title:'Được khen', desc:'Được GS. Trần khen trước lớp.',
    choices:[
@@ -762,87 +757,87 @@ const GOOD_EVENTS=[
    ]}
 ];
 
-/* ====== CHOICE FIXED EVENTS ====== */
+/* ===== CHOICE FIXED EVENTS (c1_w18 → c1_w17) ===== */
 const CHOICE_EVENTS = {
   'c1_w3_lostwallet': {
-    ch:1, week:3, once:true,
+    ch:1, week:3,
     e:'😰', title:'Mất ví',
     desc:'Mất ví 200 tệ ở tàu điện. Vân Khánh sờ túi — trống không.',
     choices:[
-      {text:'Kể với Hòa, vay tiền', sub:'+100 tệ, +10 SP. Nợ 100 tệ phải trả tuần 6',
+      {text:'Kể với Hòa, vay tiền', sub:'+100 tệ, +10 SP. Nợ 100 tệ',
         result:{money:+100,sp:+10}, flag:'debt_hoa'},
-      {text:'Giấu, không kể ai', sub:'−15 SP. 1 tuần sau giảm 10% thu nhập',
+      {text:'Giấu, không kể ai', sub:'−15 SP',
         result:{sp:-15}, flag:'secret_loss'}
     ]
   },
   'c1_w8_linh': {
-    ch:1, week:8, once:true, isLinh:true,
+    ch:1, week:8,
     e:'💔', title:'Linh khóc trong thư viện',
     desc:'Linh ngồi co ro ở góc thư viện. "Tao không chịu nổi nữa Khánh ạ..."',
     choices:[
-      {text:'"Mày ở lại thêm 1 học kỳ nữa."', sub:'+15 SP, mất 1 ngày. Linh sẽ ở lại',
+      {text:'"Mày ở lại thêm 1 học kỳ nữa."', sub:'+15 SP, mất 1 ngày',
         result:{sp:+15,skipDays:1}, flag:'linh_stayed'},
-      {text:'"Nếu mày muốn về thì về."', sub:'+5 SP. Linh về cuối học kỳ 1',
+      {text:'"Nếu mày muốn về thì về."', sub:'+5 SP',
         result:{sp:+5}, flag:'linh_left_early'}
     ]
   },
   'c1_w12_hoa': {
-    ch:1, week:12, once:true,
+    ch:1, week:12,
     e:'📞', title:'Hòa tâm sự',
     desc:'Hòa gọi lúc 11h đêm. Giọng run. "Tao... tao không ổn."',
     choices:[
       {text:'Ở bên Hòa cả đêm', sub:'+20 SP, mất 1 ngày',
         result:{sp:+20,skipDays:1}, flag:'hoa_friend'},
-      {text:'Nghe 30 phút rồi về', sub:'+5 SP, −5 SP cảm giác có lỗi',
+      {text:'Nghe 30 phút rồi về', sub:'−5 SP',
         result:{sp:-5}, flag:'hoa_distant'}
     ]
   },
   'c1_w15_truongkien': {
-    ch:1, week:15, once:true,
+    ch:1, week:15,
     e:'😤', title:'Trương Kiến xúc phạm',
     desc:'"Sinh viên Việt Nam chỉ biết học bổng, không có thực lực."',
     choices:[
-      {text:'Im lặng, để Đình Hưng bảo vệ', sub:'+10 SP, quan hệ tốt với Đình Hưng',
+      {text:'Im lặng, để Đình Hưng bảo vệ', sub:'+10 SP',
         result:{sp:+10}, flag:'dinhhung_friend'},
-      {text:'Tự đứng lên phản bác', sub:'+20 SP, quan hệ xấu với Trương Kiến',
+      {text:'Tự đứng lên phản bác', sub:'+20 SP',
         result:{sp:+20}, flag:'confident'}
     ]
   },
-  'c1_w18_suytbohoc': {
-    ch:1, week:18, once:true,
+  'c1_w17_suytbohoc': {
+    ch:1, week:17,
     e:'💔', title:'Suýt bỏ học',
     desc:'11h đêm. Bản thảo đầy lỗi. Vân Khánh gọi mẹ — không ai nghe.',
     choices:[
-      {text:'Đứng dậy, viết lại từ đầu', sub:'−15 SP, +1% luận văn, +flag kiên định',
+      {text:'Đứng dậy, viết lại từ đầu', sub:'−15 SP, +1% luận văn',
         result:{sp:-15,lu:+1}, flag:'resilient'},
       {text:'Bỏ học, về nhà', sub:'Mở ending "Về nhà" sớm',
         result:{}, flag:'quit_early', special:'quit'}
     ]
   },
   'c2_w1_shanghai': {
-    ch:2, week:1, once:true,
+    ch:2, week:1,
     e:'🚄', title:'Lên Thượng Hải',
     desc:'Đình Hưng đưa Vân Khánh cuốn sổ trắng ở ga Bắc Kinh.',
     choices:[
-      {text:'Nhận sổ, hứa viết', sub:'+10 SP, mở flag "gratitude"',
+      {text:'Nhận sổ, hứa viết', sub:'+10 SP',
         result:{sp:+10}, flag:'gratitude'},
       {text:'Cảm ơn nhưng từ chối', sub:'+5 SP',
         result:{sp:+5}}
     ]
   },
   'c2_w3_singapore': {
-    ch:2, week:3, once:true,
+    ch:2, week:3,
     e:'🌏', title:'Hội thảo Singapore',
-    desc:'Cơ hội vàng. 2000 tệ. Vân Khánh chỉ có 3500.',
+    desc:'Cơ hội vàng. 2000 tệ.',
     choices:[
       {text:'Vay em gái, đi dự', sub:'−2000 tệ, +4% luận, +15 SP',
         result:{money:-2000,lu:+4,sp:+15}, flag:'singapore'},
-      {text:'Không đi, tiết kiệm', sub:'−10 SP, không mất tiền',
+      {text:'Không đi, tiết kiệm', sub:'−10 SP',
         result:{sp:-10}, flag:'skip_singapore'}
     ]
   },
   'c2_w7_tokyo': {
-    ch:2, week:7, once:true,
+    ch:2, week:7,
     e:'🌏', title:'Hội thảo Tokyo',
     desc:'Bay sang Tokyo trình bày nghiên cứu. 2500 tệ.',
     choices:[
@@ -853,22 +848,22 @@ const CHOICE_EVENTS = {
     ]
   },
   'c2_w24_dad': {
-    ch:2, week:24, once:true,
+    ch:2, week:24,
     e:'📵', title:'Bố không nghe máy',
-    desc:'Bố không nghe máy. Mẹ nói "bố mệt". Vân Khánh biết mẹ đang giấu.',
+    desc:'Bố không nghe máy. Mẹ nói "bố mệt".',
     choices:[
-      {text:'Về thăm bố ngay', sub:'−3000 tệ, +30 SP, mất 1 tuần',
-        result:{money:-3000,sp:+30,skipDays:7}, flag:'filial'},
-      {text:'Ở lại, tin mẹ', sub:'−20 SP. Lo lắng kéo dài',
+      {text:'Về thăm bố ngay', sub:'−3000 tệ, +30 SP, mất 3 ngày',
+        result:{money:-3000,sp:+30,skipDays:3}, flag:'filial'},
+      {text:'Ở lại, tin mẹ', sub:'−20 SP',
         result:{sp:-20}, flag:'worried'}
     ]
   },
   'c2_w28_dad_pride': {
-    ch:2, week:28, once:true,
+    ch:2, week:28,
     e:'👨‍👩‍👧‍👦', title:'Bố nói "Bố tự hào về con"',
     desc:'Cả nhà qua thăm. Bố đứng dậy, tay run cầm ly: "...Bố tự hào về con."',
     choices:[
-      {text:'Ôm bố', sub:'+60 SP, +30 HP, mở flag "pride"',
+      {text:'Ôm bố', sub:'+60 SP, +30 HP',
         result:{sp:+60,hp:+30}, flag:'pride'},
       {text:'Cúi đầu, im lặng', sub:'+40 SP',
         result:{sp:+40}}
@@ -876,15 +871,14 @@ const CHOICE_EVENTS = {
   }
 };
 
-/* ====== CULTURAL EVENTS (6 events) ====== */
+/* ===== CULTURAL EVENTS ===== */
 const CULTURAL_EVENTS = [
-  // LỄ HỘI ÂM LỊCH
   {
     id: 'tet_nguyen_dan',
     e: '🧧', title: 'Tết Nguyên Đán xa nhà',
-    desc: 'Mùng 1 Tết. Mẹ gọi video. Cả nhà đang gói bánh chưng. Em trai Khang giơ điện thoại quay mâm cỗ: "Chị ơi, thiếu chị."',
+    desc: 'Mùng 1 Tết. Mẹ gọi video. Cả nhà đang gói bánh chưng. Em trai Khang giơ điện thoại: "Chị ơi, thiếu chị."',
     choices: [
-      {text: 'Gọi video cả tiếng, xem cả nhà ăn Tết', sub: '+40 SP, −50 tệ, mất buổi tối',
+      {text: 'Gọi video cả tiếng, xem cả nhà ăn Tết', sub: '+40 SP, −50 tệ, mất 2 action',
         result: {sp: +40, money: -50, skipActions: 2}, flag: 'tet_call'},
       {text: 'Nói 5 phút, không muốn buồn thêm', sub: '+5 SP',
         result: {sp: +5}, flag: 'tet_short'}
@@ -904,10 +898,10 @@ const CULTURAL_EVENTS = [
   {
     id: 'gio_to_hung_vuong',
     e: '🌸', title: 'Giỗ Tổ Hùng Vương',
-    desc: 'Ngày 10/3 âm lịch. Cộng đồng người Việt ở Bắc Kinh tổ chức offline. Có mâm cỗ, có hát Quốc ca, có kể chuyện cội nguồn.',
+    desc: 'Ngày 10/3 âm lịch. Cộng đồng người Việt ở Bắc Kinh tổ chức offline. Có mâm cỗ, có hát Quốc ca.',
     choices: [
-      {text: 'Tham gia, mặc áo dài', sub: '+50 SP, −100 tệ',
-        result: {sp: +50, money: -100, skipDays: 0.5}, flag: 'hungking'},
+      {text: 'Tham gia, mặc áo dài', sub: '+50 SP, −100 tệ, mất 1 ngày',
+        result: {sp: +50, money: -100, skipDays: 1}, flag: 'hungking'},
       {text: 'Ở nhà, tự thắp hương', sub: '+15 SP',
         result: {sp: +15}}
     ]
@@ -915,15 +909,14 @@ const CULTURAL_EVENTS = [
   {
     id: 'trung_thu',
     e: '🎏', title: 'Trung Thu cộng đồng',
-    desc: 'Tết Trung Thu. Cộng đồng Việt ở Bắc Kinh làm bánh trung thu. Chị Hà Nội rủ: "Em ơi, qua cho vui."',
+    desc: 'Tết Trung Thu. Cộng đồng Việt ở Bắc Kinh làm bánh trung thu.',
     choices: [
-      {text: 'Đi làm bánh, gặp cộng đồng người Việt', sub: '+35 SP, −50 tệ',
-        result: {sp: +35, money: -50, skipDays: 0.5}, flag: 'community'},
+      {text: 'Đi làm bánh, gặp cộng đồng người Việt', sub: '+35 SP, −50 tệ, mất 1 ngày',
+        result: {sp: +35, money: -50, skipDays: 1}, flag: 'community'},
       {text: 'Ở nhà, mua bánh siêu thị', sub: '+10 SP, −30 tệ',
         result: {sp: +10, money: -30}}
     ]
   },
-  // RANDOM
   {
     id: 'khanh_wedding',
     e: '💌', title: 'Bạn Khanh ở quê cưới',
@@ -948,56 +941,93 @@ const CULTURAL_EVENTS = [
   }
 ];
 
-/* ====== OFFERS ====== */
+/* ===== RESCUE EVENTS ===== */
+const RESCUE_EVENTS = {
+  rescue1: {
+    id: 'rescue1',
+    e: '📞', title: 'GS. Trần gọi lên văn phòng',
+    desc: 'Vân Khánh bước vào phòng. GS. Trần đang đọc bản thảo. Ông đặt xuống, nhìn thẳng: "Cô chỉ còn ít tuần. Luận văn mới một nửa. Nhưng tôi thấy cô cố gắng. Tôi sẽ giúp."',
+    choices: [
+      {text: 'Nhận tài liệu, cảm ơn thầy', sub: '+8% luận văn, −200 tệ, −10 SP',
+        result: {lu: +8, money: -200, sp: -10}, flag: 'rescue1_accepted'},
+      {text: 'Từ chối, tự làm', sub: '+15 SP',
+        result: {sp: +15}, flag: 'rescue1_declined'}
+    ]
+  },
+  rescue2: {
+    id: 'rescue2',
+    e: '📝', title: 'Xin gia hạn',
+    desc: 'Vân Khánh đến gặp GS. Trần. Tay cô run. "Thầy ơi... em xin gia hạn thêm 2 tuần." Hội đồng đồng ý — nhưng phải nộp 500 tệ phí và mất 30 SP vì lo lắng.',
+    choices: [
+      {text: 'Đồng ý xin gia hạn', sub: '+2 tuần, −500 tệ, −30 SP',
+        result: {money: -500, sp: -30, addWeeks: 2}, flag: 'rescue2_accepted'},
+      {text: 'Từ chối, chấp nhận kết quả', sub: '+20 SP',
+        result: {sp: +20}, flag: 'rescue2_declined'}
+    ]
+  },
+  rescue3: {
+    id: 'rescue3',
+    e: '💌', title: 'Đình Hưng giúp đỡ',
+    desc: 'Đình Hưng gọi từ Bắc Kinh. "Anh có 3 bài báo chưa công bố. Em trích dẫn được." Vân Khánh ngại ngùng. "Không sao. Em đã giúp anh rất nhiều. Giờ anh giúp lại."',
+    choices: [
+      {text: 'Nhận sự giúp đỡ', sub: '+12% luận văn, +5 SP, mất bạn Đình Hưng',
+        result: {lu: +12, sp: +5}, flag: 'rescue3_accepted'},
+      {text: 'Từ chối, tự làm', sub: '+25 SP',
+        result: {sp: +25}, flag: 'rescue3_declined'}
+    ]
+  }
+};
+
+/* ===== OFFERS ===== */
 const OFFERS = [
   {id:'trip', e:'✈️', title:'Hòa rủ đi Cố Cung', desc:'Đi chơi cả buổi ở Cố Cung.',
    choices:[
-     {text:'Đi cùng Hòa', sub:'−400 tệ, +40 SP, +2% luận', result:{money:-400,sp:+40,lu:+2,skipDays:0.5}},
+     {text:'Đi cùng Hòa', sub:'−400 tệ, +40 SP, +2% luận', result:{money:-400,sp:+40,lu:+2}},
      {text:'Ở nhà viết luận', sub:'+2% luận, −5 SP', result:{lu:+2,sp:-5}}
    ]},
   {id:'picnic', e:'🏞️', title:'Dã ngoại cuối tuần', desc:'Cả lab đi dã ngoại.',
    choices:[
-     {text:'Đi', sub:'−150 tệ, +25 SP, +5 HP', result:{money:-150,sp:+25,hp:+5,skipDays:0.5}},
+     {text:'Đi', sub:'−150 tệ, +25 SP, +5 HP', result:{money:-150,sp:+25,hp:+5}},
      {text:'Không đi', sub:'+1% luận, −10 SP', result:{lu:+1,sp:-10}}
    ]},
   {id:'ktv', e:'🎤', title:'KTV cùng lớp', desc:'Lớp tổ chức hát karaoke.',
    choices:[
-     {text:'Đi', sub:'−200 tệ, +30 SP, +10 HP', result:{money:-200,sp:+30,hp:+10,skipDays:0.5}},
+     {text:'Đi', sub:'−200 tệ, +30 SP, +10 HP', result:{money:-200,sp:+30,hp:+10}},
      {text:'Không đi', sub:'+1% luận, −5 SP', result:{lu:+1,sp:-5}}
    ]},
   {id:'party', e:'🍲', title:'Liên hoan cuối kỳ', desc:'Liên hoan nhóm nghiên cứu.',
    choices:[
-     {text:'Đi', sub:'−100 tệ, +20 SP, +5 HP', result:{money:-100,sp:+20,hp:+5,skipDays:0.5}},
+     {text:'Đi', sub:'−100 tệ, +20 SP, +5 HP', result:{money:-100,sp:+20,hp:+5}},
      {text:'Không đi', sub:'+1% luận, −10 SP', result:{lu:+1,sp:-10}}
    ]},
   {id:'coat', e:'🧥', title:'Mùa đông mua áo', desc:'Trời trở lạnh.',
    choices:[
-     {text:'Mua áo', sub:'−250 tệ, +5 HP, +10 SP', result:{money:-250,hp:+5,sp:+10,skipDays:0.3}},
+     {text:'Mua áo', sub:'−250 tệ, +5 HP, +10 SP', result:{money:-250,hp:+5,sp:+10}},
      {text:'Mặc áo cũ', sub:'20% bị cảm', result:{}, flag:'cold_risk'}
    ]},
   {id:'books', e:'📚', title:'Hiệu sách giảm giá', desc:'Sale 50% sách chuyên ngành.',
    choices:[
-     {text:'Mua sách', sub:'−180 tệ, +2% luận', result:{money:-180,lu:+2,skipDays:0.3}},
+     {text:'Mua sách', sub:'−180 tệ, +2% luận', result:{money:-180,lu:+2}},
      {text:'Không mua', sub:'Không mất gì', result:{}}
    ]},
   {id:'bed', e:'🛏️', title:'Chăn ga mới', desc:'Chăn ga mùa đông.',
    choices:[
-     {text:'Mua', sub:'−120 tệ, +5 HP, +10 SP', result:{money:-120,hp:+5,sp:+10,skipDays:0.3}},
+     {text:'Mua', sub:'−120 tệ, +5 HP, +10 SP', result:{money:-120,hp:+5,sp:+10}},
      {text:'Dùng chăn cũ', sub:'−5 HP/tuần', result:{}, flag:'poor_sleep'}
    ]},
   {id:'cook', e:'🥢', title:'Nồi cơm mini', desc:'Nấu ăn tiết kiệm.',
    choices:[
-     {text:'Mua', sub:'−100 tệ, tiết kiệm 3 tệ/bữa mãi mãi', result:{money:-100,skipDays:0.3}, flag:'have_cooker'},
+     {text:'Mua', sub:'−100 tệ, tiết kiệm 3 tệ/bữa', result:{money:-100}, flag:'have_cooker'},
      {text:'Không mua', sub:'Tiếp tục ăn ngoài', result:{}}
    ]},
   {id:'bday', e:'🎂', title:'Sinh nhật bạn', desc:'Sinh nhật Hòa.',
    choices:[
-     {text:'Mua quà', sub:'−80 tệ, +20 SP', result:{money:-80,sp:+20,skipDays:0.3}},
+     {text:'Mua quà', sub:'−80 tệ, +20 SP', result:{money:-80,sp:+20}},
      {text:'Chỉ chúc mừng', sub:'−10 SP', result:{sp:-10}}
    ]}
 ];
 
-/* ====== BIG EVENTS ====== */
+/* ===== BIG EVENTS ===== */
 const BIG_EVENTS=[
   {id:'conf', e:'🎓', title:'Hội nghị SV Quốc tế', desc:'Hội nghị nghiên cứu sinh quốc tế.',
    choices:[
@@ -1026,12 +1056,12 @@ const BIG_EVENTS=[
    ]},
   {id:'museum', e:'🏛️', title:'Triển lãm bảo tàng', desc:'Bảo tàng Quốc gia mở triển lãm.',
    choices:[
-     {text:'Đi', sub:'−200 tệ, +1% luận, +25 SP', result:{money:-200,lu:+1,sp:+25,skipDays:0.5}},
+     {text:'Đi', sub:'−200 tệ, +1% luận, +25 SP', result:{money:-200,lu:+1,sp:+25}},
      {text:'Bỏ qua', sub:'', result:{}}
    ]}
 ];
 
-/* ====== FIXED STORY ====== */
+/* ===== FIXED STORY ===== */
 const FIXED_STORY = [
   {ch:1, week:1, e:'🌸', title:'Ngày đầu ở Bắc Kinh',
    text:'Bà cụ Trung Quốc dẫn đường đến CNU. Bà nói: "Con gái, cố lên."',
@@ -1059,12 +1089,13 @@ const FIXED_STORY = [
    reward:{}}
 ];
 
-/* ====== SAVE STATE ====== */
+/* ===== SAVE STATE ===== */
 const D0=()=>({
   day:1,week:1,yearWeek:1,year:1,ch:1,period:0,
   hp:80,sp:70,lu:0,money:START_MONEY,
   periodActionsLeft:ACTIONS_PER_PERIOD,
   dayActionsLeft:ACTIONS_PER_DAY,
+  wroteThisPeriod:false,
   rolledToday:false,
   lotteryDoneThisYear:false,
   bigEventsThisYear:[],
@@ -1074,6 +1105,7 @@ const D0=()=>({
   pendingBigEvent:null,
   pendingCulturalEvent:null,
   pendingChoiceEvent:null,
+  pendingRescue:null,
   notes:[],
   seenEvents:{},
   seen:0,
@@ -1088,29 +1120,41 @@ try{
   if(raw){const o=JSON.parse(raw);if(o&&o.ch&&o.day) S=Object.assign(D0(),o);}
 }catch(e){}
 
-if(typeof S.periodActionsLeft!=='number') S.periodActionsLeft=ACTIONS_PER_PERIOD;
-if(typeof S.dayActionsLeft!=='number') S.dayActionsLeft=ACTIONS_PER_DAY;
-if(typeof S.yearWeek!=='number') S.yearWeek=((S.week-1)%WEEKS_PER_YEAR)+1;
-if(typeof S.year!=='number') S.year=Math.ceil(S.week/WEEKS_PER_YEAR);
+/* ===== FIX SAVE CŨ ===== */
+if(typeof S.day !== 'number' || isNaN(S.day)) S.day = 1;
+if(S.day !== Math.floor(S.day)) S.day = Math.ceil(S.day);
+if(S.day < 1) S.day = 1;
+if(typeof S.week !== 'number' || S.week < 1) S.week = 1;
+if(typeof S.ch !== 'number' || S.ch < 1 || S.ch > 2) S.ch = 1;
+if(typeof S.period !== 'number' || S.period < 0 || S.period > 2) S.period = 0;
+if(S.period !== Math.floor(S.period)) S.period = Math.floor(S.period);
+if(typeof S.money !== 'number' || isNaN(S.money)) S.money = START_MONEY;
+if(typeof S.hp !== 'number' || isNaN(S.hp)) S.hp = 80;
+if(typeof S.sp !== 'number' || isNaN(S.sp)) S.sp = 70;
+if(typeof S.lu !== 'number' || isNaN(S.lu)) S.lu = 0;
+if(typeof S.periodActionsLeft !== 'number') S.periodActionsLeft = ACTIONS_PER_PERIOD;
+if(typeof S.dayActionsLeft !== 'number') S.dayActionsLeft = ACTIONS_PER_DAY;
+if(typeof S.yearWeek !== 'number') S.yearWeek = ((S.week-1)%WEEKS_PER_YEAR)+1;
+if(typeof S.year !== 'number') S.year = Math.ceil(S.week/WEEKS_PER_YEAR);
 if(!Array.isArray(S.bigEventsThisYear)) S.bigEventsThisYear=[];
 if(!S.seenEvents) S.seenEvents={};
 if(!S.flags) S.flags={};
-if(typeof S.lotteryDoneThisYear!=='boolean') S.lotteryDoneThisYear=false;
+if(typeof S.wroteThisPeriod !== 'boolean') S.wroteThisPeriod = false;
+if(typeof S.lotteryDoneThisYear !== 'boolean') S.lotteryDoneThisYear = false;
+if(S.pendingRescue === undefined) S.pendingRescue = null;
+if(S._lotteryWarned === undefined) S._lotteryWarned = false;
 
-/* ====== ACHIEVEMENTS ====== */
+/* ===== ACHIEVEMENTS ===== */
 const ACHIEVEMENTS=[
   {id:'a_first_action', ico:'🎬', name:'Bước đầu tiên', desc:'Thực hiện action đầu tiên'},
   {id:'a_first_week',   ico:'📅', name:'Tuần đầu tiên', desc:'Hoàn thành 1 tuần'},
   {id:'a_first_month',  ico:'🗓️', name:'Tháng đầu tiên', desc:'Hoàn thành 4 tuần'},
   {id:'a_first_year',   ico:'🎊', name:'Năm đầu tiên', desc:'Hoàn thành 5 tuần'},
   {id:'a_ch1_done',     ico:'🎓', name:'Thạc sĩ', desc:'Hoàn thành Chương 1'},
-  {id:'a_ch2_done',     ico:'🎓🎓', name:'Tiến sĩ', desc:'Hoàn thành Chương 2'},
   {id:'a_grad',         ico:'🏆', name:'Tốt nghiệp', desc:'Mở ending tốt nghiệp'},
   {id:'a_home',         ico:'🌸', name:'Về nhà', desc:'Mở ending về nhà'},
   {id:'a_lottery',      ico:'💰', name:'Trúng số', desc:'Mở ending trúng xổ số'},
   {id:'a_timeout',      ico:'⏰', name:'Quá hạn', desc:'Mở ending quá hạn'},
-  {id:'a_writer_10',    ico:'✍️', name:'Cây bút nhỏ', desc:'Viết luận 10 lần'},
-  {id:'a_writer_50',    ico:'📝', name:'Cây bút lớn', desc:'Viết luận 50 lần'},
   {id:'a_note_10',      ico:'📖', name:'Nhà văn nhí', desc:'Viết 10 note'},
   {id:'a_note_50',      ico:'📚', name:'Nhà văn thực thụ', desc:'Viết 50 note'},
   {id:'a_hungry',       ico:'🍜', name:'Đói bụng', desc:'HP < 20 lần đầu'},
@@ -1120,16 +1164,15 @@ const ACHIEVEMENTS=[
   {id:'a_poor',         ico:'🪙', name:'Nghèo', desc:'Tiền < 100 tệ'},
   {id:'a_event_10',     ico:'🎲', name:'Người trải nghiệm', desc:'Gặp 10 event'},
   {id:'a_night_owl',    ico:'🌌', name:'Cú đêm', desc:'Thức đêm 10 lần'},
-  {id:'a_perfect',      ico:'⭐', name:'Hoàn hảo', desc:'Tốt nghiệp với HP+SP > 80, tiền > 20k'},
-  {id:'a_speedrun',     ico:'⚡', name:'Thần tốc', desc:'Tốt nghiệp < 200 ngày'},
-  {id:'a_slowrun',      ico:'🐢', name:'Chậm mà chắc', desc:'Tốt nghiệp > 400 ngày'},
+  {id:'a_perfect',      ico:'⭐', name:'Hoàn hảo', desc:'Tốt nghiệp HP+SP > 80, tiền > 20k'},
   {id:'a_linh_friend',  ico:'💗', name:'Bạn của Linh', desc:'Ở bên Linh khi cô cần'},
   {id:'a_hoa_friend',   ico:'🤝', name:'Bạn của Hòa', desc:'Ở bên Hòa cả đêm'},
   {id:'a_resilient',    ico:'🛡️', name:'Kiên định', desc:'Suýt bỏ học nhưng không bỏ'},
-  {id:'a_pride',        ico:'🌸', name:'Niềm tự hào', desc:'Nghe bố nói "Bố tự hào về con"'}
+  {id:'a_pride',        ico:'🌸', name:'Niềm tự hào', desc:'Nghe bố nói "Bố tự hào về con"'},
+  {id:'a_rescued',      ico:'🆘', name:'Được cứu', desc:'Nhận cứu trợ khi sắp hết hạn'}
 ];
 
-/* ====== DAILY QUOTES ====== */
+/* ===== DAILY QUOTES ===== */
 const DAILY_QUOTES=[
   "Hôm nay trời đẹp. Vân Khánh thấy nhẹ lòng.",
   "Một ngày mới, một cơ hội mới.",
@@ -1163,7 +1206,7 @@ const DAILY_QUOTES=[
   "Hôm nay, cô viết tiếp câu chuyện của mình."
 ];
 
-/* ====== MINIGAME ====== */
+/* ===== MINIGAME SENTENCES ===== */
 const MINIGAME_SENTENCES = {
   1: [
     { cn: '汉语教育',     py: 'hànyǔ jiàoyù',       vi: 'Giáo dục Hán ngữ' },
@@ -1181,9 +1224,9 @@ const MINIGAME_SENTENCES = {
   ]
 };
 
-/* ====== STATE ====== */
-const T={modal:0,mq:[],sheet:'',mgActive:false,mgSentence:null,mgStart:0,mgInterval:null,mgBase:0};
-/* ====== SAVE / LOAD ====== */
+/* ===== STATE ===== */
+const T={modal:0,mq:[],sheet:'',mgActive:false,mgSentence:null,mgStart:0,mgInterval:null,mgBase:0,_modalTimeout:null};
+/* ===== SAVE / LOAD ===== */
 function pack(){return JSON.stringify({v:SAVE_VER,ts:Date.now(),data:S})}
 function save(){
   clearTimeout(window.__saveTimer);
@@ -1203,6 +1246,10 @@ function loadSlot(){
     const o=JSON.parse(raw);
     if(!o||o.v!==SAVE_VER||!o.data) return false;
     S=Object.assign(D0(),o.data);
+    if(S.day !== Math.floor(S.day)) S.day = Math.ceil(S.day);
+    if(typeof S.period !== 'number' || S.period < 0 || S.period > 2) S.period = 0;
+    if(!S.flags) S.flags={};
+    if(S.pendingRescue === undefined) S.pendingRescue = null;
     T.modal=0;T.mq=[];T.sheet='';
     $('#modal').classList.add('hide');
     $('#sheet').classList.add('hide');
@@ -1222,7 +1269,7 @@ function slotInfo(){
 }
 function deleteSlot(){try{localStorage.removeItem(SLOT);return true}catch(e){return false}}
 
-/* ====== EXPORT / IMPORT ====== */
+/* ===== EXPORT / IMPORT ===== */
 function exportSave(){
   try{
     const blob=new Blob([pack()],{type:'application/json'});
@@ -1261,7 +1308,12 @@ function importSave(){
         const o=JSON.parse(r.result);
         if(!o||!o.data) return toast('❌ File không hợp lệ');
         if(!confirm(`Nhập save Ngày ${o.data.day}?`)) return;
-        S=Object.assign(D0(),o.data);saveNow();drawAll();
+        S=Object.assign(D0(),o.data);
+        if(S.day !== Math.floor(S.day)) S.day = Math.ceil(S.day);
+        if(typeof S.period !== 'number' || S.period < 0 || S.period > 2) S.period = 0;
+        if(!S.flags) S.flags={};
+        if(S.pendingRescue === undefined) S.pendingRescue = null;
+        saveNow();drawAll();
         toast('✅ Đã nhập save!');
       }catch(e){toast('❌ Lỗi đọc file')}
     };
@@ -1278,7 +1330,7 @@ function manualLoad(){
   else toast('❌ Save lỗi');
 }
 
-/* ====== RECORD ====== */
+/* ===== RECORD ===== */
 function getRec(){
   try{
     const r=localStorage.getItem(REC_KEY);
@@ -1307,7 +1359,7 @@ function addFinish(tot,c1,c2,type){
   saveRec(r);
 }
 
-/* ====== AUDIO ====== */
+/* ===== AUDIO ===== */
 let AC=null;
 function beep(f=600,d=.1){
   if(!S.snd) return;
@@ -1324,7 +1376,7 @@ function beep(f=600,d=.1){
   }catch(e){}
 }
 
-/* ====== TOAST ====== */
+/* ===== TOAST ===== */
 function toast(m,cls){
   const d=document.createElement('div');
   d.textContent=m;
@@ -1334,20 +1386,30 @@ function toast(m,cls){
   const q=$('#toast').children;if(q.length>3) q[0].remove();
 }
 
-/* ====== MODAL ====== */
+/* ===== MODAL ===== */
 function modal(h){
   if(T.modal){T.mq.push(h);return}
   T.modal=1;
   $('#modal').innerHTML=`<div class="bx">${h}</div>`;
   $('#modal').classList.remove('hide');
+  
+  clearTimeout(T._modalTimeout);
+  T._modalTimeout = setTimeout(()=>{
+    if(T.modal){
+      console.warn('[v6.6] Modal auto-closed after 30s');
+      mclose();
+    }
+  }, 30000);
 }
 function mclose(){
-  T.modal=0;$('#modal').classList.add('hide');
+  T.modal=0;
+  clearTimeout(T._modalTimeout);
+  $('#modal').classList.add('hide');
   if(T.mq.length) modal(T.mq.shift());
 }
 function closeSheet(){T.sheet='';$('#sheet').classList.add('hide')}
 
-/* ====== DOM HELPERS ====== */
+/* ===== DOM HELPERS ===== */
 const EL={};
 const el=id=>EL[id]||(EL[id]=document.getElementById(id));
 const setTxt=(id,v)=>{const e=el(id);if(e&&e.textContent!==v)e.textContent=v};
@@ -1357,7 +1419,7 @@ const setScaleX=(id,pct)=>{
   if(e._t!==t){e._t=t;e.style.transform=t}
 };
 
-/* ====== MOOD ====== */
+/* ===== MOOD ===== */
 function moodText(){
   if(S.hp<20) return 'Vân Khánh mệt lả, cần nghỉ ngơi.';
   if(S.sp<20) return 'Vân Khánh chán nản, không muốn làm gì.';
@@ -1369,10 +1431,32 @@ function moodText(){
 }
 function getDailyQuote(){ return DAILY_QUOTES[(S.day-1)%DAILY_QUOTES.length]; }
 
-/* ====== DRAW ====== */
+/* ===== DRAW ===== */
 function drawHead(){
   document.body.className='ch'+S.ch;
-  setTxt('chapLbl',S.ch==1?'✿ THẠC SĨ · CNU BẮC KINH ✿':'✿ TIẾN SĨ · SISU THƯỢNG HẢI ✿');
+  
+  // Deadline warning
+  const totalWeeks = MAX_WEEKS[S.ch];
+  const timeRatio = S.week / totalWeeks;
+  const progressRatio = S.lu / 100;
+  const deadlineWarn = timeRatio > 0.75 && progressRatio < 0.5;
+  
+  const chapEl = el('chapLbl');
+  if(chapEl){
+    if(deadlineWarn){
+      chapEl.style.color = '#fff';
+      chapEl.style.background = '#c92e72';
+      chapEl.style.padding = '1px 6px';
+      chapEl.style.borderRadius = '6px';
+      chapEl.textContent = '🚨 SẮP HẾT HẠN!';
+    } else {
+      chapEl.style.background = '';
+      chapEl.style.padding = '';
+      chapEl.style.borderRadius = '';
+      chapEl.textContent = S.ch==1?'✿ THẠC SĨ · CNU BẮC KINH ✿':'✿ TIẾN SĨ · SISU THƯỢNG HẢI ✿';
+    }
+  }
+  
   setTxt('hpV',Math.round(S.hp));
   setTxt('spV',Math.round(S.sp));
   setTxt('lvV',S.lu.toFixed(1)+'%');
@@ -1393,7 +1477,8 @@ function drawScene(){
 
   const lines=S.logDay.slice(-8);
   const logEl=$('#log');
-  const key=lines.join('|')+'#'+S.logDay.length;
+  const lastLine = lines.length ? lines[lines.length-1] : '';
+  const key = S.logDay.length + '#' + lastLine;
   if(logEl._key!==key){
     logEl._key=key;
     if(lines.length){
@@ -1405,7 +1490,7 @@ function drawScene(){
   }
 
   const badge=$('#offerBadge');
-  const pending=S.pendingOffer||S.pendingBigEvent||S.pendingCulturalEvent;
+  const pending = S.pendingRescue || S.pendingCulturalEvent || S.pendingOffer || S.pendingBigEvent;
   if(pending){
     badge.classList.add('on');
     const e=pending.e||'📌';
@@ -1435,6 +1520,7 @@ function drawActs(){
     if(done) dis=true;
     if(a.m<0 && S.money<-a.m) dis=true;
     if(a.k=='c_wr' && S.lu>=100) dis=true;
+    if(a.k=='c_wr' && S.wroteThisPeriod) dis=true;
     if(dis) cls+=' dis';
     html.push(`<button class="act ${cls}" data-a="do" data-k="${a.k}" ${dis?'disabled':''}>
       <b>${a.e}</b><span>${a.n}</span>
@@ -1445,16 +1531,9 @@ function drawActs(){
   if(actsEl._h!==h){actsEl._h=h;actsEl.innerHTML=h}
 
   const nb=$('#nextBtn');
-  if(S.period==0) {
-    nb.textContent='➡️ SANG BUỔI CHIỀU';
-    nb.dataset.a='next';
-  } else if(S.period==1) {
-    nb.textContent='➡️ SANG BUỔI TỐI';
-    nb.dataset.a='next';
-  } else {
-    nb.textContent='🌅 SANG NGÀY MỚI';
-    nb.dataset.a='next';
-  }
+  if(S.period==0) nb.textContent='➡️ SANG BUỔI CHIỀU';
+  else if(S.period==1) nb.textContent='➡️ SANG BUỔI TỐI';
+  else nb.textContent='🌅 SANG NGÀY MỚI';
 
   const wf=$('#writeFab');
   if(S.week>=STIPEND_WEEKS[S.ch] && S.lu<100) wf.classList.add('on');
@@ -1467,7 +1546,7 @@ function drawActs(){
 
 function drawAll(){drawHead();drawScene();drawActs()}
 
-/* ====== LOG ====== */
+/* ===== LOG ===== */
 function addLog(s){
   S.logDay.push(s);
   if(S.logDay.length>100) S.logDay.shift();
@@ -1475,17 +1554,17 @@ function addLog(s){
   if(S.logAll.length>800) S.logAll.shift();
 }
 
-/* ====== LOW EFFICIENCY ====== */
+/* ===== LOW EFFICIENCY ===== */
 function lowEff(){return (S.hp<30||S.sp<30)?0.5:1}
 
-/* ====== FLAG EFFECTS ====== */
+/* ===== FLAG EFFECTS (per action) ===== */
 function applyFlagEffects(){
   if(S.flags.cold_risk && !S.flags.cold_resolved){
     S.flags.cold_resolved = true;
     if(Math.random() < 0.2){
       S.hp = cl(S.hp - 15, 0, 100);
       addLog('🤒 Bị cảm vì mặc áo cũ');
-      setTimeout(() => toast('⚠️ Bị cảm! −15 HP'), 500);
+      setTimeout(()=>toast('⚠️ Bị cảm! −15 HP'), 500);
     }
   }
   if(S.flags.poor_sleep && S.day % 7 === 0){
@@ -1494,11 +1573,31 @@ function applyFlagEffects(){
   }
 }
 
+/* ===== FLAG CONSEQUENCES (per week) ===== */
+function applyFlagConsequences(){
+  if(S.flags.debt_hoa && S.week >= 6){
+    S.money -= 100;
+    S.flags.debt_hoa = false;
+    addLog('💰 Trả nợ Hòa: −100 tệ');
+    setTimeout(()=>toast('💰 Đã trả nợ Hòa'), 500);
+  }
+  if(S.flags.secret_loss && S.week >= 4){
+    const penalty = Math.floor(SCHOLAR[S.ch] * 0.1);
+    S.money -= penalty;
+    S.flags.secret_loss = false;
+    addLog(`💸 Giấu mất ví — hao hụt ${penalty} tệ`);
+  }
+  if(S.flags.worried){
+    S.sp = cl(S.sp - 10, 0, 100);
+    addLog('😟 Lo lắng bố: −10 SP');
+  }
+}
+
 function getFoodCost(baseCost){
   return S.flags.have_cooker ? Math.max(0, baseCost - 3) : baseCost;
 }
 
-/* ====== RANDOM EVENTS ====== */
+/* ===== RANDOM EVENTS ===== */
 function maybeRandomEvent(){
   if(S.rolledToday) return null;
   if(Math.random()>RANDOM_EVENT_CHANCE) return null;
@@ -1520,9 +1619,38 @@ function applyEvent(ev,choiceIdx){
     S.periodActionsLeft=Math.max(0,S.periodActionsLeft-r.skipActions);
     S.dayActionsLeft=Math.max(0,S.dayActionsLeft-r.skipActions);
   }
+  
+  // skipDays — trigger endWeek nếu qua ngày 7
   if(r.skipDays){
-    S.day += r.skipDays;
+    const skip = Math.max(1, Math.round(r.skipDays));
+    for(let i = 0; i < skip; i++){
+      if(S.day % 7 === 0){
+        const scholar = SCHOLAR[S.ch];
+        const rent = RENT_PER_WEEK[S.ch] || 0;
+        S.money += scholar - rent;
+        S.week++;
+        S.yearWeek++;
+        if(S.yearWeek > WEEKS_PER_YEAR){
+          S.yearWeek = 1;
+          S.year++;
+          S.bigEventsThisYear = [];
+          S.lotteryDoneThisYear = false;
+          S.culturalEventThisYear = null;
+        }
+        addLog(`📊 Tuần ${S.week-1} kết thúc (bị skip)`);
+      }
+      S.day++;
+    }
   }
+  
+  // addWeeks — rescue2
+  if(r.addWeeks){
+    S.week = Math.max(1, S.week - r.addWeeks);
+    S.yearWeek = ((S.week - 1) % WEEKS_PER_YEAR) + 1;
+    S.year = Math.ceil(S.week / WEEKS_PER_YEAR);
+  }
+  
+  if(S.day !== Math.floor(S.day)) S.day = Math.ceil(S.day);
 
   if(choice.flag){
     S.flags=S.flags||{};
@@ -1541,10 +1669,24 @@ function applyEvent(ev,choiceIdx){
 }
 
 function showChoiceEvent(ev,callback){
+  if(!ev){
+    console.error('[v6.6] showChoiceEvent: ev is null');
+    return;
+  }
+  
+  T.modal = 0;
+  T.mq = [];
+  $('#modal').classList.add('hide');
+
   const isCultural = ev.id && CULTURAL_EVENTS.some(c => c.id === ev.id);
+  const isRescue = ev.id && RESCUE_EVENTS[ev.id];
+  
+  const banner = isCultural ? `<div class="cultural-banner">🇻🇳 SỰ KIỆN VĂN HÓA VIỆT NAM</div>` 
+                : isRescue ? `<div class="cultural-banner" style="background:linear-gradient(90deg,#c92e72,#ff6b9d,#c92e72)">🆘 CƠ HỘI CUỐI</div>`
+                : '';
   
   const html=`
-    ${isCultural ? `<div class="cultural-banner">🇻🇳 SỰ KIỆN VĂN HÓA VIỆT NAM</div>` : ''}
+    ${banner}
     <h2>${ev.e} ${ev.title}</h2>
     <div class="body" style="text-align:center;margin-bottom:12px;font-style:italic">${ev.desc}</div>
     ${ev.choices.map((c,i)=>`
@@ -1565,6 +1707,13 @@ function pickChoice(idx){
   const ev=window.__currentChoiceEvent;
   if(!ev) return;
   const choice=ev.choices[idx];
+  const r = choice.result || {};
+  
+  // Check money trước
+  if(r.money && r.money < 0 && S.money < -r.money){
+    toast('❌ Không đủ tiền!');
+    return;
+  }
 
   if(choice.special==='quit'){
     mclose();
@@ -1586,7 +1735,7 @@ function pickChoice(idx){
   }
 }
 
-/* ====== OFFER ====== */
+/* ===== OFFER ===== */
 function maybeOffer(){
   if(S.pendingOffer||S.pendingBigEvent||S.pendingCulturalEvent) return;
   if(Math.random()>0.15) return;
@@ -1598,17 +1747,24 @@ function maybeOffer(){
 }
 
 function openOffer(){
-  const pending=S.pendingOffer||S.pendingBigEvent||S.pendingCulturalEvent;
+  const pending = S.pendingRescue || S.pendingCulturalEvent || S.pendingOffer || S.pendingBigEvent;
   if(!pending) return;
+  
+  const isRescue = S.pendingRescue && pending === S.pendingRescue;
+  const isCultural = S.pendingCulturalEvent && pending === S.pendingCulturalEvent;
+  const isOffer = S.pendingOffer && pending === S.pendingOffer;
+  const isBig = S.pendingBigEvent && pending === S.pendingBigEvent;
+  
   showChoiceEvent(pending,()=>{
-    S.pendingOffer=null;
-    S.pendingBigEvent=null;
-    S.pendingCulturalEvent=null;
+    if(isRescue) S.pendingRescue = null;
+    if(isCultural) S.pendingCulturalEvent = null;
+    if(isOffer) S.pendingOffer = null;
+    if(isBig) S.pendingBigEvent = null;
     saveNow();drawAll();
   });
 }
 
-/* ====== BIG EVENTS ====== */
+/* ===== BIG EVENTS ===== */
 function maybeFixedBigEvent(){
   if(S.pendingBigEvent) return;
   const fe=FIXED_STORY.find(ev=>ev.ch===S.ch && ev.week===S.week && !S.seenEvents['fix_'+ev.ch+'_'+ev.week]);
@@ -1687,7 +1843,51 @@ function maybeCulturalEvent(){
   saveNow();
 }
 
-/* ====== CHOICE FIXED EVENTS ====== */
+/* ===== RESCUE SYSTEM ===== */
+function maybeRescue() {
+  if (S.pendingRescue) return;
+  
+  const totalWeeks = MAX_WEEKS[S.ch];
+  const timeRatio = S.week / totalWeeks;
+  const progressRatio = S.lu / 100;
+  
+  // RESCUE 3: Đình Hưng (ưu tiên cao nhất)
+  if (!S.flags.rescue3_used && S.flags.dinhhung_friend &&
+      timeRatio >= 0.85 && progressRatio < 0.8) {
+    S.flags.rescue3_used = true;
+    S.pendingRescue = Object.assign({}, RESCUE_EVENTS.rescue3);
+    saveNow();
+    return;
+  }
+  
+  // RESCUE 2: Xin gia hạn
+  if (!S.flags.rescue2_used &&
+      timeRatio >= 0.80 && progressRatio < 0.7) {
+    S.flags.rescue2_used = true;
+    S.pendingRescue = Object.assign({}, RESCUE_EVENTS.rescue2);
+    saveNow();
+    return;
+  }
+  
+  // RESCUE 1: GS. Trần
+  if (!S.flags.rescue1_used &&
+      timeRatio >= 0.70 && progressRatio < 0.6) {
+    S.flags.rescue1_used = true;
+    S.pendingRescue = Object.assign({}, RESCUE_EVENTS.rescue1);
+    saveNow();
+    return;
+  }
+}
+
+function showRescueEvent() {
+  if (!S.pendingRescue) return;
+  showChoiceEvent(S.pendingRescue, () => {
+    S.pendingRescue = null;
+    saveNow(); drawAll();
+  });
+}
+
+/* ===== CHOICE FIXED EVENTS ===== */
 function maybeChoiceFixed(){
   if(S.pendingChoiceEvent) return;
   const key=Object.keys(CHOICE_EVENTS).find(k=>{
@@ -1706,14 +1906,16 @@ function maybeChoiceFixed(){
   }),500);
 }
 
-/* ====== DO ACTION ====== */
+/* ===== DO ACTION ===== */
 function doAct(k){
+  if(S.endReason) return;
   if(T.modal) return;
   if(S.periodActionsLeft<=0) return toast('Hết action buổi này');
   const a=ACTS.find(x=>x.k==k);
   if(!a) return;
   if(a.m<0 && S.money<-a.m) return toast('Không đủ tiền');
   if(a.k=='c_wr' && S.lu>=100) return;
+  if(a.k=='c_wr' && S.wroteThisPeriod) return;
 
   const eff=lowEff();
 
@@ -1729,8 +1931,11 @@ function doAct(k){
   S.dayActionsLeft--;
   beep(a.grp=='viet'?880:a.grp=='choi'?660:520,.08);
 
+  // MINIGAME cho Viết luận
   if(a.k==='c_wr'){
+    S.wroteThisPeriod = true;
     const baseReward=WRITE_RATE[S.ch]*eff;
+    addLog(`✍️ Bắt đầu viết luận...`);
     saveNow();drawAll();
     setTimeout(()=>startWritingMinigame(baseReward),100);
     return;
@@ -1742,7 +1947,7 @@ function doAct(k){
     else if(a.lu==='fix') rate=FIX_RATE[S.ch];
     else if(a.lu==='meet') rate=MEET_RATE[S.ch];
     else if(a.lu==='lib') rate=LIB_RATE[S.ch];
-    const g=Math.round(rate*eff*10)/10;
+    const g=Math.round(rate*eff*100)/100;
     S.lu=cl(S.lu+g,0,100);
     addLog(`${a.e} ${a.n}: +${g}% luận văn`);
   } else if(a.grp=='lam'){
@@ -1762,6 +1967,7 @@ function doAct(k){
       S.periodActionsLeft=ACTIONS_PER_PERIOD;
       S.dayActionsLeft=ACTIONS_PER_DAY;
       S.rolledToday=false;S.logDay=[];
+      S.wroteThisPeriod=false;
       checkWeekLimit();saveNow();drawAll();
     },400);
     return;
@@ -1779,7 +1985,7 @@ function doAct(k){
   saveNow();drawAll();
 }
 
-/* ====== MINIGAME ====== */
+/* ===== MINIGAME ===== */
 function normalizeText(str){
   return str.toLowerCase()
     .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
@@ -1860,11 +2066,11 @@ function submitMinigame(elapsed,skipped){
   if(skipped){
     const reward=base*0.7;
     S.lu=cl(S.lu+reward,0,100);
-    addLog(`✍️ Viết luận (bỏ qua): +${reward.toFixed(1)}% luận văn`);
+    addLog(`✍️ Viết luận (bỏ qua): +${reward.toFixed(2)}% luận văn`);
     mclose();
     setTimeout(()=>{
       modal(`<h2>⏭️ Bỏ qua</h2>
-        <div class="body" style="text-align:center">Nhận <b>70%</b>: <b>+${reward.toFixed(1)}%</b> luận văn.</div>
+        <div class="body" style="text-align:center">Nhận <b>70%</b>: <b>+${reward.toFixed(2)}%</b> luận văn.</div>
         <div class="mb"><button class="btn p" data-a="mx">OK</button></div>`);
       afterWriteAction();
     },200);
@@ -1877,21 +2083,21 @@ function submitMinigame(elapsed,skipped){
   const correct=(userNorm===targetNorm)||(userNorm===pyNorm);
 
   let multiplier=0,msg='',ico='';
-  if(!correct){multiplier=-0.2;msg='Gõ sai rồi!';ico='❌';beep(300,.2);}
-  else if(elapsed<5000){multiplier=1.0;msg='Xuất sắc! Viết cực nhanh!';ico='🌟';beep(1200,.15);}
-  else if(elapsed<8000){multiplier=0.5;msg='Tốt lắm!';ico='✅';beep(900,.12);}
+  if(!correct){multiplier=-0.3;msg='Gõ sai rồi!';ico='❌';beep(300,.2);}
+  else if(elapsed<5000){multiplier=0.4;msg='Xuất sắc! Viết cực nhanh!';ico='🌟';beep(1200,.15);}
+  else if(elapsed<8000){multiplier=0.15;msg='Tốt lắm!';ico='✅';beep(900,.12);}
   else {multiplier=0;msg='Chậm một chút.';ico='⏰';beep(600,.1);}
 
   const finalReward=base*(1+multiplier);
   S.lu=cl(S.lu+finalReward,0,100);
-  addLog(`✍️ Viết luận: ${finalReward>=0?'+':''}${finalReward.toFixed(1)}% luận văn`);
+  addLog(`✍️ Viết luận: ${finalReward>=0?'+':''}${finalReward.toFixed(2)}% luận văn`);
 
   mclose();
   setTimeout(()=>{
     modal(`<h2>${ico} ${msg}</h2>
       <div class="body" style="text-align:center">
         ${correct?`Thời gian: <b>${(elapsed/1000).toFixed(1)}s</b><br>`:`Câu đúng: <b>${target.cn}</b><br>`}
-        Luận văn: <b style="color:${finalReward>=0?'#3a8a70':'#c92e72'}">${finalReward>=0?'+':''}${finalReward.toFixed(1)}%</b>
+        Luận văn: <b style="color:${finalReward>=0?'#3a8a70':'#c92e72'}">${finalReward>=0?'+':''}${finalReward.toFixed(2)}%</b>
       </div>
       <div class="mb"><button class="btn p" data-a="mx">OK</button></div>`);
     afterWriteAction();
@@ -1914,8 +2120,9 @@ function skipMinigame(){
   submitMinigame(0,true);
 }
 
-/* ====== LATE WRITE ====== */
+/* ===== LATE WRITE ===== */
 function lateWrite(){
+  if(S.endReason) return;
   if(T.modal) return;
   if(S.week<STIPEND_WEEKS[S.ch]) return toast('Chưa mở khóa');
   if(S.lu>=100) return toast('Luận văn đã xong');
@@ -1932,8 +2139,9 @@ function lateWrite(){
   saveNow();drawAll();
 }
 
-/* ====== LOTTERY ====== */
+/* ===== LOTTERY ===== */
 function doLottery(){
+  if(S.endReason) return;
   if(T.modal) return;
   if(S.money<20) return toast('❌ Không đủ 20 tệ');
   if(S.lotteryDoneThisYear) return toast('Năm nay đã mua rồi');
@@ -1941,6 +2149,8 @@ function doLottery(){
 
   S.money-=20;
   S.lotteryDoneThisYear=true;
+  saveNow();
+  drawAll();
   beep(500,.1);
 
   modal(`<h2>🎫 Mua xổ số</h2>
@@ -1954,7 +2164,6 @@ Bạn biết mình sẽ trượt. Nhưng bạn vẫn mua.
 Vì đó là 20 tệ cho một giấc mơ.
     </div>
     <div class="mb"><button class="btn p" data-a="lotteryResult">Mở tờ xổ số</button></div>`);
-  saveNow();drawAll();
 }
 
 function lotteryResult(){
@@ -2008,12 +2217,26 @@ Mà để nhớ mình đã từng hy vọng.
   },300);
 }
 
-/* ====== PERIOD / DAY / WEEK ====== */
+/* ===== PERIOD / DAY / WEEK ===== */
 function nextPeriod(){
-  if(S.period>=2){endDay();return}
+  if(S.endReason) return;
+  if(T.modal) return;
+  
+  if(S.period >= 2){
+    endDay();
+    return;
+  }
+  
   S.period++;
-  S.periodActionsLeft=ACTIONS_PER_PERIOD;
-  saveNow();drawAll();
+  S.periodActionsLeft = ACTIONS_PER_PERIOD;
+  S.dayActionsLeft = Math.max(0, S.dayActionsLeft);
+  S.wroteThisPeriod = false;
+  
+  if(S.period < 0) S.period = 0;
+  if(S.period > 2) S.period = 2;
+  
+  saveNow();
+  drawAll();
 }
 
 function endDay(){
@@ -2023,9 +2246,9 @@ function endDay(){
   S.period=0;
   S.periodActionsLeft=ACTIONS_PER_PERIOD;
   S.dayActionsLeft=ACTIONS_PER_DAY;
+  S.wroteThisPeriod=false;
   S.rolledToday=false;
   S.logDay=[];
-  // Tự động hồi phục khi hết buổi Tối
   S.hp=cl(S.hp+DAILY_HP_RECOVER,0,100);
   S.sp=cl(S.sp+DAILY_SP_RECOVER,0,100);
   addLog(`🌅 Ngày mới — nghỉ ngơi hồi phục (+${DAILY_HP_RECOVER} HP, +${DAILY_SP_RECOVER} SP)`);
@@ -2062,6 +2285,13 @@ function endWeek(){
     S.money-=rent;
   }
 
+  // Auto-cứu khi money âm
+  if(S.money < 0){
+    S.money = 300;
+    addLog('💸 Hết tiền — mẹ gửi 300 tệ cứu đói');
+    setTimeout(()=>toast('💸 Hết tiền — mẹ gửi 300 tệ cứu','warn'),500);
+  }
+
   const wLog={week:S.week,ch:S.ch,year:S.year,yearWeek:S.yearWeek,moneyAfter:S.money,
     scholar,rent,lu:S.lu,hp:S.hp,sp:S.sp};
   S.logWeek.push(wLog);
@@ -2072,9 +2302,16 @@ function endWeek(){
   S.period=0;
   S.periodActionsLeft=ACTIONS_PER_PERIOD;
   S.dayActionsLeft=ACTIONS_PER_DAY;
+  S.wroteThisPeriod=false;
   S.rolledToday=false;
   S.logDay=[];
   S.yearWeek++;
+
+  // Cảnh báo bỏ lỡ xổ số
+  if(S.yearWeek === 2 && !S.lotteryDoneThisYear && !S._lotteryWarned){
+    S._lotteryWarned = true;
+    setTimeout(()=>toast('💡 Bạn đã bỏ lỡ cơ hội mua xổ số năm nay!','warn'),800);
+  }
 
   let newYear=false;
   if(S.yearWeek>WEEKS_PER_YEAR){
@@ -2084,7 +2321,11 @@ function endWeek(){
     S.bigEventsThisYear=[];
     S.lotteryDoneThisYear=false;
     S.culturalEventThisYear=null;
+    S._lotteryWarned=false;
   }
+
+  // Apply flag consequences
+  applyFlagConsequences();
 
   saveNow();
 
@@ -2094,7 +2335,7 @@ function endWeek(){
     if (!pending) return null;
     if (pending.weekCreated === undefined) return null;
     const weeksPassed = S.week - pending.weekCreated;
-    if (weeksPassed > 1) {
+    if (weeksPassed >= 1) {
       expiredOffers.push(pending);
       addLog(`⏰ Bỏ lỡ: ${pending.e} ${pending.title}`);
       return null;
@@ -2107,7 +2348,7 @@ function endWeek(){
   S.pendingCulturalEvent = checkExpire(S.pendingCulturalEvent);
 
   if (expiredOffers.length > 0) {
-    setTimeout(() => {
+    setTimeout(()=>{
       expiredOffers.forEach(o => toast(`⏰ Bỏ lỡ: ${o.title}`, 'warn'));
     }, 600);
   }
@@ -2115,12 +2356,34 @@ function endWeek(){
   const delta=S.money-before;
   const weeksLeft=Math.max(0,MAX_WEEKS[S.ch]-S.week+1);
 
+  // Warning level
+  const timeRatio = S.week / MAX_WEEKS[S.ch];
+  const progressRatio = S.lu / 100;
+  let warningLevel = '';
+  if (timeRatio > 0.75 && progressRatio < 0.5) warningLevel = 'danger';
+  else if (timeRatio > 0.6 && progressRatio < 0.4) warningLevel = 'warn';
+
   let expiredText = '';
   if (expiredOffers.length > 0) {
     expiredText = `
       <div class="ev" style="background:linear-gradient(180deg,#ffe8d0,#ffd0a0);font-size:11px">
         <b>⏰ Offer đã hết hạn:</b><br>
         ${expiredOffers.map(o => `${o.e} ${o.title}`).join('<br>')}
+      </div>`;
+  }
+
+  let warningText = '';
+  if (warningLevel === 'danger') {
+    warningText = `
+      <div class="ev" style="background:linear-gradient(180deg,#ffe0e8,#ffb3c6);font-size:11px;text-align:center">
+        <b>🚨 NGUY CƠ THUA!</b><br>
+        Đã dùng ${Math.round(timeRatio*100)}% thời gian nhưng chỉ hoàn thành ${Math.round(progressRatio*100)}% luận văn.
+      </div>`;
+  } else if (warningLevel === 'warn') {
+    warningText = `
+      <div class="ev" style="background:linear-gradient(180deg,#fff5e0,#ffe4a8);font-size:11px;text-align:center">
+        <b>⚠️ Sắp hết hạn!</b><br>
+        Hãy cố gắng viết luận nhiều hơn.
       </div>`;
   }
 
@@ -2133,8 +2396,9 @@ function endWeek(){
     <span>💵 Còn lại</span><b>${F(S.money)} tệ</b>
     <span>📝 Luận văn</span><b>${S.lu.toFixed(1)}%</b>
     <span>⚡ HP / 💗 SP</span><b>${Math.round(S.hp)} / ${Math.round(S.sp)}</b>
-    <span>⏳ Còn lại</span><b>${weeksLeft} tuần</b>
+    <span>⏳ Còn lại</span><b style="${warningLevel==='danger'?'color:#c92e72':warningLevel==='warn'?'color:#8a5a00':''}">${weeksLeft} tuần ${warningLevel==='danger'?'⚠️':warningLevel==='warn'?'⚡':''}</b>
   </div>
+  ${warningText}
   ${expiredText}
   <div class="ev" style="font-size:11.5px">
     <b>📝 Gợi ý:</b> ${S.lu>0?`Tuần này viết được ${S.lu.toFixed(1)}% luận văn.`:'Chưa viết được gì.'}
@@ -2155,6 +2419,7 @@ function afterWeek(){
     maybeRandomBigEvent();
     maybeOffer();
     maybeCulturalEvent();
+    maybeRescue();
   },400);
   checkWeekLimit();
   if(S.endReason) return;
@@ -2165,6 +2430,11 @@ function afterWeek(){
 
   if(S.yearWeek===1 && S.week>1){
     setTimeout(()=>newYearGreeting(),800);
+  }
+  
+  // Nếu có rescue pending → hiện sau 1s
+  if (S.pendingRescue) {
+    setTimeout(() => showRescueEvent(), 1000);
   }
 }
 
@@ -2184,13 +2454,14 @@ function newYearGreeting(){
   drawAll();
 }
 
-/* ====== STORY ====== */
+/* ===== STORY ===== */
 function checkStory(){
   if(S.lu>=100 && S.ch==1){
     const ch1Days=S.day,ch1Weeks=S.week;
     S.ch=2;S.lu=0;S.day=1;S.week=1;S.year=1;S.yearWeek=1;S.period=0;
     S.periodActionsLeft=ACTIONS_PER_PERIOD;
     S.dayActionsLeft=ACTIONS_PER_DAY;
+    S.wroteThisPeriod=false;
     S.rolledToday=false;
     S.bigEventsThisYear=[];
     S.lotteryDoneThisYear=false;
@@ -2234,21 +2505,17 @@ function finishGrad(){
   <div class="body">
   Vân Khánh bảo vệ luận án tiến sĩ tại SISU Thượng Hải thành công.
   <br><br>
-  <b>Bố, mẹ, em gái, em trai từ Việt Nam bay sang dự lễ.</b> Mẹ mặc áo dài, khóc. Bố im lặng nhưng mắt đỏ.
+  <b>Bố, mẹ, em gái, em trai từ Việt Nam bay sang dự lễ.</b>
   </div>
   <div class="ev" style="white-space:pre-line;font-size:11px;line-height:1.7;text-align:left">
 ━━━━━━━━━━━━━━━━━━━━━
-
-10 NĂM Ở TRUNG QUỐC.
 
 Cô đã MẤT:
 • 3 cái Tết không về nhà
 • Đám cưới của bạn bè
 • Ngày em gái lấy chồng
-• Ngày em trai tốt nghiệp đại học
 • Tóc bạc của bố
 • Nụ cười móm mém của mẹ
-• 10 năm không được ăn cơm mẹ nấu mỗi ngày
 
 Cô đã CÓ:
 • 1 bằng tiến sĩ
@@ -2264,18 +2531,12 @@ Nhưng cô cũng có những thứ không gì mua được.
 Câu nói của bố ở Thượng Hải.
 Nụ cười của mẹ ở sân bay.
 Vòng tay của em gái.
-Tin nhắn của em trai: "Chị ơi, em tự hào về chị."
 
 Cô đã có đủ.
 `:''}
 ━━━━━━━━━━━━━━━━━━━━━
 
 Cô đã không về tay không.
-Nhưng cô cũng không về với đôi tay đầy.
-
-Cô về với đôi tay đã nắm chặt một giấc mơ — và để tuột mất những thứ khác.
-
-Cô không hối hận.
 
 "Có những giấc mơ không cần phải hoàn thành —
 chỉ cần mình biết mình đã cố gắng."
@@ -2287,6 +2548,7 @@ chỉ cần mình biết mình đã cố gắng."
 }
 
 function finishHome(){
+  if(S.endReason) return;
   if(!confirm('Vân Khánh gấp cuốn nhật ký, đặt bút xuống?\nCô sẽ bỏ học, về Việt Nam lấy chồng.')) return;
   if(!confirm('Chắc chắn chứ?\nBố mẹ đã chuẩn bị đám cưới ở quê.')) return;
   S.endReason='home';
@@ -2311,7 +2573,7 @@ function finishHome(){
   </div>`);
 }
 
-/* ====== ACHIEVEMENTS ====== */
+/* ===== ACHIEVEMENTS ===== */
 function getAch(){
   try{return JSON.parse(localStorage.getItem(ACH_KEY))||{}}
   catch(e){return {}}
@@ -2347,10 +2609,13 @@ function checkAchievements(forceId){
   if(S.flags.hoa_friend) unlockAch('a_hoa_friend');
   if(S.flags.resilient) unlockAch('a_resilient');
   if(S.flags.pride) unlockAch('a_pride');
+  if(S.flags.rescue1_accepted||S.flags.rescue2_accepted||S.flags.rescue3_accepted){
+    unlockAch('a_rescued');
+  }
   if(S.endReason==='grad' && S.hp>80 && S.sp>80 && S.money>20000) unlockAch('a_perfect');
 }
 
-/* ====== NOTES ====== */
+/* ===== NOTES ===== */
 function saveNote(){
   const tb=$('#noteBox');
   if(!tb) return;
@@ -2373,7 +2638,7 @@ function delNote(k){
   saveNow();toast('🗑️ Đã xoá');openLog();
 }
 
-/* ====== SHEET: LOG ====== */
+/* ===== SHEET: LOG ===== */
 function openLog(){
   T.sheet='log';
   setTxt('sht','📖 Nhật ký');
@@ -2416,7 +2681,7 @@ function openLog(){
   $('#sheet').classList.remove('hide');
 }
 
-/* ====== SHEET: BOOK ====== */
+/* ===== SHEET: BOOK ===== */
 function openBook(){
   T.sheet='book';
   setTxt('sht','📔 Sổ tay');
@@ -2429,11 +2694,11 @@ function openBook(){
       • HP &lt; 20 → nghỉ ốm · SP &lt; 20 → action yếu 50%<br>
       • <b>Luận văn 100%</b> → tốt nghiệp<br>
       • Hạn: Thạc sĩ <b>20 tuần</b> · Tiến sĩ <b>30 tuần</b><br>
-      • <b>5 tuần = 1 năm</b> · Trợ cấp: 750 (MS) / 875 (TS)<br>
+      • <b>5 tuần = 1 năm</b> · Trợ cấp: 600 (MS) / 700 (TS)<br>
       • Ch.2 thuê nhà: <b>−200 tệ/tuần</b><br>
-      • Mỗi ngày tối đa <b>1 event</b> · Mỗi năm tối đa <b>2 big event</b><br>
-      • Xổ số: mua <b>tuần đầu năm</b>, 0.05% trúng → nghỉ học<br>
-      • <b>60% event tốt · 40% event xấu</b>
+      • Xổ số: mua <b>tuần đầu năm</b>, 0.05% trúng<br>
+      • <b>60% event tốt · 40% event xấu</b><br>
+      • 🆘 <b>Rescue tự động</b> khi sắp hết hạn
     </div>`;
 
   const periodNames=['🌅 SÁNG','☀️ CHIỀU','🌙 TỐI'];
@@ -2559,11 +2824,27 @@ function openBook(){
     }
   });
 
+  html+='<h3>🆘 Cơ hội cứu trợ</h3>';
+  Object.keys(RESCUE_EVENTS).forEach(k=>{
+    const ev = RESCUE_EVENTS[k];
+    const has = S.flags[k+'_used'] && (S.flags[k+'_accepted'] || S.flags[k+'_declined']);
+    if(has){
+      html+=`<div class="noteIt" style="background:linear-gradient(180deg,#ffe0e8,#ffb3c6);border-color:#c92e72">
+        <div class="hd" style="color:#c92e72"><span>${ev.e} ${ev.title}</span></div>
+        <div class="ct">${ev.desc}</div></div>`;
+    } else {
+      html+=`<div class="noteIt" style="background:rgba(200,180,220,.15);opacity:.55">
+        <div class="hd" style="color:var(--mu)"><span>❓ Ẩn</span></div>
+        <div class="ct" style="color:var(--mu);font-style:italic">Chưa kích hoạt</div>
+      </div>`;
+    }
+  });
+
   $('#shb').innerHTML=html;
   $('#sheet').classList.remove('hide');
 }
 
-/* ====== SHEET: RECORD ====== */
+/* ===== SHEET: RECORD ===== */
 function openRecord(){
   T.sheet='record';
   setTxt('sht','🏆 Kỷ lục');
@@ -2607,7 +2888,7 @@ function openRecord(){
   $('#sheet').classList.remove('hide');
 }
 
-/* ====== SHEET: ACHIEVEMENTS ====== */
+/* ===== SHEET: ACHIEVEMENTS ===== */
 function openAch(){
   T.sheet='ach';
   setTxt('sht','🏅 Thành tích');
@@ -2643,7 +2924,7 @@ function reSheet(){
   else if(T.sheet=='ach') openAch();
 }
 
-/* ====== INTRO / HELP ====== */
+/* ===== INTRO / HELP ===== */
 const INTRO=`<div class="sp"><img src="icon-192.png" alt=""></div>
 <h2>🌸 Vân Khánh Diary</h2>
 <div class="body">
@@ -2651,11 +2932,13 @@ Vân Khánh 24 tuổi, quê ở Phúc Thọ, Hà Nội. Chị cả trong gia đ�
 <br><br>
 Cô nhận <b>Học bổng Chính phủ Trung Quốc (CSC)</b> đi học thạc sĩ ngành <b>Giáo dục Hán ngữ Quốc tế</b> tại CNU Bắc Kinh.
 <br><br>
-Học bổng miễn học phí + KTX, trợ cấp 750 tệ/tuần — không đủ sống. Cô phải tự lo ăn uống, sách vở, và cả luận văn.
+Học bổng miễn học phí + KTX, trợ cấp 600 tệ/tuần — không đủ sống. Cô phải tự lo ăn uống, sách vở, và cả luận văn.
 <br><br>
 🌸 <b>Mục tiêu:</b> Xong thạc sĩ (max 20 tuần) → SISU Thượng Hải → xong tiến sĩ (max 30 tuần).
 <br><br>
 📅 <b>5 tuần = 1 năm.</b> Mỗi năm, tuần đầu năm, cô có thể mua xổ số.
+<br><br>
+🆘 <b>Nếu sắp hết hạn mà luận văn chưa xong</b>, cô sẽ nhận được cơ hội cứu trợ.
 </div>
 <div class="mb"><button class="btn p" data-a="mx">Bắt đầu 💕</button></div>`;
 
@@ -2663,7 +2946,7 @@ const HELP=`<h2>🌸 Cách chơi</h2>
 <div class="body">
 1 ngày = <b>3 buổi</b>. Mỗi buổi = <b>2 hành động</b>.
 <br><br>
-Hết buổi Tối → tự động qua ngày mới (+12 HP, +20 SP).
+Hết buổi Tối → tự động qua ngày mới (+3 HP, +5 SP).
 <br><br>
 <b>Nút phụ:</b><br>
 🌌 Thức đêm — mở sau 10/20 tuần<br>
@@ -2671,15 +2954,15 @@ Hết buổi Tối → tự động qua ngày mới (+12 HP, +20 SP).
 <br><br>
 <b>Chỉ số:</b> HP &lt; 20 → nghỉ ốm · SP &lt; 20 → yếu 50% · Luận văn 100% → tốt nghiệp.
 <br><br>
-<b>Event:</b> 30%/action (max 1/ngày) — 60% tốt / 40% xấu. Mỗi event có <b>2 lựa chọn</b>.
+<b>Event:</b> 30%/action (max 1/ngày) — 60% tốt / 40% xấu.
 <br><br>
 <b>⏰ Offer hết hạn sau 1 tuần</b> nếu không xử lý.
 <br><br>
-<b>📔 Sổ tay:</b> Xem bảng hệ số + danh sách event.
+<b>🆘 Rescue tự động</b> khi thời gian &gt; 70% và luận văn &lt; 60%.
 </div>
 <div class="mb"><button class="btn p" data-a="mx">OK! 🌸</button></div>`;
 
-/* ====== EVENT LISTENER ====== */
+/* ===== EVENT LISTENER ===== */
 document.addEventListener('click',e=>{
   const target=e.target.closest('[data-a]');
   if(!target) return;
@@ -2741,7 +3024,7 @@ if(sheetEl) sheetEl.addEventListener('click',e=>{
   if(e.target.id==='sheet') closeSheet();
 });
 
-/* ====== PWA SHORTCUTS ====== */
+/* ===== PWA SHORTCUTS ===== */
 (function handleShortcut(){
   const params=new URLSearchParams(location.search);
   const action=params.get('action');
@@ -2755,7 +3038,7 @@ if(sheetEl) sheetEl.addEventListener('click',e=>{
   },500);
 })();
 
-/* ====== INIT ====== */
+/* ===== INIT ===== */
 window.__ch1Days=null;
 window.__ch1Weeks=null;
 drawAll();
