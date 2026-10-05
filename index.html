@@ -2065,6 +2065,8 @@ function nextPeriod(){
 }
 
 function endDay(){
+   // Xử lý flag effects (cold_risk, poor_sleep)
+  applyFlagEffects();
   // Trừ tiền thuê nhà Ch.2 theo tuần (chỉ trừ đầu tuần)
   if(S.day%7==0){endWeek();return}
   S.day++;
@@ -2747,13 +2749,102 @@ if(sheetEl) sheetEl.addEventListener('click',e=>{
   if(e.target.id==='sheet') closeSheet();
 });
 
+/* ====== XỬ LÝ FLAGS ĐẶC BIỆT ====== */
+function applyFlagEffects(){
+  // cold_risk: 20% bị cảm sau khi từ chối mua áo
+  if(S.flags.cold_risk && !S.flags.cold_resolved){
+    S.flags.cold_resolved = true;
+    if(Math.random() < 0.2){
+      S.hp = cl(S.hp - 15, 0, 100);
+      addLog('🤒 Bị cảm vì mặc áo cũ');
+      setTimeout(() => toast('⚠️ Bị cảm! −15 HP'), 500);
+    }
+  }
+  
+  // poor_sleep: −5 HP mỗi tuần nếu dùng chăn cũ
+  if(S.flags.poor_sleep && S.day % 7 === 0){
+    S.hp = cl(S.hp - 5, 0, 100);
+    addLog('😴 Ngủ không ngon: −5 HP');
+  }
+  
+  // have_cooker: giảm giá ăn 3 tệ/bữa
+  // (đã xử lý trong doAct khi check giá ăn)
+}
+
+/* ====== ÁP DỤNG FLAG VÀO ACTION ĂN ====== */
+function getFoodCost(baseCost){
+  // Nếu có nồi cơm → giảm 3 tệ
+  return S.flags.have_cooker ? Math.max(0, baseCost - 3) : baseCost;
+}
+
+/* ====== XỬ LÝ PWA SHORTCUTS ====== */
+(function handleShortcut(){
+  const params = new URLSearchParams(location.search);
+  const action = params.get('action');
+  if (!action) return;
+  history.replaceState(null, '', location.pathname);
+  
+  setTimeout(() => {
+    if (action === 'log') openLog();
+    else if (action === 'book') openBook();
+    else if (action === 'record') openRecord();
+    else if (action === 'ach') openAch();
+  }, 500);
+})();
+/* ====== XỬ LÝ FLAGS ĐẶC BIỆT ====== */
+function applyFlagEffects(){
+  // cold_risk: 20% bị cảm sau khi từ chối mua áo
+  if(S.flags.cold_risk && !S.flags.cold_resolved){
+    S.flags.cold_resolved = true;
+    if(Math.random() < 0.2){
+      S.hp = cl(S.hp - 15, 0, 100);
+      addLog('🤒 Bị cảm vì mặc áo cũ');
+      setTimeout(() => toast('⚠️ Bị cảm! −15 HP'), 500);
+    }
+  }
+  
+  // poor_sleep: −5 HP mỗi tuần nếu dùng chăn cũ
+  if(S.flags.poor_sleep && S.day % 7 === 0){
+    S.hp = cl(S.hp - 5, 0, 100);
+    addLog('😴 Ngủ không ngon: −5 HP');
+  }
+  
+  // have_cooker: giảm giá ăn 3 tệ/bữa
+  // (đã xử lý trong doAct khi check giá ăn)
+}
+
+/* ====== ÁP DỤNG FLAG VÀO ACTION ĂN ====== */
+function getFoodCost(baseCost){
+  // Nếu có nồi cơm → giảm 3 tệ
+  return S.flags.have_cooker ? Math.max(0, baseCost - 3) : baseCost;
+}
+
+/* ====== XỬ LÝ PWA SHORTCUTS ====== */
+(function handleShortcut(){
+  const params = new URLSearchParams(location.search);
+  const action = params.get('action');
+  if (!action) return;
+  history.replaceState(null, '', location.pathname);
+  
+  setTimeout(() => {
+    if (action === 'log') openLog();
+    else if (action === 'book') openBook();
+    else if (action === 'record') openRecord();
+    else if (action === 'ach') openAch();
+  }, 500);
+})();
+
 /* ====== INIT ====== */
 window.__ch1Days=null;
 window.__ch1Weeks=null;
 drawAll();
 if(!S.seen){S.seen=1;saveNow();modal(INTRO);}
 
+// Gọi applyFlagEffects mỗi khi bắt đầu ngày mới
+// (đã được gọi trong endDay qua checkAchievements — nhưng gọi thêm để chắc)
+setTimeout(() => applyFlagEffects(), 500);
+
 // Service Worker
 if('serviceWorker'in navigator&&location.protocol.startsWith('http'))
   navigator.serviceWorker.register('sw.js').catch(()=>{});
-  </script></body></html>.
+</script></body></html>
